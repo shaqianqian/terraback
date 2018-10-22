@@ -22,6 +22,31 @@ public class terraium {
     @CreationTimestamp
     private Date createTime;
 
+    public int getId() {
+        return id;
+    }
 
+    public double getHumite() {
+        return humite;
+    }
 
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setHumite(double humite) {
+        this.humite = humite;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 }

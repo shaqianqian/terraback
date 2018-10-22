@@ -3,14 +3,14 @@ package com.terrastation.sha.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.terrastation.sha.repositary.*;
 import com.terrastation.sha.domain.terraium;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -41,6 +41,29 @@ public class terraiumController {
     }
 
 
+
+    @PutMapping("/terrarium/{id}")
+    public terraium updateNote(@PathVariable(value = "id") int terraiumId,
+                             @Valid @RequestBody terraium terraiumDetails) {
+        Optional<terraium> terraium = terraiumRepositary.findById(terraiumId);
+        terraium terraium1=null;
+        if(terraium.isPresent()) {
+            terraium1=terraium.get();
+            terraium1.setHumite(terraiumDetails.getHumite());
+        }
+        terraium updatedTerraium = terraiumRepositary.save(terraium1);
+        return updatedTerraium;
+    }
+
+    @DeleteMapping("/terrarium/{id}")
+    public ResponseEntity<?> deleteNote(@PathVariable(value = "id") int noteId) {
+        Optional<terraium> terraium = terraiumRepositary.findById(noteId);
+        terraium terraium1=null;
+        if(terraium.isPresent()) {
+            terraium1=terraium.get();
+            terraiumRepositary.delete(terraium1);}
+        return ResponseEntity.ok().build();
+    }
 
 
 }
