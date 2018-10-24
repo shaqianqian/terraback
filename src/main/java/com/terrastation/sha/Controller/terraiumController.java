@@ -1,12 +1,11 @@
 package com.terrastation.sha.Controller;
 
-import com.terrastation.sha.ResultUtil;
-import com.terrastation.sha.ResultVO;
+import com.terrastation.sha.Util.ResultUtil;
+import com.terrastation.sha.VO.ResultVO;
 import com.terrastation.sha.enums.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.terrastation.sha.repositary.*;
 import com.terrastation.sha.domain.terraium;

@@ -1,5 +1,6 @@
-package com.terrastation.sha;
+package com.terrastation.sha.Util;
 
+import com.terrastation.sha.VO.ResultVO;
 import com.terrastation.sha.enums.ResultEnum;
 
 public class ResultUtil {

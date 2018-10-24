@@ -1,4 +1,4 @@
-package com.terrastation.sha;
+package com.terrastation.sha.VO;
 
 import lombok.Data;
 
