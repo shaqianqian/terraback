@@ -1,9 +1,13 @@
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+1
   profiles:
     active: prod
   datasource:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/runoob_db?verifyServerCertificate=false&useSSL=true
+      #url: jdbc:mysql://127.0.0.1:3306/runoob_db?verifyServerCertificate=false&useSSL=true
+      url: jdbc:mysql://192.168.1.73:3306/runoob_db?verifyServerCertificate=false&useSSL=true
       username: root
       password: 123456
   jpa:

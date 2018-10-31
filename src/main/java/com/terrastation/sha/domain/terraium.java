@@ -11,21 +11,22 @@ import java.util.Date;
 @Entity
 public class terraium {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
 
     private double temperature;
 
     private double humidite;
 
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name= "createTime",updatable = false)
-    @CreationTimestamp
     private Date createTime;
 
+    @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updateTime")
-    @UpdateTimestamp
     private Date updateTime;
 
 

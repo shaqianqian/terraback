@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Entity
 public class reptile {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
     
     private int age;
