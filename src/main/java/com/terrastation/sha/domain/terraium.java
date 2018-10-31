@@ -16,7 +16,7 @@ public class terraium {
 
     private double temperature;
 
-    private double humite;
+    private double humidite;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name= "createTime",updatable = false)

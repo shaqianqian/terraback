@@ -37,7 +37,7 @@ public class terraiumController {
 
     public ResultVO<terraium> add(@RequestBody terraium terraium) {
         terraium t = new terraium();
-        t.setHumite(terraium.getHumite());
+        t.setHumidite(terraium.getHumidite());
         t.setTemperature(terraium.getTemperature());
         return ResultUtil.success(terraiumRepositary.save(t));
 
@@ -54,7 +54,7 @@ public class terraiumController {
         } else {
             terraiumNew = terraiumOriginal.get();
             terraiumNew.setTemperature(terraiumDetails.getTemperature());
-            terraiumNew.setHumite(terraiumDetails.getHumite());
+            terraiumNew.setHumidite(terraiumDetails.getHumidite());
         }
         return  ResultUtil.success(terraiumRepositary.save(terraiumNew));
     }
