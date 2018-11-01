@@ -1,14 +1,14 @@
-package com.terrastation.sha.exception;
+package com.terrastation.sha.Exception;
 
-import com.terrastation.sha.enums.ResultEnum;
+import com.terrastation.sha.Enums.ResultEnum;
 import lombok.Getter;
 
 @Getter
-public class terraiumException extends RuntimeException {
+public class TerraiumException extends RuntimeException {
 
     private Integer code;
    //resultEnum les codes et informations d'erreurs pour retourner au front
-    public terraiumException(ResultEnum resultEnum) {
+    public TerraiumException(ResultEnum resultEnum) {
         super(resultEnum.getMessage());
 
         this.code = resultEnum.getCode();

@@ -1,4 +1,4 @@
-package com.terrastation.sha.domain;
+package com.terrastation.sha.Entity;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class terraium {
+public class Terraium {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

@@ -27,5 +27,5 @@ def fun_timer():
 
 timer = threading.Timer(1, fun_timer)
 timer.start()
-time.sleep(15)
+time.sleep(100)
 timer.cancel()

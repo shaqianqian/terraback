@@ -1,4 +1,4 @@
-package com.terrastation.sha.domain;
+package com.terrastation.sha.Entity;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class reptile {
+public class Reptile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

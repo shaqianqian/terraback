@@ -1,4 +1,4 @@
-package com.terrastation.sha.enums;
+package com.terrastation.sha.Enums;
 
 import lombok.Getter;
 
