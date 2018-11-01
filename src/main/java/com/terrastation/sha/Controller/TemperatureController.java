@@ -26,16 +26,10 @@ public class TemperatureController {
     private TerraiumRepositary terraiumRepositary;
 
 
-    @RequestMapping(value = "getCurrentTemperature", method = RequestMethod.GET)
 
-    public ResultVO<Terraium> getCurrentTemperature() {
 
-        return ResultUtil.success(terraiumRepositary.findCurrentTemperature());
-
-    }
-
-    @RequestMapping(value = "getCurrentTemperatures", method = RequestMethod.GET)
-    public ResultVO<TemperaturesVO> getCurrentTemperatures() {
+    @RequestMapping(value = "getCurrentTemperaturesVO", method = RequestMethod.GET)
+    public ResultVO<TemperaturesVO> getCurrentTemperaturesVO() {
         List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
         Collections.reverse(terraiumList);
         List<TemperatureVO> terraiumListVO = new ArrayList<TemperatureVO>();

@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TerraiumRepositary extends JpaRepository<Terraium,Integer> {
     @Query(value = "select *  from runoob_db.terraium where (select max(create_time) from runoob_db.terraium )=create_time ", nativeQuery = true)
-    public Terraium findCurrentTemperature();
+    public Terraium findCurrentParametres();
+
 
     @Query(value = "SELECT * FROM runoob_db.terraium order by create_time desc limit ?1 ; ", nativeQuery = true)
      public List<Terraium> findCurrentTemperatures(Integer quantity);
@@ -19,5 +20,14 @@ public interface TerraiumRepositary extends JpaRepository<Terraium,Integer> {
 
     @Query(value="select * from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currenctTemp1 where (select min(temperature) from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currentTemp2)=temperature", nativeQuery = true)
     public Terraium findMinTemperatures(Integer quantity);
+
+
+    @Query(value="select * from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currenctTemp1 where (select max(humidite) from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currentTemp2)=humidite", nativeQuery = true)
+    public Terraium findMaxHumidites(Integer quantity);
+
+    @Query(value="select * from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currenctTemp1 where (select min(humidite) from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currentTemp2)=humidite", nativeQuery = true)
+    public Terraium findMinHumidites(Integer quantity);
+
+
 
 }
