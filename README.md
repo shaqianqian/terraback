@@ -3,7 +3,7 @@ Recuperers les parametres sont recupere par raspberry, et les stoke dans la base
 on va les retourner ver front en forme json
 url www.localhost:8080
 ##TerraiumController
-#### /terraium//getAll (recuperer tous les parametres de terraium)
+#### /terraium/getAll (recuperer tous les parametres de terraium)
 ``` json
 {
     "code": 0,
@@ -64,7 +64,7 @@ url www.localhost:8080
 }
 ```
 
-#### /terraium//getCurrentParametres (supprime une ligne de parametre au terraium)
+#### /terraium/getCurrentParametres (recuperer les lignes des parametres recents）
 
 ``` json
 
