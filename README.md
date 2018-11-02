@@ -4,7 +4,7 @@ on va les retourner ver front en forme json
 url www.localhost:8080
 ##TerraiumController
 #### /terraium//getAll (recuperer tous les parametres de terraium)
-
+``` json
 {
     "code": 0,
     "msg": "reussi",
@@ -24,8 +24,9 @@ url www.localhost:8080
             "updateTime": "2018-11-01 19:53:54"
         }]
   }
-
+``` 
 #### /terraium/add (ajouter une ligne de parametre au terraium)
+``` json
 {
     "code": 0,
     "msg": "reussi",
@@ -38,8 +39,9 @@ url www.localhost:8080
     }
 }
 
-
+``` 
 #### /terraium/update/{id} (modifier une ligne de parametre au terraium)
+``` json
 {
     "code": 0,
     "msg": "reussi",
@@ -51,13 +53,21 @@ url www.localhost:8080
         "updateTime": "2018-11-02 16:27:17"
     }
 }
+```
+
 #### /terraium/delete/{id} (supprime une ligne de parametre au terraium)
+```json
 {
     "code": 0,
     "msg": "reussi",
     "data": "vous avez reussi de supprimer : 22"
 }
+```
+
 #### /terraium//getCurrentParametres (supprime une ligne de parametre au terraium)
+
+``` json
+
 {
     "code": 0,
     "msg": "reussi",
@@ -77,7 +87,13 @@ url www.localhost:8080
             "updateTime": "2018-11-01 19:55:19"
         }]
  }
+ ```
+
+ 
 #### /terraium/temperature/getCurrentTemperaturesVO(recuperer les temperatures recentes, maximal et minimal )
+
+
+ ``` json
 {
     "code": 0,
     "msg": "reussi",
@@ -116,7 +132,12 @@ url www.localhost:8080
         ]
     }
 }
+```
+
+
 #### /terraium/humidite/getCurrentHumiditesVO(recuperer les humidites recentes, maximal et minimal )
+
+``` json
 {
     "code": 0,
     "msg": "reussi",
@@ -155,3 +176,5 @@ url www.localhost:8080
         }
     }
 }
+```
+
