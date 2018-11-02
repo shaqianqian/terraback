@@ -98,46 +98,40 @@ url www.localhost:8080
     "code": 0,
     "msg": "reussi",
     "data": {
+        "type": "Temperature",
+        "symbol": "°C",
         "max": {
-            "id": 20,
-            "type": "Temperature",
-            "valeur": 36.06,
-            "symbol": "%",
-            "createTime": "2018-11-01 19:55:24",
-            "updateTime": "2018-11-01 19:55:24"
+            "value": 36.06,
+            "time": "2018-11-01 19:55:24"
         },
         "min": {
-            "id": 17,
-            "type": "Temperature",
-            "valeur": 33,
-            "symbol": "%",
-            "createTime": "2018-11-01 19:55:09",
-            "updateTime": "2018-11-01 19:55:09"
+            "value": 33,
+            "time": "2018-11-01 19:55:09"
         },
-        "terraiumsVO": [
+        "values": [
             {
-                "id": 15,
-                "type": "Temperature",
-                "valeur": 33.22,
-                "symbol": "%",
-                "createTime": "2018-11-01 19:54:59",
-                "updateTime": "2018-11-01 19:54:59"
+                "value": 33.22,
+                "time": "2018-11-01 19:54:59"
             },
             {
-                "id": 16,
-                "type": "Temperature",
-                "valeur": 35.97,
-                "symbol": "%",
-                "createTime": "2018-11-01 19:55:04",
-                "updateTime": "2018-11-01 19:55:04"
+                "value": 35.97,
+                "time": "2018-11-01 19:55:04"
             },
             {
-                "id": 17,
-                "type": "Temperature",
-                "valeur": 33,
-                "symbol": "%",
-                "createTime": "2018-11-01 19:55:09",
-                "updateTime": "2018-11-01 19:55:09"
+                "value": 33,
+                "time": "2018-11-01 19:55:09"
+            },
+            {
+                "value": 35.89,
+                "time": "2018-11-01 19:55:14"
+            },
+            {
+                "value": 35.5,
+                "time": "2018-11-01 19:55:19"
+            },
+            {
+                "value": 36.06,
+                "time": "2018-11-01 19:55:24"
             }
         ]
     }
@@ -152,48 +146,41 @@ url www.localhost:8080
     "code": 0,
     "msg": "reussi",
     "data": {
+        "type": "Humidite",
+        "symbol": "%",
         "max": {
-            "id": 17,
-            "type": "Humidite",
-            "valeur": 89.59,
-            "symbol": "%",
-            "createTime": "2018-11-01 19:55:09",
-            "updateTime": "2018-11-01 19:55:09"
+            "value": 89.59,
+            "time": "2018-11-01 19:55:09"
         },
         "min": {
-            "id": 20,
-            "type": "Humidite",
-            "valeur": 51.64,
-            "symbol": "%",
-            "createTime": "2018-11-01 19:55:24",
-            "updateTime": "2018-11-01 19:55:24"
+            "value": 51.64,
+            "time": "2018-11-01 19:55:24"
         },
-        "terraiumsVO": [
+        "values": [
             {
-                "id": 15,
-                "type": "Humidite",
-                "valeur": 57.8,
-                "symbol": "%",
-                "createTime": "2018-11-01 19:54:59",
-                "updateTime": "2018-11-01 19:54:59"
+                "value": 57.8,
+                "time": "2018-11-01 19:54:59"
             },
             {
-                "id": 16,
-                "type": "Humidite",
-                "valeur": 76.67,
-                "symbol": "%",
-                "createTime": "2018-11-01 19:55:04",
-                "updateTime": "2018-11-01 19:55:04"
+                "value": 76.67,
+                "time": "2018-11-01 19:55:04"
             },
             {
-                "id": 17,
-                "type": "Humidite",
-                "valeur": 89.59,
-                "symbol": "%",
-                "createTime": "2018-11-01 19:55:09",
-                "updateTime": "2018-11-01 19:55:09"
+                "value": 89.59,
+                "time": "2018-11-01 19:55:09"
+            },
+            {
+                "value": 87.05,
+                "time": "2018-11-01 19:55:14"
+            },
+            {
+                "value": 88.81,
+                "time": "2018-11-01 19:55:19"
+            },
+            {
+                "value": 51.64,
+                "time": "2018-11-01 19:55:24"
             }
-           
         ]
     }
 }

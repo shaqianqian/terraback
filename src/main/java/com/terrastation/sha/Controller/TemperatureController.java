@@ -35,37 +35,32 @@ public class TemperatureController {
         List<TerraiumVO> terraiumListVO = new ArrayList<TerraiumVO>();
         for (Terraium t : terraiumList) {
             TerraiumVO temperatureVO = new TerraiumVO();
-            temperatureVO.setId(t.getId());
-            temperatureVO.setValeur(t.getTemperature());
-            temperatureVO.setCreateTime(t.getCreateTime());
-            temperatureVO.setUpdateTime(t.getUpdateTime());
+            temperatureVO.setValue(t.getTemperature());
+            temperatureVO.setTime(t.getCreateTime());
             terraiumListVO.add(temperatureVO);
-            temperatureVO.setSymbol("%");
-            temperatureVO.setType("Temperature");
 
         }
         Terraium temp_max = terraiumRepositary.findMaxTemperatures(6);
         TerraiumVO tempVO_max = new TerraiumVO();
-        tempVO_max.setId(temp_max.getId());
-        tempVO_max.setUpdateTime(temp_max.getUpdateTime());
-        tempVO_max.setCreateTime(temp_max.getCreateTime());
-        tempVO_max.setValeur(temp_max.getTemperature());
-        tempVO_max.setSymbol("%");
-        tempVO_max.setType("Temperature");
+        tempVO_max.setTime(temp_max.getCreateTime());
+        tempVO_max.setValue(temp_max.getTemperature());
+
+
 
         Terraium temp_min = terraiumRepositary.findMinTemperatures(6);
         TerraiumVO tempVO_min = new TerraiumVO();
-        tempVO_min.setId(temp_min.getId());
-        tempVO_min.setUpdateTime(temp_min.getUpdateTime());
-        tempVO_min.setCreateTime(temp_min.getCreateTime());
-        tempVO_min.setValeur(temp_min.getTemperature());
-        tempVO_min.setSymbol("%");
-        tempVO_min.setType("Temperature");
+        tempVO_min.setTime(temp_min.getCreateTime());
+        tempVO_min.setValue(temp_min.getTemperature());
+
+
 
         TerraiumsVO temperaturesVO=new TerraiumsVO();
+        temperaturesVO.setSymbol("°C");
+        temperaturesVO.setType("Temperature");
         temperaturesVO.setMax(tempVO_max);
         temperaturesVO.setMin(tempVO_min);
-        temperaturesVO.setTerraiumsVO(terraiumListVO);
+        temperaturesVO.setValues(terraiumListVO);
+
         return ResultUtil.success(temperaturesVO);
 
     }

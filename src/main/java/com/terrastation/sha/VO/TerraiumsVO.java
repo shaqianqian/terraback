@@ -7,9 +7,15 @@ import java.util.List;
 @Data
 public class TerraiumsVO {
 
-   private  List<TerraiumVO> TerraiumsVO;
+   private String type;
+   private String symbol;
+   private  List<TerraiumVO> Values;
+
    private  TerraiumVO max;
    private  TerraiumVO  min;
+
+
+
 
 
 }
