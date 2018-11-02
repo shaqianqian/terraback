@@ -26,37 +26,44 @@ public class HumiditeController {
 
 
     @RequestMapping(value = "/terraium/humidite/getCurrentHumiditesVO", method = RequestMethod.GET)
-    public ResultVO<HumiditesVO> getCurrentHumiditesVO() {
+    public ResultVO<TerraiumsVO> getCurrentHumiditesVO() {
         List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
         Collections.reverse(terraiumList);
-        List<HumiditeVO> humiditeVOList = new ArrayList<HumiditeVO>();
+        List<TerraiumVO> humiditeVOList = new ArrayList<TerraiumVO>();
         for (Terraium t : terraiumList) {
-            HumiditeVO humiditeVO = new HumiditeVO();
+            TerraiumVO humiditeVO = new TerraiumVO();
             humiditeVO.setId(t.getId());
-            humiditeVO.setHumidite(t.getHumidite());
+            humiditeVO.setValeur(t.getHumidite());
             humiditeVO.setCreateTime(t.getCreateTime());
             humiditeVO.setUpdateTime(t.getUpdateTime());
             humiditeVOList.add(humiditeVO);
+            humiditeVO.setSymbol("%");
+            humiditeVO.setType("Humidite");
 
         }
         Terraium hum_max = terraiumRepositary.findMaxHumidites(6);
-        HumiditeVO humiditeVO_max = new HumiditeVO();
+        TerraiumVO humiditeVO_max = new TerraiumVO();
         humiditeVO_max.setId(hum_max.getId());
         humiditeVO_max.setUpdateTime(hum_max.getUpdateTime());
         humiditeVO_max.setCreateTime(hum_max.getCreateTime());
-        humiditeVO_max.setHumidite(hum_max.getHumidite());
+        humiditeVO_max.setValeur(hum_max.getHumidite());
+        humiditeVO_max.setSymbol("%");
+        humiditeVO_max.setType("Humidite");
 
         Terraium hum__min = terraiumRepositary.findMinHumidites(6);
-        HumiditeVO humiditeVO_min = new HumiditeVO();
+        TerraiumVO humiditeVO_min = new TerraiumVO();
         humiditeVO_min.setId(hum__min.getId());
         humiditeVO_min.setUpdateTime(hum__min.getUpdateTime());
         humiditeVO_min.setCreateTime(hum__min.getCreateTime());
-        humiditeVO_min.setHumidite(hum__min.getHumidite());
+        humiditeVO_min.setValeur(hum__min.getHumidite());
+        humiditeVO_min.setSymbol("%");
+        humiditeVO_min.setType("Humidite");
 
-        HumiditesVO humiditesVO=new HumiditesVO();
-        humiditesVO.setMax_hum(humiditeVO_max);
-        humiditesVO.setMin_hum(humiditeVO_min);
-        humiditesVO.setHumiditesVO(humiditeVOList);
+
+        TerraiumsVO humiditesVO=new  TerraiumsVO();
+        humiditesVO.setMax(humiditeVO_max);
+        humiditesVO.setMin(humiditeVO_min);
+        humiditesVO.setTerraiumsVO(humiditeVOList);
         return ResultUtil.success(humiditesVO);
 
     }

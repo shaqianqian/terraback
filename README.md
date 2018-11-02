@@ -98,34 +98,44 @@ url www.localhost:8080
     "code": 0,
     "msg": "reussi",
     "data": {
-        "max_temp": {
+        "max": {
             "id": 20,
-            "temperature": 36.06,
+            "type": "Temperature",
+            "valeur": 36.06,
+            "symbol": "%",
             "createTime": "2018-11-01 19:55:24",
             "updateTime": "2018-11-01 19:55:24"
         },
-        "min_temp": {
-            "id": 20,
-            "temperature": 33,
+        "min": {
+            "id": 17,
+            "type": "Temperature",
+            "valeur": 33,
+            "symbol": "%",
             "createTime": "2018-11-01 19:55:09",
             "updateTime": "2018-11-01 19:55:09"
         },
-        "temperaturesVO": [
+        "terraiumsVO": [
             {
                 "id": 15,
-                "temperature": 33.22,
+                "type": "Temperature",
+                "valeur": 33.22,
+                "symbol": "%",
                 "createTime": "2018-11-01 19:54:59",
                 "updateTime": "2018-11-01 19:54:59"
             },
             {
                 "id": 16,
-                "temperature": 35.97,
+                "type": "Temperature",
+                "valeur": 35.97,
+                "symbol": "%",
                 "createTime": "2018-11-01 19:55:04",
                 "updateTime": "2018-11-01 19:55:04"
             },
             {
                 "id": 17,
-                "temperature": 33,
+                "type": "Temperature",
+                "valeur": 33,
+                "symbol": "%",
                 "createTime": "2018-11-01 19:55:09",
                 "updateTime": "2018-11-01 19:55:09"
             }
@@ -142,38 +152,49 @@ url www.localhost:8080
     "code": 0,
     "msg": "reussi",
     "data": {
-        "humiditesVO": [
+        "max": {
+            "id": 17,
+            "type": "Humidite",
+            "valeur": 89.59,
+            "symbol": "%",
+            "createTime": "2018-11-01 19:55:09",
+            "updateTime": "2018-11-01 19:55:09"
+        },
+        "min": {
+            "id": 20,
+            "type": "Humidite",
+            "valeur": 51.64,
+            "symbol": "%",
+            "createTime": "2018-11-01 19:55:24",
+            "updateTime": "2018-11-01 19:55:24"
+        },
+        "terraiumsVO": [
             {
                 "id": 15,
-                "humidite": 57.8,
+                "type": "Humidite",
+                "valeur": 57.8,
+                "symbol": "%",
                 "createTime": "2018-11-01 19:54:59",
                 "updateTime": "2018-11-01 19:54:59"
             },
             {
                 "id": 16,
-                "humidite": 76.67,
+                "type": "Humidite",
+                "valeur": 76.67,
+                "symbol": "%",
                 "createTime": "2018-11-01 19:55:04",
                 "updateTime": "2018-11-01 19:55:04"
             },
             {
                 "id": 17,
-                "humidite": 89.59,
+                "type": "Humidite",
+                "valeur": 89.59,
+                "symbol": "%",
                 "createTime": "2018-11-01 19:55:09",
                 "updateTime": "2018-11-01 19:55:09"
-            },
-        ],
-        "max_hum": {
-            "id": 17,
-            "humidite": 89.59,
-            "createTime": "2018-11-01 19:55:09",
-            "updateTime": "2018-11-01 19:55:09"
-        },
-        "min_hum": {
-            "id": 20,
-            "humidite": 51.64,
-            "createTime": "2018-11-01 19:55:24",
-            "updateTime": "2018-11-01 19:55:24"
-        }
+            }
+           
+        ]
     }
 }
 ```

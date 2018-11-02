@@ -3,16 +3,19 @@ package com.terrastation.sha.VO;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
-public class HumiditeVO {
+public class TerraiumVO {
 
    private int id;
 
-   private double humidite;
+   private String type;
+   private double valeur;
+
+   private String symbol;
 
    private Date createTime;
+
 
    private Date updateTime;
 
