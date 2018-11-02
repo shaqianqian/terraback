@@ -23,8 +23,11 @@ public class TerraiumController {
     @Autowired
     private TerraiumRepositary terraiumRepositary;
 
-
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    /**
+     * recuperer tous les parametres de terraium
+     * @return
+     */
+    @RequestMapping(value = "/terraium/getAll", method = RequestMethod.GET)
 
     public ResultVO<List<Terraium>> findall() {
 
@@ -32,20 +35,26 @@ public class TerraiumController {
 
     }
 
+    /**
+     * ajouter une ligne de parametre au terraium
+     * @param terraium
+     * @return
+     */
     //json forme donnee
-    @RequestMapping(value = "add", method = RequestMethod.POST)
+    @RequestMapping(value = "/terraium/add", method = RequestMethod.POST)
 
     public ResultVO<Terraium> add(@RequestBody Terraium terraium) {
         Terraium t = new Terraium();
         t.setHumidite(terraium.getHumidite());
         t.setTemperature(terraium.getTemperature());
-        return ResultUtil.success(terraiumRepositary.save(t));
+        Terraium t_add=terraiumRepositary.save(t);
+        return ResultUtil.success(t_add);
 
     }
 
-
-    @PutMapping(value = "/terraium/{id}")
-    public  ResultVO<Terraium> updateNote(@PathVariable(value = "id") int terraiumId,
+//modifier une ligne de parametre au terraium
+    @PutMapping(value = "/terraium/update/{id}")
+    public  ResultVO<Terraium> updateTerraium(@PathVariable(value = "id") int terraiumId,
                                @RequestBody Terraium terraiumDetails) {
         Optional<Terraium> terraiumOriginal = terraiumRepositary.findById(terraiumId);
         Terraium terraiumNew = null;
@@ -58,9 +67,9 @@ public class TerraiumController {
         }
         return  ResultUtil.success(terraiumRepositary.save(terraiumNew));
     }
-
-    @DeleteMapping("/terraium/{id}")
-    public  ResultVO<String> deleteReptile(@PathVariable(value = "id") int noteId) {
+    //supprimer une ligne de parametre au terraium
+    @DeleteMapping("/terraium/delete/{id}")
+    public  ResultVO<String> deleteTerraium(@PathVariable(value = "id") int noteId) {
         Optional<Terraium> terraiumOriginal = terraiumRepositary.findById(noteId);
         Terraium terraium = null;
         if (!terraiumOriginal.isPresent()) {
@@ -72,7 +81,9 @@ public class TerraiumController {
         } return  ResultUtil.success("vous avez reussi de supprimer : "+noteId);
 
     }
-    @RequestMapping(value = "getCurrentParametres", method = RequestMethod.GET)
+
+    //recuperer tous les lignes recentes des parametres
+    @RequestMapping(value = "/terraium/getCurrentParametres", method = RequestMethod.GET)
     public ResultVO<List<Terraium> >getCurrentParametres() {
 
 

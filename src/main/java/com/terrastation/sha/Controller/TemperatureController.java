@@ -27,8 +27,8 @@ public class TemperatureController {
 
 
 
-
-    @RequestMapping(value = "getCurrentTemperaturesVO", method = RequestMethod.GET)
+//recuperer les temperatures recentes, maximal et minimal
+    @RequestMapping(value = "/terraium/temperature/getCurrentTemperaturesVO", method = RequestMethod.GET)
     public ResultVO<TemperaturesVO> getCurrentTemperaturesVO() {
         List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
         Collections.reverse(terraiumList);

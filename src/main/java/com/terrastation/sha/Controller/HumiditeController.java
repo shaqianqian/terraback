@@ -25,7 +25,7 @@ public class HumiditeController {
 
 
 
-    @RequestMapping(value = "getCurrentHumiditesVO", method = RequestMethod.GET)
+    @RequestMapping(value = "/terraium/humidite/getCurrentHumiditesVO", method = RequestMethod.GET)
     public ResultVO<HumiditesVO> getCurrentHumiditesVO() {
         List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
         Collections.reverse(terraiumList);
