@@ -2,9 +2,9 @@ package com.terrastation.sha.Service;
 
 import com.terrastation.sha.Entity.Terraium;
 import com.terrastation.sha.Repositary.TerraiumRepositary;
-import com.terrastation.sha.Util.ResultUtil;
-import com.terrastation.sha.VO.ResultVO;
+import com.terrastation.sha.VO.TerraiumGenereVO;
 import com.terrastation.sha.VO.TerraiumVO;
+import com.terrastation.sha.VO.TerraiumsGenereVO;
 import com.terrastation.sha.VO.TerraiumsVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,35 +16,35 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class TerraiumService {
+public class TerraiumServiceGenere {
     @Autowired
     private TerraiumRepositary terraiumRepositary;
-    public TerraiumsVO  GetCurrentHumiditesVO() {
+    public TerraiumsGenereVO  GetCurrentHumiditesVO() {
         List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
         Collections.reverse(terraiumList);
-        List<TerraiumVO> humiditeVOList = new ArrayList<TerraiumVO>();
+        List<TerraiumGenereVO> humiditeVOList = new ArrayList<TerraiumGenereVO>();
         for (Terraium t : terraiumList) {
-            TerraiumVO humiditeVO = new TerraiumVO();
-            humiditeVO.setValue(t.getHumidite());
-            humiditeVO.setTime(t.getCreateTime());
+            TerraiumGenereVO humiditeVO = new TerraiumGenereVO();
+            humiditeVO.setY(t.getHumidite());
+            humiditeVO.setX(t.getCreateTime());
             humiditeVOList.add(humiditeVO);
 
 
         }
         Terraium hum_max = terraiumRepositary.findMaxHumidites(6);
-        TerraiumVO humiditeVO_max = new TerraiumVO();
-        humiditeVO_max.setTime(hum_max.getCreateTime());
-        humiditeVO_max.setValue(hum_max.getHumidite());
+        TerraiumGenereVO humiditeVO_max = new TerraiumGenereVO();
+        humiditeVO_max.setX(hum_max.getCreateTime());
+        humiditeVO_max.setY(hum_max.getHumidite());
 
 
         Terraium hum__min = terraiumRepositary.findMinHumidites(6);
-        TerraiumVO humiditeVO_min = new TerraiumVO();
-        humiditeVO_min.setTime(hum__min.getCreateTime());
-        humiditeVO_min.setValue(hum__min.getHumidite());
+        TerraiumGenereVO humiditeVO_min = new TerraiumGenereVO();
+        humiditeVO_min.setX(hum__min.getCreateTime());
+        humiditeVO_min.setY(hum__min.getHumidite());
 
 
 
-        TerraiumsVO humiditesVO=new  TerraiumsVO();
+        TerraiumsGenereVO humiditesVO=new  TerraiumsGenereVO();
         humiditesVO.setMax(humiditeVO_max);
         humiditesVO.setMin(humiditeVO_min);
         humiditesVO.setSymbol("%");
@@ -58,32 +58,32 @@ public class TerraiumService {
 
     }
 
-    public TerraiumsVO GetCurrentTemperaturesVO() {
+    public TerraiumsGenereVO GetCurrentTemperaturesVO() {
         List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
         Collections.reverse(terraiumList);
-        List<TerraiumVO> terraiumListVO = new ArrayList<TerraiumVO>();
+        List<TerraiumGenereVO> terraiumListVO = new ArrayList<TerraiumGenereVO>();
         for (Terraium t : terraiumList) {
-            TerraiumVO temperatureVO = new TerraiumVO();
-            temperatureVO.setValue(t.getTemperature());
-            temperatureVO.setTime(t.getCreateTime());
+            TerraiumGenereVO temperatureVO = new TerraiumGenereVO();
+            temperatureVO.setY(t.getTemperature());
+            temperatureVO.setX(t.getCreateTime());
             terraiumListVO.add(temperatureVO);
 
         }
         Terraium temp_max = terraiumRepositary.findMaxTemperatures(6);
-        TerraiumVO tempVO_max = new TerraiumVO();
-        tempVO_max.setTime(temp_max.getCreateTime());
-        tempVO_max.setValue(temp_max.getTemperature());
+        TerraiumGenereVO tempVO_max = new TerraiumGenereVO();
+        tempVO_max.setX(temp_max.getCreateTime());
+        tempVO_max.setY(temp_max.getTemperature());
 
 
 
         Terraium temp_min = terraiumRepositary.findMinTemperatures(6);
-        TerraiumVO tempVO_min = new TerraiumVO();
-        tempVO_min.setTime(temp_min.getCreateTime());
-        tempVO_min.setValue(temp_min.getTemperature());
+        TerraiumGenereVO tempVO_min = new TerraiumGenereVO();
+        tempVO_min.setX(temp_min.getCreateTime());
+        tempVO_min.setY(temp_min.getTemperature());
 
 
 
-        TerraiumsVO temperaturesVO=new TerraiumsVO();
+        TerraiumsGenereVO temperaturesVO=new TerraiumsGenereVO();
         temperaturesVO.setSymbol("°C");
         temperaturesVO.setType("temperature");
         temperaturesVO.setMax(tempVO_max);

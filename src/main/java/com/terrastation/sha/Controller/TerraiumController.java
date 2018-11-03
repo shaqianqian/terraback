@@ -1,11 +1,10 @@
 package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.Service.TerraiumService;
+import com.terrastation.sha.Service.TerraiumServiceGenere;
 import com.terrastation.sha.Util.ResultUtil;
-import com.terrastation.sha.VO.ResultVO;
+import com.terrastation.sha.VO.*;
 import com.terrastation.sha.Enums.ResultEnum;
-import com.terrastation.sha.VO.TerraiumsGenereVO;
-import com.terrastation.sha.VO.TerraiumsVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,8 @@ public class TerraiumController {
 
     @Autowired
     private TerraiumService terraiumService;
+    @Autowired
+    private TerraiumServiceGenere terraiumServiceGenere;
     @Autowired
     private TerraiumRepositary terraiumRepositary;
 
@@ -98,8 +99,8 @@ public class TerraiumController {
 
    @RequestMapping(value = "/terraium/getCurrentParametresVO", method = RequestMethod.GET)
 
-    public ResultVO<TerraiumsGenereVO>getCurrentParametresVO() {
-      TerraiumsGenereVO terraiumsGenereVO=new TerraiumsGenereVO();
+    public ResultVO<TerraiumsSensorVO>getCurrentParametresVO() {
+       TerraiumsSensorVO terraiumsGenereVO=new TerraiumsSensorVO();
       List<TerraiumsVO> terraiumsVOList=new ArrayList<TerraiumsVO>();
 
        TerraiumsVO temperaturesVO=terraiumService.GetCurrentTemperaturesVO();
@@ -107,6 +108,21 @@ public class TerraiumController {
        terraiumsVOList.add(temperaturesVO);
        terraiumsVOList.add(humiditesVO);
        terraiumsGenereVO.setSensors(terraiumsVOList);
+
+        return ResultUtil.success(terraiumsGenereVO);
+
+    }
+    @RequestMapping(value = "/terraium/getCurrentParametresGenereVO", method = RequestMethod.GET)
+
+    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO() {
+        TerraiumsSensorGenereVO terraiumsGenereVO=new TerraiumsSensorGenereVO();
+        List<TerraiumsGenereVO> terraiumsVOList=new ArrayList<TerraiumsGenereVO>();
+
+        TerraiumsGenereVO temperaturesVO=terraiumServiceGenere.GetCurrentTemperaturesVO();
+        TerraiumsGenereVO humiditesVO=terraiumServiceGenere.GetCurrentHumiditesVO();
+        terraiumsVOList.add(temperaturesVO);
+        terraiumsVOList.add(humiditesVO);
+        terraiumsGenereVO.setSensors(terraiumsVOList);
 
         return ResultUtil.success(terraiumsGenereVO);
 
