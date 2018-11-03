@@ -1,8 +1,11 @@
 package com.terrastation.sha.Controller;
 
+import com.terrastation.sha.Service.TerraiumService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
 import com.terrastation.sha.Enums.ResultEnum;
+import com.terrastation.sha.VO.TerraiumsGenereVO;
+import com.terrastation.sha.VO.TerraiumsVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import com.terrastation.sha.Repositary.*;
 import com.terrastation.sha.Entity.Terraium;
 import com.terrastation.sha.Exception.TerraiumException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +23,8 @@ import java.util.Optional;
 public class TerraiumController {
     Logger log = LoggerFactory.getLogger(TerraiumController.class);
 
-
+    @Autowired
+    private TerraiumService terraiumService;
     @Autowired
     private TerraiumRepositary terraiumRepositary;
 
@@ -88,6 +93,22 @@ public class TerraiumController {
 
 
         return ResultUtil.success(terraiumRepositary.findCurrentTemperatures(6));
+
+    }
+
+   @RequestMapping(value = "/terraium/getCurrentParametresVO", method = RequestMethod.GET)
+
+    public ResultVO<TerraiumsGenereVO>getCurrentParametresVO() {
+      TerraiumsGenereVO terraiumsGenereVO=new TerraiumsGenereVO();
+      List<TerraiumsVO> terraiumsVOList=new ArrayList<TerraiumsVO>();
+
+       TerraiumsVO temperaturesVO=terraiumService.GetCurrentTemperaturesVO();
+       TerraiumsVO humiditesVO=terraiumService.GetCurrentHumiditesVO();
+       terraiumsVOList.add(temperaturesVO);
+       terraiumsVOList.add(humiditesVO);
+       terraiumsGenereVO.setSensors(terraiumsVOList);
+
+        return ResultUtil.success(terraiumsGenereVO);
 
     }
 

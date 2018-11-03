@@ -1,6 +1,7 @@
 package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.Entity.Terraium;
+import com.terrastation.sha.Service.TerraiumService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
 import com.terrastation.sha.Exception.TerraiumException;
@@ -24,42 +25,18 @@ public class TemperatureController {
 
     @Autowired
     private TerraiumRepositary terraiumRepositary;
+    @Autowired
+    private TerraiumService terraiumService;
 
 
 
 //recuperer les temperatures recentes, maximal et minimal
     @RequestMapping(value = "/terraium/temperature/getCurrentTemperaturesVO", method = RequestMethod.GET)
     public ResultVO<TerraiumsVO> getCurrentTemperaturesVO() {
-        List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
-        Collections.reverse(terraiumList);
-        List<TerraiumVO> terraiumListVO = new ArrayList<TerraiumVO>();
-        for (Terraium t : terraiumList) {
-            TerraiumVO temperatureVO = new TerraiumVO();
-            temperatureVO.setValue(t.getTemperature());
-            temperatureVO.setTime(t.getCreateTime());
-            terraiumListVO.add(temperatureVO);
-
-        }
-        Terraium temp_max = terraiumRepositary.findMaxTemperatures(6);
-        TerraiumVO tempVO_max = new TerraiumVO();
-        tempVO_max.setTime(temp_max.getCreateTime());
-        tempVO_max.setValue(temp_max.getTemperature());
 
 
+        TerraiumsVO temperaturesVO=terraiumService.GetCurrentTemperaturesVO();
 
-        Terraium temp_min = terraiumRepositary.findMinTemperatures(6);
-        TerraiumVO tempVO_min = new TerraiumVO();
-        tempVO_min.setTime(temp_min.getCreateTime());
-        tempVO_min.setValue(temp_min.getTemperature());
-
-
-
-        TerraiumsVO temperaturesVO=new TerraiumsVO();
-        temperaturesVO.setSymbol("°C");
-        temperaturesVO.setType("Temperature");
-        temperaturesVO.setMax(tempVO_max);
-        temperaturesVO.setMin(tempVO_min);
-        temperaturesVO.setValues(terraiumListVO);
 
         return ResultUtil.success(temperaturesVO);
 

@@ -8,7 +8,6 @@ import java.util.Date;
 public class TerraiumVO {
 
 
-
    private double value;
 
 

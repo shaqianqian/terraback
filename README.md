@@ -186,3 +186,69 @@ url www.localhost:8080
 }
 ```
 
+
+#### /terraium/humidite/getCurrentParametresVO(recuperer les donnees de tous les sensors )
+
+``` json
+{
+    "code": 0,
+    "msg": "reussi",
+    "data": {
+        "sensors": [
+            {
+                "type": "temperature",
+                "symbol": "°C",
+                "name": "Temperature",
+                "id": 1,
+                "max": {
+                    "value": 36.06,
+                    "time": "2018-11-01 19:55:24"
+                },
+                "min": {
+                    "value": 33,
+                    "time": "2018-11-01 19:55:09"
+                },
+                "values": [
+                    {
+                        "value": 33.22,
+                        "time": "2018-11-01 19:54:59"
+                    },
+                    {
+                        "value": 35.97,
+                        "time": "2018-11-01 19:55:04"
+                    },
+                    {
+                        "value": 33,
+                        "time": "2018-11-01 19:55:09"
+                    },
+                ]
+            },
+            {
+                "type": "humidite",
+                "symbol": "%",
+                "name": "Humidite",
+                "id": 2,
+                "max": {
+                    "value": 89.59,
+                    "time": "2018-11-01 19:55:09"
+                },
+                "min": {
+                    "value": 51.64,
+                    "time": "2018-11-01 19:55:24"
+                },
+                "values": [
+                    {
+                        "value": 57.8,
+                        "time": "2018-11-01 19:54:59"
+                    },
+                    {
+                        "value": 76.67,
+                        "time": "2018-11-01 19:55:04"
+                    },
+            
+                ]
+            }
+        ]
+    }
+}
+```
