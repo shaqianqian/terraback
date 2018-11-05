@@ -7,16 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.terrastation.sha.repositary.*;
-import com.terrastation.sha.domain.terraium;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
     @RestController
-
-    public class reptileController {
-        Logger log = LoggerFactory.getLogger(com.terrastation.sha.Controller.reptileController.class);
+    public class PrereglagesController {
+        Logger log = LoggerFactory.getLogger(com.terrastation.sha.Controller.PrereglagesController.class);
 
 
         @Autowired
@@ -79,4 +76,4 @@ import java.util.Optional;
 
 
 
-}
+

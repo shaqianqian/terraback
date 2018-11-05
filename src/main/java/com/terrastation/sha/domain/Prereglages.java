@@ -1,6 +1,5 @@
 package com.terrastation.sha.domain;
 
-package com.terrastation.sha.domain;
 
 import lombok.Data;
 
