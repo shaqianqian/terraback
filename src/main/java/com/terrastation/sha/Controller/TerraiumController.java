@@ -1,5 +1,6 @@
 package com.terrastation.sha.Controller;
 
+import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Service.TerraiumService;
 import com.terrastation.sha.Service.TerraiumServiceGenere;
 import com.terrastation.sha.Util.ResultUtil;
@@ -79,7 +80,7 @@ public class TerraiumController {
         Optional<Terraium> terraiumOriginal = terraiumRepositary.findById(noteId);
         Terraium terraium = null;
         if (!terraiumOriginal.isPresent()) {
-            throw new TerraiumException(ResultEnum.ID_NOT_EXIST);
+            throw new IdNotExistException(ResultEnum.ID_NOT_EXIST);
         } else {
             terraium = terraiumOriginal.get();
             terraiumRepositary.delete(terraium);
