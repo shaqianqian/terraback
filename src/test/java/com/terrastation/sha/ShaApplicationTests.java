@@ -76,5 +76,4 @@ public class ShaApplicationTests {
         assertTrue(error.getErrors().get(0).contains("media type is not supported"));
     }
 
-
 }
