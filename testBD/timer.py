@@ -12,7 +12,7 @@ print(mydb)
 def fun_timer():
     temperature=str(round(random.uniform(30,37),2))
     humidity=str(round(random.uniform(50,100),2))
-    print(temperature)
+    print("temperature: "+temperature+" humidite: "+humidity)
     global mycursor
     mycursor = mydb.cursor()
     # mycursor.execute("CREATE DATABASE runoob_db")

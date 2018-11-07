@@ -3,11 +3,15 @@ package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.Entity.Chauffage;
 import com.terrastation.sha.Repositary.ChauffageRepository;
+import com.terrastation.sha.Util.ResultUtil;
+import com.terrastation.sha.VO.ResultVO;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,23 +24,38 @@ public class ChauffageController {
     private ChauffageRepository chauffageRepository;
 
 
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/chauffage/getAll", method = RequestMethod.GET)
 
-    public List<Chauffage> findall() {
-        return chauffageRepository.findAll();
+    public  ResultVO  findall() {
+        return ResultUtil.success(chauffageRepository.findAll());
 
     }
 
-    @RequestMapping(value = "add", method = RequestMethod.POST)
+    @RequestMapping(value = "/chauffage/add", method = RequestMethod.POST)
 
-    public Chauffage add(@RequestParam("dateDebut")Date dateDebut, @RequestParam("dateFin") Date dateFin, @RequestParam("min") double min , @RequestParam("max") double max, @RequestParam("etat")boolean etat) {
+    public ResultVO add(@RequestParam("dateDebut")String dateDebut, @RequestParam("dateFin") String dateFin, @RequestParam("min") double min , @RequestParam("max") double max, @RequestParam("etat")boolean etat) {
         Chauffage rep=new Chauffage();
-        rep.setDateDebut(dateDebut);
-        rep.setDateFin(dateFin);
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date timeDebut;
+        Date timeFin;
+        try {
+            timeDebut=format.parse(dateDebut);
+            rep.setDateDebut(timeDebut);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            timeDebut=format.parse(dateFin);
+            rep.setDateFin(timeDebut);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         rep.setMin(min);
         rep.setMax(max);
         rep.setEtat(etat);
-        return  chauffageRepository.save(rep);
+
+        return   ResultUtil.success(chauffageRepository.save(rep));
 
     }
 

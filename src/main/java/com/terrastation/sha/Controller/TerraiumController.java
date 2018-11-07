@@ -62,15 +62,19 @@ public class TerraiumController {
 //modifier une ligne de parametre au terraium
     @PutMapping(value = "/terraium/update/{id}")
     public  ResultVO<Terraium> updateTerraium(@PathVariable(value = "id") int terraiumId,
-                               @RequestBody Terraium terraiumDetails) {
+                                              @RequestParam(value="temperature" , required = false,defaultValue = "0") double temperature ,
+                                              @RequestParam(value="humidite" , required = false,defaultValue = "0") double humidite ) {
         Optional<Terraium> terraiumOriginal = terraiumRepositary.findById(terraiumId);
         Terraium terraiumNew = null;
         if (!terraiumOriginal.isPresent()) {
             throw new TerraiumException(ResultEnum.ID_NOT_EXIST);
         } else {
             terraiumNew = terraiumOriginal.get();
-            terraiumNew.setTemperature(terraiumDetails.getTemperature());
-            terraiumNew.setHumidite(terraiumDetails.getHumidite());
+
+            if(temperature!=0)
+            {terraiumNew.setTemperature(temperature);}
+            if(humidite!=0)
+            {terraiumNew.setHumidite(humidite);}
         }
         return  ResultUtil.success(terraiumRepositary.save(terraiumNew));
     }
