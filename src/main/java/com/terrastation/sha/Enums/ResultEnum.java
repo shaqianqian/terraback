@@ -9,7 +9,9 @@ public enum ResultEnum {
 
     PARAM_ERROR(1, "les parametres ne sont pas correctes"),
 
-    ID_NOT_EXIST(2, "cet id existe pas "),;
+    ID_NOT_EXIST(2, "cet id existe pas "),
+
+    Time_Ordre (3, "le dateDebut doit etre plus tot ou autant que le dateFin "),;
 
     private Integer code;
 

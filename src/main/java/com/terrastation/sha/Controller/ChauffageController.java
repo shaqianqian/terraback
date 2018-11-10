@@ -2,6 +2,8 @@ package com.terrastation.sha.Controller;
 
 
 import com.terrastation.sha.Entity.Chauffage;
+import com.terrastation.sha.Enums.ResultEnum;
+import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Repositary.ChauffageRepository;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
@@ -34,52 +36,41 @@ public class ChauffageController {
     @RequestMapping(value = "/chauffage/add", method = RequestMethod.POST)
 
     public ResultVO add(@RequestParam("dateDebut")String dateDebut, @RequestParam("dateFin") String dateFin, @RequestParam("min") double min , @RequestParam("max") double max, @RequestParam("etat")boolean etat) {
-        Chauffage rep=new Chauffage();
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date timeDebut;
-        Date timeFin;
+        Chauffage rep = new Chauffage();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date timeDebut = null;
+        Date timeFin = null;
         try {
-            timeDebut=format.parse(dateDebut);
+            timeDebut = format.parse(dateDebut);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            timeFin = format.parse(dateFin);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (timeDebut.after(timeFin)||timeDebut.equals(timeFin)) {
+
+            throw new IdNotExistException(ResultEnum.Time_Ordre);
+        } else {
             rep.setDateDebut(timeDebut);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            timeDebut=format.parse(dateFin);
-            rep.setDateFin(timeDebut);
-        } catch (ParseException e) {
-            e.printStackTrace();
+            rep.setDateFin(timeFin);
+            rep.setMin(min);
+            rep.setMax(max);
+            rep.setEtat(etat);
+
+//        }
+
+            return ResultUtil.success(chauffageRepository.save(rep));
+
         }
 
-        rep.setMin(min);
-        rep.setMax(max);
-        rep.setEtat(etat);
 
-        return   ResultUtil.success(chauffageRepository.save(rep));
 
     }
-
-
-
-    @PutMapping("/prereglages/{id}")
-    public Chauffage updateNote(@PathVariable(value = "id") int chauffageId,
-                                @Valid @RequestBody Chauffage chauffageDetails) {
-        Optional<Chauffage> chauf = chauffageRepository.findById(chauffageId);
-        Chauffage chauffage1=null;
-        if(chauf.isPresent()) {
-            chauffage1=chauf.get();
-            chauffage1.setDateDebut(chauffageDetails.getDateDebut());
-            chauffage1.setDateFin(chauffageDetails.getDateFin());
-            chauffage1.setMin(chauffageDetails.getMin());
-            chauffage1.setMax(chauffageDetails.getMax());
-            chauffage1.setEtat(chauffageDetails.isEtat());
-
-        }
-        Chauffage chauffagePrereglages = chauffageRepository.save(chauffage1);
-        return chauffagePrereglages;
-    }
-
-
 
 
 }
