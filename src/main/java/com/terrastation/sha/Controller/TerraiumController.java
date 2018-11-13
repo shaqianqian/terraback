@@ -3,6 +3,7 @@ package com.terrastation.sha.Controller;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Service.TerraiumService;
 import com.terrastation.sha.Service.TerraiumServiceGenere;
+import com.terrastation.sha.Service.TerraiumServiceSensor;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.*;
 import com.terrastation.sha.Enums.ResultEnum;
@@ -29,7 +30,8 @@ public class TerraiumController {
     private TerraiumServiceGenere terraiumServiceGenere;
     @Autowired
     private TerraiumRepositary terraiumRepositary;
-
+    @Autowired
+    private TerraiumServiceSensor terraiumServiceSensor;
     /**
      * recuperer tous les parametres de terraium
      * @return
@@ -130,6 +132,28 @@ public class TerraiumController {
         terraiumsGenereVO.setSensors(terraiumsVOList);
 
         return ResultUtil.success(terraiumsGenereVO);
+
+    }
+    @RequestMapping(value = "/terraium/listSensors", method = RequestMethod.GET)
+
+    public ResultVO<SensorsVO> getListSensors() {
+
+        SensorsVO sensorsVO=new SensorsVO();
+        List<SensorAffichageVO> sensorVOList=new ArrayList<SensorAffichageVO>();
+        SensorAffichageVO temperatureSensor=new SensorAffichageVO(1,"temperature","°C");
+        SensorAffichageVO  humiditeSensor=new SensorAffichageVO (2,"humidity","%");
+        sensorVOList.add(temperatureSensor);
+        sensorVOList.add(humiditeSensor);
+        sensorsVO.setSensors(sensorVOList);
+        return ResultUtil.success(sensorsVO);
+
+    }
+    @RequestMapping(value = "/terraium/listSensors/{id}", method = RequestMethod.GET)
+
+    public ResultVO<SensorVO> getListSensors(@PathVariable(value = "id") int index) {
+        SensorVO sensorVO=new SensorVO();
+        sensorVO=terraiumServiceSensor.getSensorByIdVO(index);
+        return ResultUtil.success(sensorVO);
 
     }
 

@@ -7,11 +7,11 @@ import java.util.Date;
 @Data
 public class TerraiumGenereVO {
 
-
+   private Date x;
    private double y;
 
 
-   private Date x;
+
 
 
 

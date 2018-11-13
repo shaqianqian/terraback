@@ -4,6 +4,7 @@ import com.terrastation.sha.Entity.Terraium;
 import com.terrastation.sha.Exception.TerraiumException;
 import com.terrastation.sha.Repositary.TerraiumRepositary;
 import com.terrastation.sha.Service.TerraiumService;
+import com.terrastation.sha.Service.TerraiumServiceSensor;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.*;
 import org.slf4j.Logger;
@@ -25,17 +26,17 @@ public class HumiditeController {
     private TerraiumRepositary terraiumRepositary;
     @Autowired
     private TerraiumService terraiumService;
+    @Autowired
+    private TerraiumServiceSensor terraiumServiceSensor;
 
-
+    //recuperer les humidites recentes, maximal et minimal
     @RequestMapping(value = "/terraium/humidite/getCurrentHumiditesVO", method = RequestMethod.GET)
-    public ResultVO<TerraiumsVO> getCurrentHumiditesVO() {
+    public ResultVO<TerraiumsVO> getCurrentHumiditeVO() {
 
+        SensorVO humidite_sensor=new SensorVO();
+        humidite_sensor=terraiumServiceSensor.getCurrentHumiditeVO();
 
-
-        TerraiumsVO humiditesVO=terraiumService.GetCurrentHumiditesVO();
-
-
-        return ResultUtil.success(humiditesVO);
+        return ResultUtil.success(humidite_sensor);
 
     }
 
