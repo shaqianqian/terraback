@@ -68,39 +68,25 @@ public class TerraiumServiceSensor {
 
     public SensorVO getSensorByIdVO(int id) {
         SensorVO sensor=new SensorVO();
+        TerraiumsVO terraiumsVO=new TerraiumsVO();
        if(id==2){
-           TerraiumsVO humiditesVO=terraiumService.GetCurrentHumiditesVO();
-           List<TerraiumVO>  humidites=humiditesVO.getValues();
-           List<TerraiumGenereVO> humiditeGeneres=new ArrayList<TerraiumGenereVO>();
-           for(TerraiumVO t:humidites){
-
-               TerraiumGenereVO humidteGenere=new TerraiumGenereVO();
-               humidteGenere.setX(t.getTime());
-               humidteGenere.setY(t.getValue());
-               humiditeGeneres.add(humidteGenere);
-           }
-
-           sensor.setId(2);
-           sensor.setMeasurments(humiditeGeneres);
-
+           terraiumsVO=terraiumService.GetCurrentHumiditesVO();
        }else if(id==1){
-
-
-           TerraiumsVO humiditesVO=terraiumService.GetCurrentHumiditesVO();
-           List<TerraiumVO>  humidites=humiditesVO.getValues();
-           List<TerraiumGenereVO> humiditeGeneres=new ArrayList<TerraiumGenereVO>();
-           for(TerraiumVO t:humidites){
-
-               TerraiumGenereVO humidteGenere=new TerraiumGenereVO();
-               humidteGenere.setX(t.getTime());
-               humidteGenere.setY(t.getValue());
-               humiditeGeneres.add(humidteGenere);
-           }
-           sensor.setId(2);
-           sensor.setMeasurments(humiditeGeneres);
+           terraiumsVO=terraiumService.GetCurrentTemperaturesVO();
 
        }
        else{ throw new IdNotExistException(ResultEnum.ID_NOT_EXIST);}
+        List<TerraiumVO>  terraiumVOS=terraiumsVO.getValues();
+        List<TerraiumGenereVO> terraiumGeneres=new ArrayList<TerraiumGenereVO>();
+        for(TerraiumVO t:terraiumVOS){
+
+            TerraiumGenereVO terraiumGenereVO=new TerraiumGenereVO();
+            terraiumGenereVO.setX(t.getTime());
+            terraiumGenereVO.setY(t.getValue());
+            terraiumGeneres.add(terraiumGenereVO);
+        }
+        sensor.setId(id);
+        sensor.setMeasurments(terraiumGeneres);
 
         return  sensor;
 
