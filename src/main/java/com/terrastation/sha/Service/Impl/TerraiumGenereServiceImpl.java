@@ -1,7 +1,11 @@
-package com.terrastation.sha.Service;
+package com.terrastation.sha.Service.Impl;
 
 import com.terrastation.sha.Entity.Terraium;
+import com.terrastation.sha.Enums.ResultEnum;
+import com.terrastation.sha.Exception.TerraiumException;
 import com.terrastation.sha.Repositary.TerraiumRepositary;
+import com.terrastation.sha.Service.TerraiumGenereService;
+import com.terrastation.sha.Service.TerraiumService;
 import com.terrastation.sha.VO.TerraiumGenereVO;
 import com.terrastation.sha.VO.TerraiumVO;
 import com.terrastation.sha.VO.TerraiumsGenereVO;
@@ -16,11 +20,13 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class TerraiumServiceGenere {
+public class TerraiumGenereServiceImpl implements TerraiumGenereService {
     @Autowired
     private TerraiumRepositary terraiumRepositary;
-    public TerraiumsGenereVO  GetCurrentHumiditesVO() {
-        List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
+    public TerraiumsGenereVO  GetCurrentHumiditesVO(int quantite) {
+        if(quantite>terraiumRepositary.getRowQuantity()){
+            throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
+        List<Terraium> terraiumList = terraiumRepositary.findCurrentParametres(quantite);
         Collections.reverse(terraiumList);
         List<TerraiumGenereVO> humiditeVOList = new ArrayList<TerraiumGenereVO>();
         for (Terraium t : terraiumList) {
@@ -31,13 +37,13 @@ public class TerraiumServiceGenere {
 
 
         }
-        Terraium hum_max = terraiumRepositary.findMaxHumidites(6);
+        Terraium hum_max = terraiumRepositary.findMaxHumidites(quantite);
         TerraiumGenereVO humiditeVO_max = new TerraiumGenereVO();
         humiditeVO_max.setX(hum_max.getCreateTime());
         humiditeVO_max.setY(hum_max.getHumidite());
 
 
-        Terraium hum__min = terraiumRepositary.findMinHumidites(6);
+        Terraium hum__min = terraiumRepositary.findMinHumidites(quantite);
         TerraiumGenereVO humiditeVO_min = new TerraiumGenereVO();
         humiditeVO_min.setX(hum__min.getCreateTime());
         humiditeVO_min.setY(hum__min.getHumidite());
@@ -58,8 +64,10 @@ public class TerraiumServiceGenere {
 
     }
 
-    public TerraiumsGenereVO GetCurrentTemperaturesVO() {
-        List<Terraium> terraiumList = terraiumRepositary.findCurrentTemperatures(6);
+    public TerraiumsGenereVO GetCurrentTemperaturesVO(int quantite) {
+        if(quantite>terraiumRepositary.getRowQuantity()){
+            throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
+        List<Terraium> terraiumList = terraiumRepositary.findCurrentParametres(quantite);
         Collections.reverse(terraiumList);
         List<TerraiumGenereVO> terraiumListVO = new ArrayList<TerraiumGenereVO>();
         for (Terraium t : terraiumList) {
@@ -69,14 +77,14 @@ public class TerraiumServiceGenere {
             terraiumListVO.add(temperatureVO);
 
         }
-        Terraium temp_max = terraiumRepositary.findMaxTemperatures(6);
+        Terraium temp_max = terraiumRepositary.findMaxTemperatures(quantite);
         TerraiumGenereVO tempVO_max = new TerraiumGenereVO();
         tempVO_max.setX(temp_max.getCreateTime());
         tempVO_max.setY(temp_max.getTemperature());
 
 
 
-        Terraium temp_min = terraiumRepositary.findMinTemperatures(6);
+        Terraium temp_min = terraiumRepositary.findMinTemperatures(quantite);
         TerraiumGenereVO tempVO_min = new TerraiumGenereVO();
         tempVO_min.setX(temp_min.getCreateTime());
         tempVO_min.setY(temp_min.getTemperature());

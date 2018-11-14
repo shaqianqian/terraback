@@ -1,15 +1,13 @@
-package com.terrastation.sha.Service;
+package com.terrastation.sha.Service.Impl;
 
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Repositary.TerraiumRepositary;
-import com.terrastation.sha.Util.ResultUtil;
+import com.terrastation.sha.Service.TerraiumSensorService;
 import com.terrastation.sha.VO.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +15,17 @@ import java.util.List;
 @Service
 @Slf4j
 
-public class TerraiumServiceSensor {
+public class TerraiumSensorServiceImpl implements TerraiumSensorService
+{
     @Autowired
     private TerraiumRepositary terraiumRepositary;
     @Autowired
-    private TerraiumService terraiumService;
+    private TerraiumServiceImpl terraiumServiceImpl;
 
-    public SensorVO getCurrentHumiditeVO() {
+    public SensorVO getCurrentHumiditeVO(int quantite) {
 
 
-        TerraiumsVO humiditesVO=terraiumService.GetCurrentHumiditesVO();
+        TerraiumsVO humiditesVO= terraiumServiceImpl.GetCurrentHumiditesVO(quantite);
         List<TerraiumVO>  humidites=humiditesVO.getValues();
         List<TerraiumGenereVO> humiditeGeneres=new ArrayList<TerraiumGenereVO>();
         for(TerraiumVO t:humidites){
@@ -43,10 +42,10 @@ public class TerraiumServiceSensor {
         return  humidite_sensor;
 
     }
-    public SensorVO getCurrentTemperaturesVO() {
+    public SensorVO getCurrentTemperaturesVO(int quantite) {
 
 
-        TerraiumsVO temperaturesVO=terraiumService.GetCurrentTemperaturesVO();
+        TerraiumsVO temperaturesVO= terraiumServiceImpl.GetCurrentTemperaturesVO(quantite);
 
         List<TerraiumVO>  temperatures=temperaturesVO.getValues();
         List<TerraiumGenereVO> temperatureGeneres=new ArrayList<TerraiumGenereVO>();
@@ -66,13 +65,13 @@ public class TerraiumServiceSensor {
 
     }
 
-    public SensorVO getSensorByIdVO(int id) {
+    public SensorVO getSensorByIdVO(int id,int quantite) {
         SensorVO sensor=new SensorVO();
         TerraiumsVO terraiumsVO=new TerraiumsVO();
        if(id==2){
-           terraiumsVO=terraiumService.GetCurrentHumiditesVO();
+           terraiumsVO= terraiumServiceImpl.GetCurrentHumiditesVO(quantite);
        }else if(id==1){
-           terraiumsVO=terraiumService.GetCurrentTemperaturesVO();
+           terraiumsVO= terraiumServiceImpl.GetCurrentTemperaturesVO(quantite);
 
        }
        else{ throw new IdNotExistException(ResultEnum.ID_NOT_EXIST);}

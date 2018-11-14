@@ -13,7 +13,7 @@ public interface TerraiumRepositary extends JpaRepository<Terraium,Integer> {
 
 
     @Query(value = "SELECT * FROM runoob_db.terraium order by create_time desc limit ?1 ; ", nativeQuery = true)
-     public List<Terraium> findCurrentTemperatures(Integer quantity);
+     public List<Terraium> findCurrentParametres(Integer quantity);
 
     @Query(value="select * from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currenctTemp1 where (select max(temperature) from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currentTemp2)=temperature", nativeQuery = true)
      public Terraium findMaxTemperatures(Integer quantity);
@@ -28,6 +28,8 @@ public interface TerraiumRepositary extends JpaRepository<Terraium,Integer> {
     @Query(value="select * from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currenctTemp1 where (select min(humidite) from (SELECT * FROM runoob_db.terraium order by create_time desc limit ?1) as currentTemp2)=humidite", nativeQuery = true)
     public Terraium findMinHumidites(Integer quantity);
 
+    @Query(value = "SELECT COUNT(*) FROM terraium;", nativeQuery = true)
+    public int getRowQuantity();
 
 
 }

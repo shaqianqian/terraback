@@ -7,17 +7,12 @@ import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Repositary.ChauffageRepository;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Logger;
+
 
 @RestController
 public class ChauffageController {
