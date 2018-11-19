@@ -1,11 +1,9 @@
 package com.terrastation.sha.Controller;
 
-import com.terrastation.sha.Service.Impl.TerraiumServiceImpl;
-import com.terrastation.sha.Service.TerraiumSensorService;
+import com.terrastation.sha.Service.TerrariumSensorService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.*;
 import com.terrastation.sha.Exception.TerraiumException;
-import com.terrastation.sha.Repositary.TerraiumRepositary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +16,18 @@ public class TemperatureController {
 
 
     @Autowired
-    private TerraiumSensorService terraiumSensorService;
+    private TerrariumSensorService terrariumSensorService;
 
 
 //recuperer les temperatures recentes, maximal et minimal
     @RequestMapping(value = "/terraium/temperature/getCurrentTemperaturesVO", method = RequestMethod.GET)
-    public ResultVO<TerraiumsVO> getCurrentTemperaturesVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
+    public ResultVO<TerrariumsVO> getCurrentTemperaturesVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
 
 
 
         SensorVO temperature_sensor=new SensorVO();
 
-        temperature_sensor= terraiumSensorService.getCurrentTemperaturesVO(quantite);
+        temperature_sensor= terrariumSensorService.getCurrentTemperaturesVO(quantite);
 
 
         return ResultUtil.success(temperature_sensor);

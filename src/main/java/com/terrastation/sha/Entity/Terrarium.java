@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class Terraium {
+public class Terrarium {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

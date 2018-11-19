@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TerraiumsSensorVO {
+public class TerrariumsSensorVO {
 
-   private  List<TerraiumsVO>Sensors;
+   private  List<TerrariumsVO>Sensors;
 
 
 

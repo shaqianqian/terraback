@@ -5,15 +5,15 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TerraiumsGenereVO {
+public class TerrariumsGenereVO {
 
    private String type;
    private String symbol;
-   private  List<TerraiumGenereVO> Values;
+   private  List<TerrariumGenereVO> Values;
    private String name;
    private int id;
-   private  TerraiumGenereVO max;
-   private  TerraiumGenereVO  min;
+   private TerrariumGenereVO max;
+   private TerrariumGenereVO min;
 
 
 

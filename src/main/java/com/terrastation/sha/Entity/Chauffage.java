@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
+
 @Data
 @Entity
 public class Chauffage {
@@ -17,11 +18,10 @@ public class Chauffage {
 
     private Date dateFin;
 
-    private double min ;
+    private double min;
 
-    private double max ;
+    private double max;
 
-    private boolean etat ;
 
     public int getId() {
         return id;
@@ -43,9 +43,6 @@ public class Chauffage {
         return max;
     }
 
-    public boolean isEtat() {
-        return etat;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -67,7 +64,4 @@ public class Chauffage {
         this.max = max;
     }
 
-    public void setEtat(boolean etat) {
-        this.etat = etat;
-    }
 }

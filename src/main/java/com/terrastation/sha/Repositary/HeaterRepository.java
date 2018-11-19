@@ -1,9 +1,9 @@
 package com.terrastation.sha.Repositary;
 
 
-import com.terrastation.sha.Entity.Piece;
+import com.terrastation.sha.Entity.Heater;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PieceRepository extends JpaRepository<Piece,Integer> {
+public interface HeaterRepository extends JpaRepository<Heater,Integer> {
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class TerraiumsSensorGenereVO {
 
-   private  List<TerraiumsGenereVO>Sensors;
+   private  List<TerrariumsGenereVO>Sensors;
 
 
 

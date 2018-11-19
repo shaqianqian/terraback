@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class Piece {
+public class Heater {
     @Id
     @GeneratedValue
     private int id;
