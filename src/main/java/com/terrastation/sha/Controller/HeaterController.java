@@ -35,7 +35,7 @@ public class PieceController {
     @RequestMapping(value = "/terraium/chauffage/getEtatChauffage", method = RequestMethod.GET)
 
 
-    public ResultVO<Piece> getEtatChauffageVO() {
+    public ResultVO<Piece> changeEtatPieceVO() {
         Piece piece;
         if (pieceRepository.findAll().size() == 0) {
             Piece newPiece = new Piece();
@@ -54,23 +54,20 @@ public class PieceController {
         List<Chauffage> chauffages = chauffageRepository.findAll();
         for (Chauffage c : chauffages) {
             if (c.getDateDebut().before(currentTime) && c.getDateFin().after(currentTime)) {
-                log.info("temperautre"+c.getMax());
+                log.info("max_limite_temperautre "+c.getMax());
+                log.info("min_limite_temperautre "+c.getMin());
                 if (c.getMax() <currentTemperature) {
                     piece.setEtat(false);
                     pieceRepository.save(piece);
-                    log.info("eteindre le chauffage");
-
+                    log.info("trop chaud, eteindre le chauffage");
                 } else if (c.getMin()>currentTemperature) {
                     piece.setEtat(true);
                     pieceRepository.save(piece);
-                    log.info("offrir le chauffage");
-
+                    log.info("trop froid, offrir le chauffage");
                 }else if(currentTemperature<=c.getMax()&&currentTemperature>=c.getMin()){
                     log.info("change pas letat de chauffage");
                     pieceRepository.save(piece);
-
                 }
-
 
             }
 
