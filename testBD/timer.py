@@ -16,7 +16,7 @@ def fun_timer():
     global mycursor
     mycursor = mydb.cursor()
     # mycursor.execute("CREATE DATABASE runoob_db")
-    sql = "Insert into runoob_db.terraium (temperature,humidite,create_time,update_time) values(" + temperature + "," + humidity + ",CURTIME(),CURTIME())"
+    sql = "Insert into runoob_db.terrarium (temperature,humidite,create_time,update_time) values(" + temperature + "," + humidity + ",CURTIME(),CURTIME())"
     mycursor = mydb.cursor()
     mycursor.execute(sql)
     mydb.commit()

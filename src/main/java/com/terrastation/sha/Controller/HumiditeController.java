@@ -19,7 +19,7 @@ public class HumiditeController {
     private TerrariumSensorServiceImpl terraiumServiceSensor;
 
     //recuperer les humidites recentes, maximal et minimal
-    @RequestMapping(value = "/terraium/humidite/getCurrentHumiditesVO", method = RequestMethod.GET)
+    @RequestMapping(value = "/terrarium/humidite/getCurrentHumiditesVO", method = RequestMethod.GET)
     public ResultVO<TerrariumsVO> getCurrentHumiditeVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
 
         SensorVO humidite_sensor = new SensorVO();

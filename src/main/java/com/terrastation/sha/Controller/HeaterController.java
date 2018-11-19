@@ -29,7 +29,7 @@ public class HeaterController {
 
 
     //get l'etat de chauffage
-    @RequestMapping(value = "/terraium/chauffage/getEtatChauffage", method = RequestMethod.GET)
+    @RequestMapping(value = "/terrarium/chauffage/getEtatChauffage", method = RequestMethod.GET)
 
 
     public ResultVO<Heater> changeEtatPieceVO() {

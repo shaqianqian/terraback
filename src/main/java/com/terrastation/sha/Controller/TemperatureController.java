@@ -20,7 +20,7 @@ public class TemperatureController {
 
 
 //recuperer les temperatures recentes, maximal et minimal
-    @RequestMapping(value = "/terraium/temperature/getCurrentTemperaturesVO", method = RequestMethod.GET)
+    @RequestMapping(value = "/terrarium/temperature/getCurrentTemperaturesVO", method = RequestMethod.GET)
     public ResultVO<TerrariumsVO> getCurrentTemperaturesVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
 
 
