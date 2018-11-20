@@ -14,10 +14,11 @@ public class Terrarium {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
+    @Column(name="temperature", columnDefinition="DOUBLE default 0",nullable=false)
+    private double temperature=0;
 
-    private double temperature;
-
-    private double humidite;
+    @Column(name="humidite", columnDefinition="DOUBLE default 0",nullable=false)
+    private double humidite=0;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
