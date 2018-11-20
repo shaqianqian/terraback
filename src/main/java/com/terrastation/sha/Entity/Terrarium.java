@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity
 public class Terrarium {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @Column(name="temperature", columnDefinition="DOUBLE default 0",nullable=false)
