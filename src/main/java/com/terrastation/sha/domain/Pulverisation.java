@@ -1,6 +1,5 @@
 package com.terrastation.sha.domain;
 
-package com.terrastation.sha.domain;
 
 import lombok.Data;
 
@@ -17,8 +16,10 @@ public class Pulverisation {
     @Id
     @GeneratedValue
     private int id;
-    private Date date;
-    private Date heure ;
+    private Date dateDebut;
+    private Date dateFin;
+    private Date heureDebut ;
+    private Date heureFin;
     private int durée ;
 
     public int getId() {
@@ -29,20 +30,36 @@ public class Pulverisation {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateDebut() {
+        return dateDebut;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public Date getHeure() {
-        return heure;
+    public Date getDateFin() {
+        return dateFin;
     }
 
-    public void setHeure(Date heure) {
-        this.heure = heure;
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public Date getHeureDebut() {
+        return heureDebut;
+    }
+
+    public void setHeureDebut(Date heureDebut) {
+        this.heureDebut = heureDebut;
+    }
+
+    public Date getHeureFin() {
+        return heureFin;
+    }
+
+    public void setHeureFin(Date heureFin) {
+        this.heureFin = heureFin;
     }
 
     public int getDurée() {
