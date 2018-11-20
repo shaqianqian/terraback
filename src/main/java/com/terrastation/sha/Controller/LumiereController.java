@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
+@RequestMapping(value = "/lumiere")
 public class LumiereController {
 
 
@@ -44,7 +45,7 @@ public class LumiereController {
 
 
 
-    @PutMapping("/lumiere/{id}")
+    @PutMapping("/{id}")
     public Lumiere updateNote(@PathVariable(value = "id") int lumiereId,
                               @Valid @RequestBody Lumiere lumiereDetails) {
         Optional<Lumiere> lumiere = lumiereRepository.findById(lumiereId);
@@ -61,7 +62,7 @@ public class LumiereController {
         return updatedLumiere;
     }
 
-    @DeleteMapping("/lumiere/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReptile(@PathVariable(value = "id") int noteId) {
         Optional<Lumiere> lumieres = lumiereRepository.findById(noteId);
         Lumiere lumieres1=null;
