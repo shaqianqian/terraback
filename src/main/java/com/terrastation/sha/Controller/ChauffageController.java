@@ -35,29 +35,33 @@ public class ChauffageController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
 
-    public ResultVO add(@RequestParam("dateDebut") String dateDebut, @RequestParam("dateFin") String dateFin, @RequestParam("min") double min, @RequestParam("max") double max) {
+    public ResultVO add(@RequestParam("dateDebut") Integer dateDebut, @RequestParam("dateFin")  Integer dateFin, @RequestParam("heureDebut") Integer heureDebut,@RequestParam("heureFin") Integer heureFin,@RequestParam("min") double min, @RequestParam("max") double max) {
         Chauffage rep = new Chauffage();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date timeDebut = null;
-        Date timeFin = null;
-        try {
-            timeDebut = format.parse(dateDebut);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            timeFin = format.parse(dateFin);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (timeDebut.after(timeFin) || timeDebut.equals(timeFin)) {
-
-            throw new IdNotExistException(ResultEnum.Time_Ordre);
-        } else {
-            rep.setDateDebut(timeDebut);
-            rep.setDateFin(timeFin);
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date timeDebut = null;
+//        Date timeFin = null;
+//        try {
+//            timeDebut = format.parse(dateDebut);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            timeFin = format.parse(dateFin);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        if (timeDebut.after(timeFin) || timeDebut.equals(timeFin)) {
+//
+//            throw new IdNotExistException(ResultEnum.Time_Ordre);
+//        } else {
+//            rep.setDateDebut(timeDebut);
+//            rep.setDateFin(timeFin);
+            rep.setDateDebut(dateDebut);
+            rep.setDateFin(dateFin);
+            rep.setHeureDebut(heureDebut);
+            rep.setHeureFin(heureFin);
             rep.setMin(min);
             rep.setMax(max);
             return ResultUtil.success(chauffageRepository.save(rep));
@@ -65,7 +69,7 @@ public class ChauffageController {
         }
 
 
-    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResultVO<String> deleteChauffage(@PathVariable(value = "id") int chauffageId) {
@@ -81,49 +85,49 @@ public class ChauffageController {
         return ResultUtil.success("vous avez reussi de supprimer : " + chauffageId);
     }
 
-    @PutMapping("/update/{id}")
-    public ResultVO<Chauffage> updateNote(@PathVariable(value = "id") int chauffageId,
-                                          @RequestParam(value = "dateDebut", required = true, defaultValue = "1900-01-01 00:00:00") String dateDebut,
-                                          @RequestParam(value = "dateFin", required = true, defaultValue = "1900-01-01 00:00:00") String dateFin,
-                                          @RequestParam(value = "max", required = true, defaultValue = "0") double max,
-                                          @RequestParam(value = "min", required = true, defaultValue = "0") double min) {
-
-        Optional<Chauffage> chauffageOptional = chauffageRepository.findById(chauffageId);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Chauffage chauffageNew = null;
-        if (chauffageOptional.isPresent()) {
-            chauffageNew = chauffageOptional.get();
-            if (!dateDebut.equals("1900-01-01 00:00:00")) {
-                try {
-                    chauffageNew.setDateDebut(format.parse(dateDebut));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            if (!dateFin.equals("1900-01-01 00:00:00")) {
-
-                try {
-                    chauffageNew.setDateFin(format.parse(dateFin));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            if (max != 0) {
-                chauffageNew.setMax(max);
-            }
-
-            if (min != 0) {
-                chauffageNew.setMin(min);
-            }
-
-
-        }
-        Chauffage chauffage1 = chauffageRepository.save(chauffageNew);
-        return ResultUtil.success(chauffage1);
-    }
+//    @PutMapping("/update/{id}")
+//    public ResultVO<Chauffage> updateNote(@PathVariable(value = "id") int chauffageId,
+//                                          @RequestParam(value = "dateDebut", required = true, defaultValue = "1900-01-01 00:00:00") String dateDebut,
+//                                          @RequestParam(value = "dateFin", required = true, defaultValue = "1900-01-01 00:00:00") String dateFin,
+//                                          @RequestParam(value = "max", required = true, defaultValue = "0") double max,
+//                                          @RequestParam(value = "min", required = true, defaultValue = "0") double min) {
+//
+//        Optional<Chauffage> chauffageOptional = chauffageRepository.findById(chauffageId);
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//        Chauffage chauffageNew = null;
+//        if (chauffageOptional.isPresent()) {
+//            chauffageNew = chauffageOptional.get();
+//            if (!dateDebut.equals("1900-01-01 00:00:00")) {
+//                try {
+//                    chauffageNew.setDateDebut(format.parse(dateDebut));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//            if (!dateFin.equals("1900-01-01 00:00:00")) {
+//
+//                try {
+//                    chauffageNew.setDateFin(format.parse(dateFin));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//            if (max != 0) {
+//                chauffageNew.setMax(max);
+//            }
+//
+//            if (min != 0) {
+//                chauffageNew.setMin(min);
+//            }
+//
+//
+//        }
+//        Chauffage chauffage1 = chauffageRepository.save(chauffageNew);
+//        return ResultUtil.success(chauffage1);
+//    }
 
 
 }

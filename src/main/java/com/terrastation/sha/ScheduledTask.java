@@ -12,10 +12,6 @@ import java.util.Date;
 public class ScheduledTask {
     @Autowired
     private HeaterService heaterService;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private Integer count = 1;
-
-
     @Scheduled(fixedRate =30000)
     //30s une fois
     public void reportCurrentTime() throws InterruptedException {
