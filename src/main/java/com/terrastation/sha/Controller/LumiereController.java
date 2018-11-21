@@ -32,12 +32,12 @@ public class LumiereController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
 
-    public Lumiere add(@RequestParam("dateDebut") Date dateDebut, @RequestParam("dateFin") Date dateFin, @RequestParam("heureOn") Date heureOn , @RequestParam("heureOff") Date heureOff, @RequestParam("etat") boolean etat) {
+    public Lumiere add(@RequestParam("dateDebut") int dateDebut, @RequestParam("dateFin") int dateFin, @RequestParam("heureDebut") int heureDebut , @RequestParam("heureFin") int heureFin, @RequestParam("etat") boolean etat) {
         Lumiere lum=new Lumiere();
         lum.setDateDebut(dateDebut);
         lum.setDateFin(dateFin);
-        lum.setHeureOn(heureOn);
-        lum.setHeureOff(heureOff);
+        lum.setHeureDebut(heureDebut);
+        lum.setHeureFin(heureFin);
         lum.setEtat(etat);
         return  lumiereRepository.save(lum);
 
@@ -55,8 +55,8 @@ public class LumiereController {
             lumiere1.setDateDebut(lumiereDetails.getDateDebut());
             lumiere1.setDateFin(lumiereDetails.getDateFin());
             lumiere1.setEtat(lumiereDetails.isEtat());
-            lumiere1.setHeureOff(lumiereDetails.getHeureOff());
-            lumiere1.setHeureOn(lumiereDetails.getHeureOn());
+            lumiere1.setHeureFin(lumiereDetails.getHeureFin());
+            lumiere1.setHeureDebut(lumiereDetails.getHeureDebut());
         }
         Lumiere updatedLumiere = lumiereRepository.save(lumiere1);
         return updatedLumiere;

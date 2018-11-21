@@ -34,7 +34,7 @@ public class PulverisationController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
 
-    public Pulverisation add(@RequestParam("dateDebut") Date dateDebut, @RequestParam("dateFin") Date dateFin, @RequestParam("heureDebut") Date heureDebut , @RequestParam("heureFin") Date heureFin,@RequestParam("duree") int duree) {
+    public Pulverisation add(@RequestParam("dateDebut") int dateDebut, @RequestParam("dateFin") int dateFin, @RequestParam("heureDebut") int heureDebut , @RequestParam("heureFin") int heureFin,@RequestParam("duree") int duree) {
         Pulverisation pulv=new Pulverisation();
         pulv.setDateDebut(dateDebut);
         pulv.setDateFin(dateFin);
