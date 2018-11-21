@@ -52,7 +52,7 @@ public class HeaterServiceImpl implements HeaterService {
         List<Chauffage> chauffages = chauffageRepositary.findAll();
         for (Chauffage c : chauffages) {
 
-            if(c.getDateDebut()<=month&&c.getDateFin()>=month&&c.getHeureDebut()<=heure&&heure<=c.getHeureFin())
+            if(c.getMoisDebut()<=month&&c.getMoisFin()>=month&&c.getHeureDebut()<=heure&&heure<=c.getHeureFin())
             {
                 log.info("max_limite_temperautre "+c.getMax());
                 log.info("min_limite_temperautre "+c.getMin());

@@ -16,8 +16,8 @@ public class Pulverisation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    private int dateDebut;
-    private int dateFin;
+    private int moisDebut;
+    private int moisFin;
     private int heureDebut ;
     private int heureFin;
     private int duree ;

@@ -11,7 +11,7 @@ public enum ResultEnum {
 
     ID_NOT_EXIST(2, "cet id existe pas "),
 
-    Time_Ordre (3, "le dateDebut doit etre plus tot ou autant que le dateFin "),
+    Time_Ordre (3, "le Debut du temps doit etre plus tot ou autant que le Fin du temps"),
 
     QUANTITE_ERROR (4, "vous avez pas assez lignes de donnees en database "),;
 

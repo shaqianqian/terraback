@@ -13,9 +13,9 @@ public class Chauffage {
     @Column(name = "id")
     private int id;
 
-    private int dateDebut;
+    private int moisDebut;
 
-    private int dateFin;
+    private int moisFin;
 
     private int heureDebut;
 

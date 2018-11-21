@@ -34,10 +34,10 @@ public class PulverisationController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
 
-    public Pulverisation add(@RequestParam("dateDebut") int dateDebut, @RequestParam("dateFin") int dateFin, @RequestParam("heureDebut") int heureDebut , @RequestParam("heureFin") int heureFin,@RequestParam("duree") int duree) {
+    public Pulverisation add(@RequestParam("moisDebut") int moisDebut, @RequestParam("moisFin") int moisFin, @RequestParam("heureDebut") int heureDebut , @RequestParam("heureFin") int heureFin,@RequestParam("duree") int duree) {
         Pulverisation pulv=new Pulverisation();
-        pulv.setDateDebut(dateDebut);
-        pulv.setDateFin(dateFin);
+        pulv.setMoisDebut(moisDebut);
+        pulv.setMoisFin(moisFin);
         pulv.setHeureDebut(heureDebut);
         pulv.setHeureFin(heureFin);
         pulv.setDuree(duree);
@@ -54,8 +54,8 @@ public class PulverisationController {
         Pulverisation pulverisation1=null;
         if(pulverisation.isPresent()) {
             pulverisation1=pulverisation.get();
-            pulverisation1.setDateDebut(pulverisationDetails.getDateDebut());
-            pulverisation1.setDateFin(pulverisationDetails.getDateFin());
+            pulverisation1.setMoisDebut(pulverisationDetails.getMoisDebut());
+            pulverisation1.setMoisFin(pulverisationDetails.getMoisFin());
             pulverisation1.setDuree(pulverisationDetails.getDuree());
             pulverisation1.setHeureDebut(pulverisationDetails.getHeureDebut());
             pulverisation1.setHeureFin(pulverisationDetails.getHeureFin());

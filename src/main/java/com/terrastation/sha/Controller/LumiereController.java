@@ -32,10 +32,10 @@ public class LumiereController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
 
-    public Lumiere add(@RequestParam("dateDebut") int dateDebut, @RequestParam("dateFin") int dateFin, @RequestParam("heureDebut") int heureDebut , @RequestParam("heureFin") int heureFin, @RequestParam("etat") boolean etat) {
+    public Lumiere add(@RequestParam("moisDebut") int moisDebut, @RequestParam("moisFin") int moisFin, @RequestParam("heureDebut") int heureDebut , @RequestParam("heureFin") int heureFin, @RequestParam("etat") boolean etat) {
         Lumiere lum=new Lumiere();
-        lum.setDateDebut(dateDebut);
-        lum.setDateFin(dateFin);
+        lum.setMoisDebut(moisDebut);
+        lum.setMoisFin(moisFin);
         lum.setHeureDebut(heureDebut);
         lum.setHeureFin(heureFin);
         lum.setEtat(etat);
@@ -46,14 +46,14 @@ public class LumiereController {
 
 
     @PutMapping("/{id}")
-    public Lumiere updateNote(@PathVariable(value = "id") int lumiereId,
+    public Lumiere updateLumiere(@PathVariable(value = "id") int lumiereId,
                               @Valid @RequestBody Lumiere lumiereDetails) {
         Optional<Lumiere> lumiere = lumiereRepository.findById(lumiereId);
         Lumiere lumiere1=null;
         if(lumiere.isPresent()) {
             lumiere1=lumiere.get();
-            lumiere1.setDateDebut(lumiereDetails.getDateDebut());
-            lumiere1.setDateFin(lumiereDetails.getDateFin());
+            lumiere1.setMoisDebut(lumiereDetails.getMoisDebut());
+            lumiere1.setMoisFin(lumiereDetails.getMoisFin());
             lumiere1.setEtat(lumiereDetails.isEtat());
             lumiere1.setHeureFin(lumiereDetails.getHeureFin());
             lumiere1.setHeureDebut(lumiereDetails.getHeureDebut());
@@ -63,7 +63,7 @@ public class LumiereController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteReptile(@PathVariable(value = "id") int noteId) {
+    public ResponseEntity<?> deleteLumiere(@PathVariable(value = "id") int noteId) {
         Optional<Lumiere> lumieres = lumiereRepository.findById(noteId);
         Lumiere lumieres1=null;
         if(lumieres.isPresent()) {
