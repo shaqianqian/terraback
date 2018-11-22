@@ -11,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -60,13 +64,49 @@ public class HeaterServiceImpl implements HeaterService {
                     if(etat)
                     {heater.setEtat(false);
                     heaterRepository.save(heater);
+                        try{
+                            System.out.println("start");
+                            Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
+
+                            BufferedReader in = new BufferedReader(new
+                                    InputStreamReader(pr.getInputStream()));
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                System.out.println(line);
+                            }
+                            in.close();
+                            pr.waitFor();
+                            System.out.println("end");
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+
                     log.info("trop chaud, eteindre le chauffage");}
                     else{log.info("change pas letat de chauffage");}
                 } else if (c.getMin()>currentTemperature) {
                     if(!etat)
                     {heater.setEtat(true);
                     heaterRepository.save(heater);
-                    log.info("trop froid, offrir le chauffage");}
+                    log.info("trop froid, offrir le chauffage");
+
+                        try{
+                            System.out.println("start");
+                            Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");
+
+                            BufferedReader in = new BufferedReader(new
+                                    InputStreamReader(pr.getInputStream()));
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                System.out.println(line);
+                            }
+                            in.close();
+                            pr.waitFor();
+                            System.out.println("end");
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
                     else{log.info("change pas letat de chauffage");}
                 }else if(currentTemperature<=c.getMax()&&currentTemperature>=c.getMin()){
                     log.info("change pas letat de chauffage");
