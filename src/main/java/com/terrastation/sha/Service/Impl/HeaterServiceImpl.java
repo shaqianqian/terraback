@@ -82,7 +82,9 @@ public class HeaterServiceImpl implements HeaterService {
                         }
 
                     log.info("trop chaud, eteindre le chauffage");}
-                    else{log.info("change pas letat de chauffage");}
+                    else{
+                        log.info("le chauffage est deja ferme,change pas letat de chauffage");}
+
                 } else if (c.getMin()>currentTemperature) {
                     if(!etat)
                     {heater.setEtat(true);
@@ -107,9 +109,9 @@ public class HeaterServiceImpl implements HeaterService {
                         }
 
                     }
-                    else{log.info("change pas letat de chauffage");}
+                    else{log.info("le chauffage est deja ouvert, change pas letat de chauffage");}
                 }else if(currentTemperature<=c.getMax()&&currentTemperature>=c.getMin()){
-                    log.info("change pas letat de chauffage");
+                    log.info("la temperature a lair correcte manintenant, change pas letat de chauffage");
                 }
 
 
