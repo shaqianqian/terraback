@@ -42,7 +42,7 @@ public class HeaterServiceImpl implements HeaterService {
             heater = heaterRepository.findAll().get(0);
         }
         Boolean etat = heater.isEtat();
-        log.info("heater etat maintenant est "+etat);
+        log.info("L'etat du chauffage courant est "+etat);
         Terrarium terraium_current = terrariumRepositary.findCurrentParametre();
         Date currentTime = terraium_current.getCreateTime();
         Calendar cal=Calendar.getInstance();
@@ -52,20 +52,20 @@ public class HeaterServiceImpl implements HeaterService {
         int heure=cal.get(Calendar.HOUR)+12;
 //        log.info("月份 "+month+" 小时 "+heure);
         double currentTemperature = terraium_current.getTemperature();
-        log.info(currentTemperature+"");
+        log.info("La temperature courante est :"+currentTemperature);
         List<Chauffage> chauffages = chauffageRepositary.findAll();
         for (Chauffage c : chauffages) {
 
             if(c.getMoisDebut()<=month&&c.getMoisFin()>=month&&c.getHeureDebut()<=heure&&heure<=c.getHeureFin())
             {
-                log.info("max_limite_temperautre "+c.getMax());
-                log.info("min_limite_temperautre "+c.getMin());
+                log.info("Le MAXIMUM de temperautre est "+c.getMax());
+                log.info("Le MINIMUM de temperautre est "+c.getMin());
                 if (c.getMax() <currentTemperature) {
                     if(etat)
                     {heater.setEtat(false);
                     heaterRepository.save(heater);
                         try{
-                            System.out.println("start");
+                            log.info("START : Lancer le script du chauffage pour l'eteindre");
                             Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
 
                             BufferedReader in = new BufferedReader(new
@@ -76,23 +76,25 @@ public class HeaterServiceImpl implements HeaterService {
                             }
                             in.close();
                             pr.waitFor();
-                            System.out.println("end");
+                            log.info("END : On a reussi à l'eteindre");
                         } catch (Exception e){
                             e.printStackTrace();
                         }
 
-                    log.info("trop chaud, eteindre le chauffage");}
+//                    log.info("trop chaud, eteindre le chauffage");
+
+                    }
                     else{
-                        log.info("le chauffage est deja ferme,change pas letat de chauffage");}
+                        log.info("Le chauffage est deja fermé, on ne change pas l'état du chauffage");}
 
                 } else if (c.getMin()>currentTemperature) {
                     if(!etat)
                     {heater.setEtat(true);
                     heaterRepository.save(heater);
-                    log.info("trop froid, offrir le chauffage");
+                    log.info("Trop froid, offrir le chauffage");
 
                         try{
-                            System.out.println("start");
+                            log.info("START : Lancer le script de chauffage pour ouvrir le chauffage");
                             Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");
 
                             BufferedReader in = new BufferedReader(new
@@ -103,15 +105,15 @@ public class HeaterServiceImpl implements HeaterService {
                             }
                             in.close();
                             pr.waitFor();
-                            System.out.println("end");
+                            log.info("END : on a reussi à ouvrir le chauffage");
                         } catch (Exception e){
                             e.printStackTrace();
                         }
 
                     }
-                    else{log.info("le chauffage est deja ouvert, change pas letat de chauffage");}
+                    else{log.info("Le chauffage est deja ouvert, on ne change pas l'etat du chauffage");}
                 }else if(currentTemperature<=c.getMax()&&currentTemperature>=c.getMin()){
-                    log.info("la temperature a lair correcte manintenant, change pas letat de chauffage");
+                    log.info("La temperature a l'air correcte manintenant, on ne change pas l'etat du chauffage");
                 }
 
 
