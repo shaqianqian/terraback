@@ -123,7 +123,7 @@ public class TerrariumController {
     }
     @RequestMapping(value = "/getCurrentParametresGenereVO", method = RequestMethod.GET)
 
-    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(int quantite) {
+    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO=new TerraiumsSensorGenereVO();
         List<TerrariumsGenereVO> terraiumsVOList=new ArrayList<TerrariumsGenereVO>();
 

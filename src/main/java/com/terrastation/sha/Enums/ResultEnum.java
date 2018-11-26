@@ -13,7 +13,9 @@ public enum ResultEnum {
 
     Time_Ordre (3, "le Debut du temps doit etre plus tot ou autant que le Fin du temps"),
 
-    QUANTITE_ERROR (4, "vous avez pas assez lignes de donnees en database "),;
+    QUANTITE_ERROR (4, "vous avez pas assez lignes de donnees en database "),
+
+    TPYE_NOT_EXIST(5, "il n'existe pas cette type de sensor"),;
 
     private Integer code;
 
