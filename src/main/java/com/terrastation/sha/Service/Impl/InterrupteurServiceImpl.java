@@ -36,28 +36,34 @@ public class InterrupteurServiceImpl implements InterrupteurService {
     private ChauffageRepository chauffageRepositary;
 
     public Interrupteur InterrupterProgrammable() {
-        Interrupteur heater;
-        if (interrupteurRepository.findAll().size() == 0) {
+        Interrupteur heater = new Interrupteur();
+
+        Optional<Interrupteur> interrupteurOptional = interrupteurRepository.findByType("chauffage");
+        if (!interrupteurOptional.isPresent()) {
             Interrupteur newHeater = new Interrupteur();
             newHeater.setEtat(false);
+            newHeater.setProg(true);
             newHeater.setType("chauffage");
             heater = interrupteurRepository.save(newHeater);
-
-        } else {
-            heater = interrupteurRepository.findAll().get(0);
         }
-        Boolean etat = heater.isEtat();
-        log.info("L'etat du chauffage courant est " + etat);
-        Terrarium terraium_current = terrariumRepositary.findCurrentParametre();
-        Date currentTime = terraium_current.getCreateTime();
+       else { heater = interrupteurOptional.get();}
+
+        Terrarium terrarium_current = terrariumRepositary.findCurrentParametre();
+        Date currentTime = terrarium_current.getCreateTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         int month = cal.get(Calendar.MONTH) + 1;
 //        log.info("月份"+month);
         int heure = cal.get(Calendar.HOUR) + 12;
 //        log.info("月份 "+month+" 小时 "+heure);
-        double currentTemperature = terraium_current.getTemperature();
-        log.info("Votre chauffage est programme, La temperature courante est :" + currentTemperature);
+        double currentTemperature = terrarium_current.getTemperature();
+        Boolean etat = heater.isEtat();
+        if (etat) {
+            log.info("Votre chauffage est ouvert, il est programmé");
+        } else {
+            log.info("Votre chauffage est ferme，il est programmé");
+        }
+        log.info("La temperature courante est :" + currentTemperature);
         List<Chauffage> chauffages = chauffageRepositary.findAll();
         for (Chauffage c : chauffages) {
 
@@ -171,7 +177,14 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             newInterrupteur.setProg(isProg);
 
         }
-        interrupteurOptional.orElseThrow(() -> new IdNotExistException(ResultEnum.TPYE_NOT_EXIST));
+        else{
+            newInterrupteur = new Interrupteur();
+            newInterrupteur.setEtat(false);
+            newInterrupteur.setProg(true);
+            newInterrupteur.setType("chauffage");
+            interrupteurRepository.save(newInterrupteur);
+        }
+
 
 
         return newInterrupteur;
@@ -181,10 +194,14 @@ public class InterrupteurServiceImpl implements InterrupteurService {
     public boolean getControleInterrupteur() {
         Optional<Interrupteur> interrupteurOptional = interrupteurRepository.findByType("chauffage");
         Interrupteur interrupteur = new Interrupteur();
-        if (interrupteurOptional.isPresent()) {
-            interrupteur = interrupteurOptional.get();
+        if (!interrupteurOptional.isPresent()) {
+            Interrupteur newHeater = new Interrupteur();
+            newHeater.setEtat(false);
+            newHeater.setProg(true);
+            newHeater.setType("chauffage");
+            interrupteur = interrupteurRepository.save(newHeater);
         }
-        interrupteurOptional.orElseThrow(() -> new IdNotExistException(ResultEnum.TPYE_NOT_EXIST));
+        else {interrupteur= interrupteurOptional.get();}
 
         return interrupteur.isProg();
 
