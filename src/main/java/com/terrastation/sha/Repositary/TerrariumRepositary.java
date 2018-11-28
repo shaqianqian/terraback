@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TerrariumRepositary extends JpaRepository<Terrarium,Integer> {
     @Query(value = "select *  from runoob_db.terrarium where (select max(create_time) from runoob_db.terrarium )=create_time ", nativeQuery = true)
-    public Terrarium findCurrentParametre();
+    public Terrarium getCurrentParameter();
 
 
     @Query(value = "SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1 ; ", nativeQuery = true)
-     public List<Terrarium> findCurrentParametres(Integer quantity);
+     public List<Terrarium> findCurrentParameters(Integer quantity);
 
     @Query(value="select * from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currenctTemp1 where (select max(temperature) from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currentTemp2)=temperature", nativeQuery = true)
      public Terrarium findMaxTemperatures(Integer quantity);

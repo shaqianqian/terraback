@@ -29,15 +29,12 @@ public class InterrupteurController {
     private InterrupteurRepository interrupteurRepository;
 
 
-
-
-
     //get l'etat de chauffage
     @RequestMapping(value = "/terrarium/chauffage/getEtatChauffage", method = RequestMethod.GET)
 
 
     public ResultVO<Interrupteur> changeEtatInterrupterProgrammable() {
-        Interrupteur interrupteur= interrupteurService.InterrupterProgrammable();
+        Interrupteur interrupteur= interrupteurService.InterrupterProgrammable("chauffage");
         return ResultUtil.success(interrupteur);
 
     }
@@ -45,8 +42,7 @@ public class InterrupteurController {
     @RequestMapping(value = "/terrarium/chauffage/changeControleInterrupteur", method = RequestMethod.POST)
     public ResultVO<Interrupteur> changeControleInterrupteur( @RequestParam("isProg") boolean isProg) {
 
-
-        Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur(isProg);
+        Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur("chauffage",isProg);
 
         return ResultUtil.success(newInterrupteur);
 

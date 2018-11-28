@@ -23,7 +23,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
     public TerrariumsGenereVO GetCurrentHumiditesVO(int quantite) {
         if(quantite> terrariumRepositary.getRowQuantity()){
             throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
-        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParametres(quantite);
+        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParameters(quantite);
         Collections.reverse(terraiumList);
         List<TerrariumGenereVO> humiditeVOList = new ArrayList<TerrariumGenereVO>();
         for (Terrarium t : terraiumList) {
@@ -64,7 +64,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
     public TerrariumsGenereVO GetCurrentTemperaturesVO(int quantite) {
         if(quantite> terrariumRepositary.getRowQuantity()){
             throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
-        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParametres(quantite);
+        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParameters(quantite);
         Collections.reverse(terraiumList);
         List<TerrariumGenereVO> terraiumListVO = new ArrayList<TerrariumGenereVO>();
         for (Terrarium t : terraiumList) {

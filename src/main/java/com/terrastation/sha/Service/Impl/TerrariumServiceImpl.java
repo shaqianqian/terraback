@@ -21,7 +21,9 @@ public class TerrariumServiceImpl implements TerrariumService {
     private TerrariumRepositary terrariumRepositary;
 
     public int getRowQuantity(){return terrariumRepositary.getRowQuantity();}
-
+    public Terrarium getCurrentParameter(){
+        return terrariumRepositary.getCurrentParameter();
+    }
     public Optional<Terrarium> findById(Integer Id) {
         return terrariumRepositary.findById(Id);
     }
@@ -37,18 +39,18 @@ public class TerrariumServiceImpl implements TerrariumService {
         return terrariumRepositary.save(t);
 
     }
-   public List<Terrarium> getCurrentParametres(int quantity){
+   public List<Terrarium> getCurrentParameters(int quantity){
        if(quantity> terrariumRepositary.getRowQuantity()){
            throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
 
-       return terrariumRepositary.findCurrentParametres(quantity);
+       return terrariumRepositary.findCurrentParameters(quantity);
 
    }
     //recuperer les humidites recentes
     public TerrariumsVO GetCurrentHumiditesVO(int quantite) {
         if(quantite> terrariumRepositary.getRowQuantity()){
             throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
-        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParametres(quantite);
+        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParameters(quantite);
         Collections.reverse(terraiumList);
         List<TerrariumVO> humiditeVOList = new ArrayList<TerrariumVO>();
         for (Terrarium t : terraiumList) {
@@ -88,7 +90,7 @@ public class TerrariumServiceImpl implements TerrariumService {
     public TerrariumsVO GetCurrentTemperaturesVO(int quantite) {
         if(quantite> terrariumRepositary.getRowQuantity()){
             throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
-        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParametres(quantite);
+        List<Terrarium> terraiumList = terrariumRepositary.findCurrentParameters(quantite);
         Collections.reverse(terraiumList);
         List<TerrariumVO> terraiumListVO = new ArrayList<TerrariumVO>();
         for (Terrarium t : terraiumList) {

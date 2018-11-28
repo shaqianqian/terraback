@@ -21,11 +21,11 @@ public class ScheduledTask {
     @Scheduled(fixedRate =30000)
     //30s une fois
     public void reportCurrentTime() {
-        Terrarium terrarium_current = terrariumRepositary.findCurrentParametre();
-      if(interrupteurService.getControleInterrupteur())
-      { interrupteurService.InterrupterProgrammable();}
+        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
+      if(interrupteurService.getControleInterrupteur("chauffage").isProg())
+      { interrupteurService.InterrupterProgrammable("chauffage");}
       else{
-          log.info("Votre chauffage est controlé manuellement, la temperature courante est "+terrarium_current.getTemperature()+"°C");
+          interrupteurService.InterrupterManuelle("chauffage");
 
       }
 

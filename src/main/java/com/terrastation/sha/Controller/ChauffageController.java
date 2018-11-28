@@ -2,7 +2,6 @@ package com.terrastation.sha.Controller;
 
 
 import com.terrastation.sha.Entity.Chauffage;
-import com.terrastation.sha.Entity.Lumiere;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Exception.ParameterErrorException;
@@ -10,13 +9,8 @@ import com.terrastation.sha.Repositary.ChauffageRepository;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 
 @RestController

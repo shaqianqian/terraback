@@ -103,7 +103,7 @@ public class TerrariumController {
     @RequestMapping(value = "/getCurrentParametres", method = RequestMethod.GET)
     public ResultVO<List<Terrarium> >getCurrentParametres(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
 
-        return ResultUtil.success(terrariumService.getCurrentParametres(quantite));
+        return ResultUtil.success(terrariumService.getCurrentParameters(quantite));
 
     }
    @RequestMapping(value = "/getCurrentParametresVO", method = RequestMethod.GET)
