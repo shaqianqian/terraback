@@ -3,10 +3,11 @@ spring:
     active: prod
   datasource:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/runoob_db?verifyServerCertificate=false&useSSL=true
+      url: jdbc:mysql://127.0.0.1/phpmyadmin/index.php?db=runoob_db&target=db_structure.php
       username: root
       password:
   jpa:
     hibernate:
+      dialect : org.hibernate.dialect.MySQL5InnoDBDialect
       ddl-auto: update
     show-sql: true

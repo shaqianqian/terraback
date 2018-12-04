@@ -2,6 +2,7 @@ package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.domain.Lumiere;
 import com.terrastation.sha.domain.Pulverisation;
+import com.terrastation.sha.repositary.PulverisationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

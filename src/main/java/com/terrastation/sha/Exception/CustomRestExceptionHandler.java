@@ -1,5 +1,5 @@
 package com.terrastation.sha.Exception;
-
+/*
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
        quand un paramètre est manquant
      */
 
-    @Override
+  /*  @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpHeaders headers,
@@ -52,7 +52,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         pour la violation de contraintes
      */
 
-
+/*
     @ExceptionHandler({ ConstraintViolationException.class })
     public ResponseEntity<Object> handleConstraintViolation(
             ConstraintViolationException ex, WebRequest request) {
@@ -68,7 +68,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-
+*/
     /*
     * TypeMismatchException: This exception is thrown
     * when try to set bean property with wrong type.
@@ -80,7 +80,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     * MethodArgumentTypeMismatchException: This exception is thrown
     * when method argument is not the expected type
     * */
-    @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
+  /*  @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, WebRequest request) {
         String error =
@@ -145,3 +145,4 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 }
+*/
