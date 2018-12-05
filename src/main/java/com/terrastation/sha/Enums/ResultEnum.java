@@ -15,7 +15,13 @@ public enum ResultEnum {
 
     QUANTITE_ERROR (4, "vous avez pas assez lignes de donnees en database "),
 
-    TPYE_NOT_EXIST(5, "il n'existe pas cette type de sensor"),;
+    TPYE_NOT_EXIST(5, "il n'existe pas cette type de sensor"),
+
+    Heure_range (5, "l'heure doit  etre entre 0~24"),
+
+    Mois_range (6, "le moi doit  etre entre 1~12"),
+
+    Valeur_temperature (7, "le valeur de la temperature doit >0 "),;
 
     private Integer code;
 

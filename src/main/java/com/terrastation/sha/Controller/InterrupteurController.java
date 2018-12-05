@@ -33,7 +33,7 @@ public class InterrupteurController {
     @RequestMapping(value = "/terrarium/chauffage/getEtatChauffage", method = RequestMethod.GET)
 
 
-    public ResultVO<Interrupteur> changeEtatInterrupterProgrammable() {
+    public ResultVO<Interrupteur> getEtatInterrupterProgrammable() {
         Interrupteur interrupteur= interrupteurService.InterrupterProgrammable("chauffage");
         return ResultUtil.success(interrupteur);
 
