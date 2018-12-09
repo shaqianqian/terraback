@@ -255,7 +255,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                 interrupteurRepository.save(lumiereInterrupteur);
                 try {
                     log.info("START : Lancer le script de la lumiere pour allumer la lumiere");
-                    Process pr = Runtime.getRuntime().exec("python ./python/lumiere_test.py 1");
+                    Process pr = Runtime.getRuntime().exec("python ../python/lumiere_test.py 1");
 
                     BufferedReader in = new BufferedReader(new
                             InputStreamReader(pr.getInputStream()));
