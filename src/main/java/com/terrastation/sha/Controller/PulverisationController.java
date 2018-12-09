@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/pulverisation")
+@RequestMapping(value = "/terrarium/pulverisation")
 public class PulverisationController {
     Logger log = LoggerFactory.getLogger(com.terrastation.sha.Controller.PulverisationController.class);
 

@@ -2,10 +2,13 @@ package com.terrastation.sha.Controller;
 
 
 import com.terrastation.sha.Entity.Chauffage;
+import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Exception.ParameterErrorException;
 import com.terrastation.sha.Repositary.ChauffageRepository;
+import com.terrastation.sha.Repositary.InterrupteurRepository;
+import com.terrastation.sha.Service.InterrupteurService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,16 @@ import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/chauffage")
+@RequestMapping(value = "/terrarium/chauffage")
 public class ChauffageController {
 
     @Autowired
     private ChauffageRepository chauffageRepository;
+
+    @Autowired
+    private InterrupteurService interrupteurService;
+    @Autowired
+    private InterrupteurRepository interrupteurRepository;
 
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -156,5 +164,23 @@ public class ChauffageController {
         return ResultUtil.success(chauffage1);
     }
 
+    //get l'etat de chauffage
+    @RequestMapping(value = "/getEtatChauffage", method = RequestMethod.GET)
+
+
+    public ResultVO<Interrupteur> getEtatChauffage() {
+        Interrupteur interrupteur= interrupteurService.getControleInterrupteur("chauffage");
+        return ResultUtil.success(interrupteur);
+
+    }
+    //change le facon de controler le interrupteur
+    @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.POST)
+    public ResultVO<Interrupteur> changeControleInterrupteurChauffage( @RequestParam("isProg") boolean isProg) {
+
+        Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur("chauffage",isProg);
+
+        return ResultUtil.success(newInterrupteur);
+
+    }
 
 }

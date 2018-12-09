@@ -18,16 +18,21 @@ public class ScheduledTask {
     @Autowired
     private TerrariumRepositary terrariumRepositary;
 
-    @Scheduled(fixedRate =30000)
+    @Scheduled(fixedRate = 30000)
     //30s une fois
     public void reportCurrentTime() {
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
-      if(interrupteurService.getControleInterrupteur("chauffage").isProg())
-      { interrupteurService.InterrupterProgrammable("chauffage");}
-      else{
-          interrupteurService.InterrupterManuelle("chauffage");
+        if (interrupteurService.getControleInterrupteur("chauffage").isProg()) {
+            interrupteurService.InterrupterProgrammableChauffage("chauffage");
+        } else {
+            interrupteurService.InterrupterManuelleChauffage("chauffage");
+        }
 
-      }
+        if (interrupteurService.getControleInterrupteur("lumiere").isProg()) {
+            interrupteurService.InterrupterProgrammableLumiere("lumiere");
+        } else {
+            interrupteurService.InterrupterManuelleLumiere("lumiere");
+        }
 
     }
 
