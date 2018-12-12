@@ -1,9 +1,12 @@
 package com.terrastation.sha.Service.Impl;
 
+import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.TerraiumException;
+import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
+import com.terrastation.sha.Service.InterrupteurService;
 import com.terrastation.sha.Service.TerrariumGenereService;
 import com.terrastation.sha.VO.TerrariumGenereVO;
 import com.terrastation.sha.VO.TerrariumsGenereVO;
@@ -20,6 +23,11 @@ import java.util.List;
 public class TerrariumGenereServiceImpl implements TerrariumGenereService {
     @Autowired
     private TerrariumRepositary terrariumRepositary;
+    @Autowired
+    private InterrupteurRepository interrupteurRepository;
+    @Autowired
+    private InterrupteurService interrupteurService;
+
     public TerrariumsGenereVO GetCurrentHumiditesVO(int quantite) {
         if(quantite> terrariumRepositary.getRowQuantity()){
             throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
@@ -29,29 +37,40 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         for (Terrarium t : terraiumList) {
             TerrariumGenereVO humiditeVO = new TerrariumGenereVO();
             humiditeVO.setY(t.getHumidite());
-            humiditeVO.setX(t.getCreateTime());
+            humiditeVO.setT(t.getCreateTime());
             humiditeVOList.add(humiditeVO);
 
 
         }
         Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
         TerrariumGenereVO humiditeVO_max = new TerrariumGenereVO();
-        humiditeVO_max.setX(hum_max.getCreateTime());
+        humiditeVO_max.setT(hum_max.getCreateTime());
         humiditeVO_max.setY(hum_max.getHumidite());
 
 
         Terrarium hum__min = terrariumRepositary.findMinHumidites(quantite);
         TerrariumGenereVO humiditeVO_min = new TerrariumGenereVO();
-        humiditeVO_min.setX(hum__min.getCreateTime());
+        humiditeVO_min.setT(hum__min.getCreateTime());
         humiditeVO_min.setY(hum__min.getHumidite());
 
 
 
         TerrariumsGenereVO humiditesVO=new TerrariumsGenereVO();
-        humiditesVO.setMax(humiditeVO_max);
-        humiditesVO.setMin(humiditeVO_min);
+        Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
+
+        if(chauffage.isEtat()){
+            humiditesVO.setIsOn("true");
+        }
+        else{ humiditesVO.setIsOn("false");}
+        if(chauffage.isProg()){
+            humiditesVO.setIsProg("true");
+        }
+        else{ humiditesVO.setIsProg("false");}
+
+
+//        humiditesVO.setMax(humiditeVO_max);
+//        humiditesVO.setMin(humiditeVO_min);
         humiditesVO.setSymbol("%");
-        humiditesVO.setType("humidite");
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
         humiditesVO.setName("Humidite");
@@ -70,29 +89,39 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         for (Terrarium t : terraiumList) {
             TerrariumGenereVO temperatureVO = new TerrariumGenereVO();
             temperatureVO.setY(t.getTemperature());
-            temperatureVO.setX(t.getCreateTime());
+            temperatureVO.setT(t.getCreateTime());
             terraiumListVO.add(temperatureVO);
 
         }
-        Terrarium temp_max = terrariumRepositary.findMaxTemperatures(quantite);
-        TerrariumGenereVO tempVO_max = new TerrariumGenereVO();
-        tempVO_max.setX(temp_max.getCreateTime());
-        tempVO_max.setY(temp_max.getTemperature());
-
-
-
-        Terrarium temp_min = terrariumRepositary.findMinTemperatures(quantite);
-        TerrariumGenereVO tempVO_min = new TerrariumGenereVO();
-        tempVO_min.setX(temp_min.getCreateTime());
-        tempVO_min.setY(temp_min.getTemperature());
+//        Terrarium temp_max = terrariumRepositary.findMaxTemperatures(quantite);
+//        TerrariumGenereVO tempVO_max = new TerrariumGenereVO();
+//        tempVO_max.setT(temp_max.getCreateTime());
+//        tempVO_max.setY(temp_max.getTemperature());
+//
+//
+//
+//        Terrarium temp_min = terrariumRepositary.findMinTemperatures(quantite);
+//        TerrariumGenereVO tempVO_min = new TerrariumGenereVO();
+//        tempVO_min.setT(temp_min.getCreateTime());
+//        tempVO_min.setY(temp_min.getTemperature());
 
 
 
         TerrariumsGenereVO temperaturesVO=new TerrariumsGenereVO();
+
         temperaturesVO.setSymbol("°C");
-        temperaturesVO.setType("temperature");
-        temperaturesVO.setMax(tempVO_max);
-        temperaturesVO.setMin(tempVO_min);
+        Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
+
+        if(chauffage.isEtat()){
+            temperaturesVO.setIsOn("true");
+        }
+        else{ temperaturesVO.setIsOn("false");}
+        if(chauffage.isProg()){
+            temperaturesVO.setIsProg("true");
+        }
+        else{ temperaturesVO.setIsProg("false");}
+//        temperaturesVO.setMax(tempVO_max);
+//        temperaturesVO.setMin(tempVO_min);
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");

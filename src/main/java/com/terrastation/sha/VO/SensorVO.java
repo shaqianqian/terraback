@@ -8,7 +8,7 @@ import java.util.List;
 public class SensorVO {
 
     int id;
-    List<TerrariumGenereVO> measurments=new ArrayList<TerrariumGenereVO>();
+    List<TerrariumGenereVO> values=new ArrayList<TerrariumGenereVO>();
 
 
 

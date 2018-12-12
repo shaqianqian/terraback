@@ -7,8 +7,9 @@ import java.util.Date;
 @Data
 public class TerrariumGenereVO {
 
-   private Date x;
+
    private double y;
+   private Date t;
 
 
 

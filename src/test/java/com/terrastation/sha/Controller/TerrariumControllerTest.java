@@ -52,7 +52,7 @@ public class TerrariumControllerTest {
 
     @Test
     public void getCurrentParametresVOTest() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/terrarium/getCurrentParametresVO")
+        MvcResult mvcResult = mockMvc.perform(get("/terrarium/getParametres")
         )
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
@@ -63,7 +63,7 @@ public class TerrariumControllerTest {
 
     @Test
     public void getlistSensorsTest() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/terrarium/listSensors")
+        MvcResult mvcResult = mockMvc.perform(get("/terrarium/getParametres")
         )
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
@@ -71,17 +71,17 @@ public class TerrariumControllerTest {
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
     }
 
-
-    @Test
-    public void getCurrentParametresGenereVOTest() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/terrarium/getCurrentParametresGenereVO")
-        )
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
-
-    }
+//
+//    @Test
+//    public void getCurrentParametresGenereVOTest() throws Exception {
+//        MvcResult mvcResult = mockMvc.perform(get("/terrarium/getCurrentParametresGenereVO")
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
+//        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+//
+//    }
 
 
 }

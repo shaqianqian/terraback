@@ -99,6 +99,34 @@ public class TerrariumController {
         return  ResultUtil.success("vous avez reussi de supprimer : "+noteId);
 
     }
+    @RequestMapping(value = "/getParametres", method = RequestMethod.GET)
+
+    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
+        TerraiumsSensorGenereVO terraiumsGenereVO=new TerraiumsSensorGenereVO();
+        List<TerrariumsGenereVO> terraiumsVOList=new ArrayList<TerrariumsGenereVO>();
+
+        TerrariumsGenereVO temperaturesVO= terrariumGenereService.GetCurrentTemperaturesVO(quantite);
+        TerrariumsGenereVO humiditesVO= terrariumGenereService.GetCurrentHumiditesVO(quantite);
+        terraiumsVOList.add(temperaturesVO);
+        terraiumsVOList.add(humiditesVO);
+        terraiumsGenereVO.setSensors(terraiumsVOList);
+
+        return ResultUtil.success(terraiumsGenereVO);
+
+    }
+
+    @RequestMapping(value = "/getParametres/{id}", method = RequestMethod.GET)
+
+    public ResultVO<SensorVO> getCurrentParametresGenereVOById(@PathVariable(value = "id") int index,@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
+        SensorVO sensorVO=new SensorVO();
+        sensorVO= terraiumServiceSensor.getSensorByIdVO(index,quantite);
+        return ResultUtil.success(sensorVO);
+
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //recuperer tous les lignes recentes des parametres
     @RequestMapping(value = "/getCurrentParametres", method = RequestMethod.GET)
     public ResultVO<List<Terrarium> >getCurrentParametres(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
@@ -121,21 +149,8 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @RequestMapping(value = "/getCurrentParametresGenereVO", method = RequestMethod.GET)
 
-    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
-        TerraiumsSensorGenereVO terraiumsGenereVO=new TerraiumsSensorGenereVO();
-        List<TerrariumsGenereVO> terraiumsVOList=new ArrayList<TerrariumsGenereVO>();
-
-        TerrariumsGenereVO temperaturesVO= terrariumGenereService.GetCurrentTemperaturesVO(quantite);
-        TerrariumsGenereVO humiditesVO= terrariumGenereService.GetCurrentHumiditesVO(quantite);
-        terraiumsVOList.add(temperaturesVO);
-        terraiumsVOList.add(humiditesVO);
-        terraiumsGenereVO.setSensors(terraiumsVOList);
-
-        return ResultUtil.success(terraiumsGenereVO);
-
-    }
+//
     @RequestMapping(value = "/listSensors", method = RequestMethod.GET)
 
     public ResultVO<SensorsVO> getListSensors() {

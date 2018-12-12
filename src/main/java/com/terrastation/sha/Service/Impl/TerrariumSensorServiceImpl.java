@@ -31,13 +31,13 @@ public class TerrariumSensorServiceImpl implements TerrariumSensorService
         for(TerrariumVO t:humidites){
 
             TerrariumGenereVO humidteGenere=new TerrariumGenereVO();
-            humidteGenere.setX(t.getTime());
+            humidteGenere.setT(t.getTime());
             humidteGenere.setY(t.getValue());
             humiditeGeneres.add(humidteGenere);
         }
         SensorVO humidite_sensor=new SensorVO();
         humidite_sensor.setId(2);
-        humidite_sensor.setMeasurments(humiditeGeneres);
+        humidite_sensor.setValues(humiditeGeneres);
 
         return  humidite_sensor;
 
@@ -52,13 +52,13 @@ public class TerrariumSensorServiceImpl implements TerrariumSensorService
         for(TerrariumVO t:temperatures){
 
             TerrariumGenereVO temperatureGenere=new TerrariumGenereVO();
-            temperatureGenere.setX(t.getTime());
+            temperatureGenere.setT(t.getTime());
             temperatureGenere.setY(t.getValue());
             temperatureGeneres.add(temperatureGenere);
         }
         SensorVO temperature_sensor=new SensorVO();
         temperature_sensor.setId(1);
-        temperature_sensor.setMeasurments(temperatureGeneres);
+        temperature_sensor.setValues(temperatureGeneres);
 
 
         return temperature_sensor;
@@ -80,12 +80,12 @@ public class TerrariumSensorServiceImpl implements TerrariumSensorService
         for(TerrariumVO t:terraiumVOS){
 
             TerrariumGenereVO terrariumGenereVO =new TerrariumGenereVO();
-            terrariumGenereVO.setX(t.getTime());
+            terrariumGenereVO.setT(t.getTime());
             terrariumGenereVO.setY(t.getValue());
             terraiumGeneres.add(terrariumGenereVO);
         }
         sensor.setId(id);
-        sensor.setMeasurments(terraiumGeneres);
+        sensor.setValues(terraiumGeneres);
 
         return  sensor;
 

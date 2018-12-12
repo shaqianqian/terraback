@@ -7,13 +7,17 @@ import java.util.List;
 @Data
 public class TerrariumsGenereVO {
 
-   private String type;
-   private String symbol;
-   private  List<TerrariumGenereVO> Values;
-   private String name;
    private int id;
-   private TerrariumGenereVO max;
-   private TerrariumGenereVO min;
+   private String name;
+   private String symbol;
+   private String isProg;
+   private String isOn;
+   private  List<TerrariumGenereVO> Values;
+
+
+
+//   private TerrariumGenereVO max;
+//   private TerrariumGenereVO min;
 
 
 
