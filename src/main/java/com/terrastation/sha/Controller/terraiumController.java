@@ -1,5 +1,6 @@
 package com.terrastation.sha.Controller;
 
+import com.terrastation.sha.domain.reptile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,11 @@ public class terraiumController {
 
     }
 
+    @RequestMapping(value = "getById", method = RequestMethod.GET)
 
+    public Optional<terraium> findById(int id) {
+        return terraiumRepositary.findById(id);
+    }
     @RequestMapping(value = "add", method = RequestMethod.POST)
 
     public terraium add(@RequestParam("temperature") double temperature,@RequestParam("humity") double humity) {
@@ -43,7 +48,7 @@ public class terraiumController {
 
 
     @PutMapping("/terrarium/{id}")
-    public terraium updateNote(@PathVariable(value = "id") int terraiumId,
+    public terraium updateTerraium(@PathVariable(value = "id") int terraiumId,
                              @Valid @RequestBody terraium terraiumDetails) {
         Optional<terraium> terraium = terraiumRepositary.findById(terraiumId);
         terraium terraium1=null;
@@ -56,7 +61,7 @@ public class terraiumController {
     }
 
     @DeleteMapping("/terrarium/{id}")
-    public ResponseEntity<?> deleteNote(@PathVariable(value = "id") int noteId) {
+    public ResponseEntity<?> deleteTerraium(@PathVariable(value = "id") int noteId) {
         Optional<terraium> terraium = terraiumRepositary.findById(noteId);
         terraium terraium1=null;
         if(terraium.isPresent()) {

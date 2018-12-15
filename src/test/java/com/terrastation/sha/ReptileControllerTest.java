@@ -6,10 +6,8 @@ package com.bnguimgo.springbootrestserver.controller;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 //pour les méthodes HTTP
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 //pour JSON
@@ -20,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.*;
 
 import com.terrastation.sha.Controller.reptileController;
+import com.terrastation.sha.Controller.terraiumController;
 import com.terrastation.sha.domain.reptile;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +35,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(reptileController.class)
+@WebMvcTest(terraiumController.class)
 public class ReptileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private reptileController userController;
+    private com.terrastation.sha.Controller.reptileController reptileController;
 
     @Test
     public void testFindAll() throws Exception {
@@ -58,7 +56,7 @@ public class ReptileControllerTest {
         assertEquals("Réponse incorrecte", HttpStatus.FOUND.value(), result.getResponse().getStatus());
 
         //on s'assure que la méthode de service getAllUsers() a bien été appelée
-        verify(userController).findall();
+        verify(reptileController).findall();
     }
 
     @Test
@@ -72,7 +70,7 @@ public class ReptileControllerTest {
                 .andExpect(status().isCreated());
 
         //on s'assure que la méthode de service saveOrUpdateUser(User) a bien été appelée
-        verify(userController).add(3,"Python");
+        verify(reptileController).add(3,"Python");
 
     }
 
@@ -83,7 +81,7 @@ public class ReptileControllerTest {
                 .andExpect(status().isGone());
 
         // On vérifie que la méthode de service deleteUser(Id) a bien été appelée
-        verify(userController).deleteReptile(1);
+        verify(reptileController).deleteReptile(1);
     }
 
     @Test
@@ -95,12 +93,12 @@ public class ReptileControllerTest {
                 .accept(MediaType.APPLICATION_XML)
                 .content("<reptile><name>Titon</name></reptile>"))
                 .andExpect(status().isOk());
-        Optional<reptile> rep=userController.findById(1);
+        Optional<reptile> rep= reptileController.findById(1);
         if(rep.isPresent())
             rep1=rep.get();
-            rep1.setName("Titon");
+        rep1.setName("Titon");
         //on s'assure que la méthode de service saveOrUpdateUser(User) a bien été appelée
-        verify(userController).updateReptile(1,rep1);
+        verify(reptileController).updateReptile(1,rep1);
 
     }
 }
