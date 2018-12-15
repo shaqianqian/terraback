@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.terrastation.sha.repositary.*;
-import com.terrastation.sha.domain.terraium;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,10 +30,15 @@ public class reptileController {
 
     }
 
+    @RequestMapping(value = "getById", method = RequestMethod.GET)
+
+    public Optional<reptile> findById(int id) {
+        return reptileRepositary.findById(id);
+    }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
 
-    public reptile add(@RequestParam("age") int age,@RequestParam("humity") String name) {
+    public reptile add(@RequestParam("age") int age,@RequestParam("name") String name) {
         reptile rep=new reptile();
         rep.setAge(age);
         rep.setName(name);
@@ -45,7 +49,7 @@ public class reptileController {
 
 
     @PutMapping("/reptile/{id}")
-    public reptile updateNote(@PathVariable(value = "id") int reptileId,
+    public reptile updateReptile(@PathVariable(value = "id") int reptileId,
                                @Valid @RequestBody reptile reptileDetails) {
         Optional<reptile> reptile = reptileRepositary.findById(reptileId);
         reptile reptile1=null;

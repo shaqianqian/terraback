@@ -1,13 +1,11 @@
 spring:
-  profiles:
-    active: prod
-  datasource:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1/phpmyadmin/index.php?db=runoob_db&target=db_structure.php
-      username: root
-      password:
   jpa:
+    database: MYSQL
     hibernate:
-      dialect : org.hibernate.dialect.MySQL5InnoDBDialect
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: validate
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1/phpmyadmin/db_structure.php?server=1&db=runoob_db
+    username:
+    password:
+driver-class-name: com.mysql.jdbc.Driver

@@ -60,7 +60,7 @@ import java.util.Optional;
             return updatedPrereglages;
         }
 
-        @DeleteMapping("/reptile/{id}")
+        @DeleteMapping("/prereglages/{id}")
         public ResponseEntity<?> deleteReptile(@PathVariable(value = "id") int noteId) {
             Optional<Prereglages> prereglages = prereglagesRepositary.findById(noteId);
             Prereglages prereglages1=null;

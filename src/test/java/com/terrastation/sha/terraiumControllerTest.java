@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration("/applicationContext.xml")
 public class terraiumControllerTest {
-
+/*
     @Before
     public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -31,7 +31,7 @@ public class terraiumControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(payload);
         this.mockMvc.perform(req).andExpect(status().isOk());
-    }
+    }*/
 }
 
 

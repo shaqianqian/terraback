@@ -2,6 +2,7 @@ package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.domain.Chauffage;
 import com.terrastation.sha.domain.Prereglages;
+import com.terrastation.sha.domain.reptile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,14 @@ public class ChauffageController {
 
     }
 
+    @RequestMapping(value = "getById", method = RequestMethod.GET)
 
+    public Optional<Chauffage> findById(int id) {
+        return chauffageRepository.findById(id);
+    }
 
-    @PutMapping("/prereglages/{id}")
-    public Chauffage updateNote(@PathVariable(value = "id") int chauffageId,
+    @PutMapping("/chauffage/{id}")
+    public Chauffage updateChauffage(@PathVariable(value = "id") int chauffageId,
                                   @Valid @RequestBody Chauffage chauffageDetails) {
         Optional<Chauffage> chauf = chauffageRepository.findById(chauffageId);
         Chauffage chauffage1=null;
