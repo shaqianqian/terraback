@@ -99,6 +99,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             throw new ParameterErrorException(ResultEnum.Facon_Controler);
 
         }
+        interrupteurRepository.save(interrupteur);
         return interrupteur;
     }
 
@@ -254,6 +255,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             throw new ParameterErrorException(ResultEnum.Facon_Controler);
 
         }
+        interrupteurRepository.save(interrupteur);
 
         return interrupteur;
 

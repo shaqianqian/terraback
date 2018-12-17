@@ -57,91 +57,91 @@ public class ChauffageControllerTest {
         chauffageRepository.findAll();
 
     }
-    @Test
-    public void findAllMockTest() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/terrarium/chauffage/getAll")
-//                .param("dayNum","8")
-//                .param("date","2017-7-18 00:00:00")
-//                .param("pageNum","1")
-//                .param("pageSize","10")
- )
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void addMockMoisDebutEarilerThanMoisFinTest() throws Exception {
-        MvcResult mvcResult = null;
-            mvcResult = mockMvc.perform(post("/terrarium/chauffage/add")
-                    .param("moisDebut","12")
-                    .param("moisFin","10")
-                    .param("heureDebut","15")
-                    .param("heureFin","20")
-                    .param("min","20")
-                    .param("max","30"))
-                    .andExpect(status().is5xxServerError())
-                    .andDo(MockMvcResultHandlers.print())
-                    .andReturn();
-
-        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
-
-    }
-    @Test
-    @Transactional
-    @Rollback
-    public void addMockHeureDebutEarilerThanHeureFinTest() throws Exception {
-        MvcResult mvcResult = null;
-        mvcResult = mockMvc.perform(post("/terrarium/chauffage/add")
-                .param("moisDebut","5")
-                .param("moisFin","10")
-                .param("heureDebut","45")
-                .param("heureFin","20")
-                .param("min","20")
-                .param("max","30"))
-                .andExpect(status().is5xxServerError())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-
-        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
-
-    }
-    @Test
-    @Transactional
-    @Rollback
-    public void addMockTemperatureMoinsZeroTest() throws Exception {
-        MvcResult mvcResult = null;
-        mvcResult = mockMvc.perform(post("/terrarium/chauffage/add")
-                .param("moisDebut","5")
-                .param("moisFin","10")
-                .param("heureDebut","21")
-                .param("heureFin","23")
-                .param("min","-10")
-                .param("max","30"))
-                .andExpect(status().is5xxServerError())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-
-        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
-
-    }
-
-    @Test
-    public void getEtatInterrupterProgrammableTest() throws Exception {
-
-        MvcResult mvcResult = mockMvc.perform(get("/terrarium/chauffage/getEtatChauffage")
-        )
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
-
-
-
-    }
-
+//    @Test
+//    public void findAllMockTest() throws Exception {
+//        MvcResult mvcResult = mockMvc.perform(get("/terrarium/chauffage/getAll")
+////                .param("dayNum","8")
+////                .param("date","2017-7-18 00:00:00")
+////                .param("pageNum","1")
+////                .param("pageSize","10")
+// )
+//                .andExpect(status().isOk())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
+//        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+//    }
+//
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void addMockMoisDebutEarilerThanMoisFinTest() throws Exception {
+//        MvcResult mvcResult = null;
+//            mvcResult = mockMvc.perform(post("/terrarium/chauffage/add")
+//                    .param("moisDebut","12")
+//                    .param("moisFin","10")
+//                    .param("heureDebut","15")
+//                    .param("heureFin","20")
+//                    .param("min","20")
+//                    .param("max","30"))
+//                    .andExpect(status().is5xxServerError())
+//                    .andDo(MockMvcResultHandlers.print())
+//                    .andReturn();
+//
+//        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+//
+//    }
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void addMockHeureDebutEarilerThanHeureFinTest() throws Exception {
+//        MvcResult mvcResult = null;
+//        mvcResult = mockMvc.perform(post("/terrarium/chauffage/add")
+//                .param("moisDebut","5")
+//                .param("moisFin","10")
+//                .param("heureDebut","45")
+//                .param("heureFin","20")
+//                .param("min","20")
+//                .param("max","30"))
+//                .andExpect(status().is5xxServerError())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
+//
+//        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+//
+//    }
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void addMockTemperatureMoinsZeroTest() throws Exception {
+//        MvcResult mvcResult = null;
+//        mvcResult = mockMvc.perform(post("/terrarium/chauffage/add")
+//                .param("moisDebut","5")
+//                .param("moisFin","10")
+//                .param("heureDebut","21")
+//                .param("heureFin","23")
+//                .param("min","-10")
+//                .param("max","30"))
+//                .andExpect(status().is5xxServerError())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
+//
+//        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+//
+//    }
+//
+//    @Test
+//    public void getEtatInterrupterProgrammableTest() throws Exception {
+//
+//        MvcResult mvcResult = mockMvc.perform(get("/terrarium/chauffage/getEtatChauffage")
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
+//        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+//
+//
+//
+//    }
+//
 
 }

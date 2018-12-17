@@ -6,6 +6,7 @@ import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Exception.ParameterErrorException;
+import com.terrastation.sha.Exception.TerraiumException;
 import com.terrastation.sha.Repositary.ChauffageRepository;
 import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Service.InterrupteurService;
@@ -13,7 +14,10 @@ import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.xml.transform.Result;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,8 +42,8 @@ public class ChauffageController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
 
-    public ResultVO add(@RequestParam("moisDebut") Integer moisDebut, @RequestParam("moisFin") Integer moisFin, @RequestParam("heureDebut") Integer heureDebut, @RequestParam("heureFin") Integer heureFin, @RequestParam("min") double min, @RequestParam("max") double max) {
-        Chauffage rep = new Chauffage();
+    public ResultVO add(@RequestBody Chauffage chauffage) {
+       Chauffage newChauffage=new Chauffage();
 //        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        Date timeDebut = null;
 //        Date timeFin = null;
@@ -62,19 +66,16 @@ public class ChauffageController {
 //            rep.setDateDebut(timeDebut);
 //            rep.setDateFin(timeFin);
 
-        if (moisDebut >= moisFin) {
+        if (chauffage.getMoisDebut() >= chauffage.getMoisFin()) {
             throw new ParameterErrorException(ResultEnum.Time_Ordre);
         }
-        if (heureDebut >= heureFin) {
+        else if (chauffage.getHeureDebut() >= chauffage.getHeureFin()) {
             throw new ParameterErrorException(ResultEnum.Time_Ordre);
         }
-        rep.setMoisDebut(moisDebut);
-        rep.setMoisFin(moisFin);
-        rep.setHeureDebut(heureDebut);
-        rep.setHeureFin(heureFin);
-        rep.setMin(min);
-        rep.setMax(max);
-        return ResultUtil.success(chauffageRepository.save(rep));
+        else {newChauffage=chauffageRepository.save(chauffage);}
+
+
+        return ResultUtil.success(newChauffage);
 
     }
 
@@ -93,6 +94,30 @@ public class ChauffageController {
         return ResultUtil.success("vous avez reussi de supprimer : " + chauffageId);
     }
 
+
+
+
+    @PostMapping("/UpdateAll")
+    public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages)
+    {
+        List<Chauffage> oldChauffageList=chauffageRepository.findAll();
+        for(Chauffage oldChauffage:oldChauffageList)
+        {
+            chauffageRepository.delete(oldChauffage);
+
+        }
+        for(int i=0;i<chauffages.size();i++){
+//            chauffages.get(i).setId(i+1);
+            chauffageRepository.save(chauffages.get(i));
+        }
+
+
+        return ResultUtil.success(chauffageRepository.findAll());
+    }
+
+
+
+
     @PutMapping("/update/{id}")
     public ResultVO<Chauffage> updateNote(@PathVariable(value = "id") int chauffageId,
 //                                          @RequestParam(value = "dateDebut", required = true, defaultValue = "1900-01-01 00:00:00") String dateDebut,
@@ -100,9 +125,9 @@ public class ChauffageController {
                                           @RequestParam(value = "max", required = true, defaultValue = "0") double max,
                                           @RequestParam(value = "min", required = true, defaultValue = "0") double min,
                                           @RequestParam(value = "moisDebut", required = true, defaultValue = "0") int moisDebut,
-                                          @RequestParam(value = "moisFin", required = true, defaultValue = "0") int moisFin,
+                                          @RequestParam(value = "moisFin", required = true, defaultValue = "12") int moisFin,
                                           @RequestParam(value = "heureDebut", required = true, defaultValue = "0") int heureDebut,
-                                          @RequestParam(value = "heureFin", required = true, defaultValue = "0") int heureFin) {
+                                          @RequestParam(value = "heureFin", required = true, defaultValue = "24") int heureFin) {
 
         Optional<Chauffage> chauffageOptional = chauffageRepository.findById(chauffageId);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
