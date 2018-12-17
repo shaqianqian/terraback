@@ -31,5 +31,11 @@ public interface TerrariumRepositary extends JpaRepository<Terrarium,Integer> {
     @Query(value = "SELECT COUNT(*) FROM terrarium;", nativeQuery = true)
     public int getRowQuantity();
 
+    @Query(value="select * from runoob_db.terrarium where create_time between ?1 and ?2 ;", nativeQuery = true)
+    public List<Terrarium> variation(String date1,String date2);
+
+
+
+
 
 }
