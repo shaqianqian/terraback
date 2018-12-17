@@ -90,9 +90,18 @@ public class LumiereController {
     }
     //change le facon de controler le interrupteur
     @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.POST)
-    public ResultVO<Interrupteur> changeControleInterrupteurChauffage( @RequestParam("isProg") boolean isProg) {
+    public ResultVO<Interrupteur> changeControleInterrupteurLumiere( @RequestParam("isProg") boolean isProg) {
 
         Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur("lumiere",isProg);
+
+        return ResultUtil.success(newInterrupteur);
+
+    }
+
+    //change l'etat de la lumiere quand il est controle manuellement
+    @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.POST)
+    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement( @RequestParam("etat") boolean etat) {
+        Interrupteur newInterrupteur=interrupteurService.ChangeInterrupterManuelleLumiere(etat);
 
         return ResultUtil.success(newInterrupteur);
 

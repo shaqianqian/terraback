@@ -5,11 +5,15 @@ import com.terrastation.sha.Entity.Chauffage;
 import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Lumiere;
 import com.terrastation.sha.Entity.Terrarium;
+import com.terrastation.sha.Enums.ResultEnum;
+import com.terrastation.sha.Exception.ParameterErrorException;
+import com.terrastation.sha.Exception.TerraiumException;
 import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.ChauffageRepository;
 import com.terrastation.sha.Repositary.LumiereRepository;
 import com.terrastation.sha.Service.InterrupteurService;
 import com.terrastation.sha.Service.TerrariumService;
+import jnr.ffi.annotations.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +89,19 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             log.info("Votre chauffage est eteint, il est controlé manuellement,  la temperature courante est " + terrariumCourant.getTemperature() + "°C");
         }
     }
+
+
+    public Interrupteur ChangeInterrupterManuelleChauffage(boolean etat) {
+        Interrupteur interrupteur = getControleInterrupteur("chauffage");
+        if (!interrupteur.isProg()) {
+            interrupteur.setEtat(etat);
+        } else {
+            throw new ParameterErrorException(ResultEnum.Facon_Controler);
+
+        }
+        return interrupteur;
+    }
+
 
     public Interrupteur InterrupterProgrammableChauffage(String type) {
         Interrupteur chauffageInterrupteur = getControleInterrupteur(type);
@@ -228,6 +245,21 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
     }
 
+    public Interrupteur ChangeInterrupterManuelleLumiere(boolean etat) {
+
+        Interrupteur interrupteur = getControleInterrupteur("lumiere");
+        if (!interrupteur.isProg()) {
+            interrupteur.setEtat(etat);
+        } else {
+            throw new ParameterErrorException(ResultEnum.Facon_Controler);
+
+        }
+
+        return interrupteur;
+
+    }
+
+
     public Interrupteur InterrupterProgrammableLumiere(String type) {
         Interrupteur lumiereInterrupteur = getControleInterrupteur(type);
         Date time_current = new Date();
@@ -248,8 +280,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
 
         if (isConfigurationLumiere) {
-            if( lumiereInterrupteur.isEtat()){
-                log.info("la lumiere est deja allume");
+            if (lumiereInterrupteur.isEtat()) {
+                log.info("la lumiere est deja allume,il est controler programmable");
             } else {
                 lumiereInterrupteur.setEtat(true);
                 interrupteurRepository.save(lumiereInterrupteur);
@@ -274,8 +306,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             }
 
         } else {
-            if (! lumiereInterrupteur.isEtat()) {
-                log.info("la lumiere est deja ferme");
+            if (!lumiereInterrupteur.isEtat()) {
+                log.info("la lumiere est deja ferme,il est controler programmable");
             } else {
                 lumiereInterrupteur.setEtat(false);
                 interrupteurRepository.save(lumiereInterrupteur);

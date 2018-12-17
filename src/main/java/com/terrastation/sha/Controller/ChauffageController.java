@@ -183,4 +183,17 @@ public class ChauffageController {
 
     }
 
+
+    //change l'etat de chauffage quand il est controle manuellement
+    @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.POST)
+    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement( @RequestParam("etat") boolean etat) {
+
+        Interrupteur newInterrupteur=interrupteurService.ChangeInterrupterManuelleChauffage(etat);
+
+        return ResultUtil.success(newInterrupteur);
+
+    }
+
+
+
 }

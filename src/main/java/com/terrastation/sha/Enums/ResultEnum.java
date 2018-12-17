@@ -21,7 +21,10 @@ public enum ResultEnum {
 
     Mois_range (6, "le moi doit  etre entre 1~12"),
 
-    Valeur_temperature (7, "le valeur de la temperature doit >0 "),;
+    Valeur_temperature (7, "le valeur de la temperature doit >0 "),
+
+    Facon_Controler (8, "Votre interrupteur est controle programmablement"),
+    ;
 
     private Integer code;
 
