@@ -24,7 +24,7 @@ public class AlarmeServiceImpl implements AlarmeService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("terrastation111@gmail.com");
         message.setTo(profilRepository.findAll().get(0).getEmail());
-        message.setSubject("coucou");
+        message.setSubject("Terrastation");
         message.setText("c'est un Email de terrastation, hahaha je suis en train de tester la systeme de l'alarme");
         mailSender.send(message);
 

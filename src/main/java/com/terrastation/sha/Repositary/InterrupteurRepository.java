@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface InterrupteurRepository extends JpaRepository<Interrupteur,Integer> {
 
-    Optional<Interrupteur>findByType(String type);
+           Optional<Interrupteur>findByType(String type);
 
 
 }
