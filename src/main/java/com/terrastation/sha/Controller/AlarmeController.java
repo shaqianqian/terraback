@@ -65,61 +65,21 @@ public class AlarmeController {
 
     }
 
-//
-//    @RequestMapping(value = "/sendEmail", method = RequestMethod.GET)
-//
-//    public ResultVO sendEmail() {
-//        alarmeService.send();
-//        return ResultUtil.success("fini");
-//    }
-//
-
-    @RequestMapping(value = "/sendEmail", method = RequestMethod.GET)
+    @RequestMapping(value = "/sendEmailTemperature", method = RequestMethod.GET)
 
     public ResultVO alarmeTemperature() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Terrarium terrarium=terrariumService.getCurrentParameter();
-        Date current = terrarium.getCreateTime();
-        String currentString = df.format(current);
-        Alarme alarme = alarmeRepository.findByType("temperature").get();
-
-        Date debut = new Date();
-
-        debut.setTime(new Double(current.getTime() - 60000*alarme.getVariation()).longValue());
-
-
-        log.info("debut is "+debut.toString());
-        String debutString = df.format(debut);
-
-
-        List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
-        sortListByTemperature(terrariumList);
-
-        double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();
-        log.info("max_temperature is " + max_Temperature);
-        double min_Temperature = terrariumList.get(0).getTemperature();
-        log.info("min_temperature is " + min_Temperature);
-        if (max_Temperature - min_Temperature > alarme.getVariation()||terrarium.getTemperature()>alarme.getMax()||terrarium.getTemperature()<alarme.getMin()) {
-            alarmeService.send();
-            log.info("send a email" + alarme.getMessage());
-        }
-        return ResultUtil.success(terrariumList);
+        return ResultUtil.success(alarmeService.alarmeTemperature());
     }
 
-    private void sortListByTemperature(List<Terrarium> list) {
-        Collections.sort(list, new Comparator<Terrarium>() {
-            @Override
-            public int compare(Terrarium o1, Terrarium o2) {
-                if (o1.getTemperature() > o2.getTemperature()) {
-                    return 1;
-                } else if (o1.getTemperature() < o2.getTemperature()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
-        });
+
+    @RequestMapping(value = "/sendEmailHygrometrie", method = RequestMethod.GET)
+
+    public ResultVO alarmeHygrometrie() {
+
+        return ResultUtil.success(alarmeService.alarmeHygrometrie());
     }
+
+
 
 
 }
