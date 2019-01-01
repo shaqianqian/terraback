@@ -12,6 +12,7 @@ public class ShaApplication {
     public static void main(String[] args) {
         SpringApplication.run(ShaApplication.class, args);
 
+
 //        try{
 //            System.out.println("start");
 //            Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");

@@ -42,16 +42,16 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
 
         }
-        Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
-        TerrariumGenereVO humiditeVO_max = new TerrariumGenereVO();
-        humiditeVO_max.setT(hum_max.getCreateTime());
-        humiditeVO_max.setY(hum_max.getHumidite());
-
-
-        Terrarium hum__min = terrariumRepositary.findMinHumidites(quantite);
-        TerrariumGenereVO humiditeVO_min = new TerrariumGenereVO();
-        humiditeVO_min.setT(hum__min.getCreateTime());
-        humiditeVO_min.setY(hum__min.getHumidite());
+//        Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
+//        TerrariumGenereVO humiditeVO_max = new TerrariumGenereVO();
+//        humiditeVO_max.setT(hum_max.getCreateTime());
+//        humiditeVO_max.setY(hum_max.getHumidite());
+//
+//
+//        Terrarium hum__min = terrariumRepositary.findMinHumidites(quantite);
+//        TerrariumGenereVO humiditeVO_min = new TerrariumGenereVO();
+//        humiditeVO_min.setT(hum__min.getCreateTime());
+//        humiditeVO_min.setY(hum__min.getHumidite());
 
 
 
@@ -127,6 +127,162 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         temperaturesVO.setName("Temperature");
 
         return temperaturesVO;
+
+    }
+
+
+
+    public List<Terrarium> getDonneeUneSemaine() {
+        List<Terrarium> terrariums=terrariumRepositary.donneUneSemaine();
+        List<Terrarium> newTerrariums=new ArrayList<Terrarium>();
+        int quantite=10;
+        int distance=terrariums.size()/quantite;
+        for(int i=0;i<terrariums.size();i=i+distance){
+            Terrarium t=terrariums.get(i);
+            newTerrariums.add(t);
+
+        }
+        return newTerrariums;}
+
+    public TerrariumsGenereVO GetUneSemaineTemperaturesVO() {
+        List<Terrarium> terraiumList = this.getDonneeUneSemaine();
+        List<TerrariumGenereVO> terraiumListVO = new ArrayList<TerrariumGenereVO>();
+        for (Terrarium t : terraiumList) {
+            TerrariumGenereVO temperatureVO = new TerrariumGenereVO();
+            temperatureVO.setY(t.getTemperature());
+            temperatureVO.setT(t.getCreateTime());
+            terraiumListVO.add(temperatureVO);
+
+        }
+
+        TerrariumsGenereVO temperaturesVO=new TerrariumsGenereVO();
+
+        temperaturesVO.setSymbol("°C");
+        Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
+
+        if(chauffage.isEtat()){
+            temperaturesVO.setIsOn("true");
+        }
+        else{ temperaturesVO.setIsOn("false");}
+        if(chauffage.isProg()){
+            temperaturesVO.setIsProg("true");
+        }
+        else{ temperaturesVO.setIsProg("false");}
+        temperaturesVO.setValues(terraiumListVO);
+        temperaturesVO.setId(1);
+        temperaturesVO.setName("Temperature");
+
+        return temperaturesVO;
+
+    }
+
+    public TerrariumsGenereVO GetUneSemaineHumiditesVO() {
+
+        List<Terrarium> terraiumList = this.getDonneeUneSemaine();
+        List<TerrariumGenereVO> humiditeVOList = new ArrayList<TerrariumGenereVO>();
+        for (Terrarium t : terraiumList) {
+            TerrariumGenereVO humiditeVO = new TerrariumGenereVO();
+            humiditeVO.setY(t.getHumidite());
+            humiditeVO.setT(t.getCreateTime());
+            humiditeVOList.add(humiditeVO);
+
+
+        }
+        TerrariumsGenereVO humiditesVO=new TerrariumsGenereVO();
+        Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
+
+        if(chauffage.isEtat()){
+            humiditesVO.setIsOn("true");
+        }
+        else{ humiditesVO.setIsOn("false");}
+        if(chauffage.isProg()){
+            humiditesVO.setIsProg("true");
+        }
+        else{ humiditesVO.setIsProg("false");}
+        humiditesVO.setSymbol("%");
+        humiditesVO.setValues(humiditeVOList);
+        humiditesVO.setId(2);
+        humiditesVO.setName("Humidite");
+
+
+        return humiditesVO;
+
+    }
+
+    public List<Terrarium> getDonneeUnMois() {
+        List<Terrarium> terrariums=terrariumRepositary.donneUnMois();
+        List<Terrarium> newTerrariums=new ArrayList<Terrarium>();
+        int quantite=10;
+        int distance=terrariums.size()/quantite;
+        for(int i=0;i<terrariums.size();i=i+distance){
+            Terrarium t=terrariums.get(i);
+            newTerrariums.add(t);
+
+        }
+        return newTerrariums;}
+
+    public TerrariumsGenereVO GetUnMoisTemperaturesVO() {
+        List<Terrarium> terraiumList = this.getDonneeUnMois();
+        List<TerrariumGenereVO> terraiumListVO = new ArrayList<TerrariumGenereVO>();
+        for (Terrarium t : terraiumList) {
+            TerrariumGenereVO temperatureVO = new TerrariumGenereVO();
+            temperatureVO.setY(t.getTemperature());
+            temperatureVO.setT(t.getCreateTime());
+            terraiumListVO.add(temperatureVO);
+
+        }
+
+        TerrariumsGenereVO temperaturesVO=new TerrariumsGenereVO();
+
+        temperaturesVO.setSymbol("°C");
+        Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
+
+        if(chauffage.isEtat()){
+            temperaturesVO.setIsOn("true");
+        }
+        else{ temperaturesVO.setIsOn("false");}
+        if(chauffage.isProg()){
+            temperaturesVO.setIsProg("true");
+        }
+        else{ temperaturesVO.setIsProg("false");}
+        temperaturesVO.setValues(terraiumListVO);
+        temperaturesVO.setId(1);
+        temperaturesVO.setName("Temperature");
+
+        return temperaturesVO;
+
+    }
+
+    public TerrariumsGenereVO GetUnMoisHumiditesVO() {
+
+        List<Terrarium> terraiumList = this.getDonneeUnMois();
+        List<TerrariumGenereVO> humiditeVOList = new ArrayList<TerrariumGenereVO>();
+        for (Terrarium t : terraiumList) {
+            TerrariumGenereVO humiditeVO = new TerrariumGenereVO();
+            humiditeVO.setY(t.getHumidite());
+            humiditeVO.setT(t.getCreateTime());
+            humiditeVOList.add(humiditeVO);
+
+
+        }
+        TerrariumsGenereVO humiditesVO=new TerrariumsGenereVO();
+        Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
+
+        if(chauffage.isEtat()){
+            humiditesVO.setIsOn("true");
+        }
+        else{ humiditesVO.setIsOn("false");}
+        if(chauffage.isProg()){
+            humiditesVO.setIsProg("true");
+        }
+        else{ humiditesVO.setIsProg("false");}
+        humiditesVO.setSymbol("%");
+        humiditesVO.setValues(humiditeVOList);
+        humiditesVO.setId(2);
+        humiditesVO.setName("Humidite");
+
+
+        return humiditesVO;
 
     }
 

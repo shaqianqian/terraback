@@ -18,8 +18,9 @@ public class Pulverisation {
     private int id;
     private int moisDebut;
     private int moisFin;
-    private int heureDebut ;
-    private int heureFin;
+    private int heure;
+    private double taux_hygrometrie;
     private int duree ;
+
 
 }

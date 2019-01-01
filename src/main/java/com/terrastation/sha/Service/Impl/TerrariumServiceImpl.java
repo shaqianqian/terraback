@@ -39,6 +39,7 @@ public class TerrariumServiceImpl implements TerrariumService {
         return terrariumRepositary.save(t);
 
     }
+
    public List<Terrarium> getCurrentParameters(int quantity){
        if(quantity> terrariumRepositary.getRowQuantity()){
            throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
@@ -124,6 +125,9 @@ public class TerrariumServiceImpl implements TerrariumService {
         return temperaturesVO;
 
     }
+
+
+
 
 
 }

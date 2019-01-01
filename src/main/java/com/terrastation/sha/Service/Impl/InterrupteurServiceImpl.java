@@ -46,7 +46,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         if (!interrupteurOptional.isPresent()) {
             Interrupteur newInterrupteur = new Interrupteur();
             newInterrupteur.setEtat(false);
-            newInterrupteur.setProg(true);
+            newInterrupteur.setProg(false);
             newInterrupteur.setType(type);
             chauffageInterrupteur = interrupteurRepository.save(newInterrupteur);
         } else {
@@ -106,8 +106,6 @@ public class InterrupteurServiceImpl implements InterrupteurService {
 
     public Interrupteur InterrupterProgrammableChauffage(String type) {
         Interrupteur chauffageInterrupteur = getControleInterrupteur(type);
-
-
         Terrarium terrarium_current = terrariumService.getCurrentParameter();
         Date currentTime = terrarium_current.getCreateTime();
         Calendar cal = Calendar.getInstance();
@@ -125,6 +123,13 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
         log.info("La temperature courante est :" + currentTemperature);
         List<Chauffage> chauffages = chauffageRepositary.findAll();
+       if(chauffages.size()==0){
+
+           log.info("Vous configurez pas encore le chauffage. On change pas l'etat du  chauffage ");
+
+       }
+
+
         Chauffage chauffageConfigurationCourant = new Chauffage();
         boolean isChauffageConfiguration = false;
         for (Chauffage c : chauffages) {

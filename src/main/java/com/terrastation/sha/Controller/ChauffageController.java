@@ -115,6 +115,27 @@ public class ChauffageController {
         return ResultUtil.success(chauffageRepository.findAll());
     }
 
+    @GetMapping("/UpdateTouteLannee")
+    public ResultVO<List<Chauffage>> updateTouteLannee()
+    {
+        List<Chauffage> oldChauffageList=chauffageRepository.findAll();
+        for(Chauffage oldChauffage:oldChauffageList)
+        {
+            chauffageRepository.delete(oldChauffage);
+
+        }
+        Chauffage chauffage=new Chauffage();
+        chauffage.setHeureDebut(0);
+        chauffage.setHeureFin(23);
+        chauffage.setMax(40);
+        chauffage.setMin(20);
+        chauffage.setMoisDebut(1);
+        chauffage.setMoisFin(12);
+
+
+        return ResultUtil.success(chauffageRepository.save(chauffage));
+    }
+
 
 
 

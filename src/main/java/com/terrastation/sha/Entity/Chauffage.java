@@ -64,7 +64,7 @@ public class Chauffage {
     }
 
     public void setHeureDebut(int heureDebut) {
-        if (heureDebut > 24 || heureDebut < 0) {
+        if (heureDebut > 23 || heureDebut < 0) {
             throw new ParameterErrorException(ResultEnum.Heure_range);
         } else {
             this.heureDebut = heureDebut;
@@ -76,7 +76,7 @@ public class Chauffage {
     }
 
     public void setHeureFin(int heureFin) {
-        if (heureFin > 24 || heureFin < 0) {
+        if (heureFin > 23 || heureFin < 0) {
             throw new ParameterErrorException(ResultEnum.Heure_range);
         }
         else{this.heureFin = heureFin;}

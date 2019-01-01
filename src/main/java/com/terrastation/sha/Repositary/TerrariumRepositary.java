@@ -1,6 +1,5 @@
 package com.terrastation.sha.Repositary;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -33,9 +32,8 @@ public interface TerrariumRepositary extends JpaRepository<Terrarium,Integer> {
 
     @Query(value="select * from runoob_db.terrarium where create_time between ?1 and ?2 ;", nativeQuery = true)
     public List<Terrarium> variation(String date1,String date2);
-
-
-
-
-
+    @Query(value="SELECT * FROM terrarium where create_time>DATE_SUB(CURDATE(), INTERVAL 1 WEEK);", nativeQuery = true)
+    public List<Terrarium> donneUneSemaine();
+    @Query(value="SELECT * FROM terrarium where create_time>DATE_SUB(CURDATE(), INTERVAL 1 MONTH);", nativeQuery = true)
+    public List<Terrarium> donneUnMois();
 }

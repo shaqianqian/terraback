@@ -105,10 +105,22 @@ public class LumiereController {
 
         return ResultUtil.success(lumiereRepository.findAll());
     }
+    @GetMapping("/UpdateTouteLannee")
+    public ResultVO<List<Chauffage>> updateTouteLannee()
+    {
+        List<Lumiere> oldChauffageList=lumiereRepository.findAll();
+        for(Lumiere oldLumiere: oldChauffageList)
+        {
+            lumiereRepository.delete(oldLumiere);
 
-
-
-
+        }
+       Lumiere lumiere=new Lumiere();
+        lumiere.setHeureDebut(0);
+        lumiere.setHeureFin(23);
+        lumiere.setMoisDebut(1);
+        lumiere.setMoisFin(23);
+        return ResultUtil.success(lumiereRepository.save(lumiere));
+    }
 
     //get l'etat de chauffage
     @RequestMapping(value = "/getEtatLumiere", method = RequestMethod.GET)

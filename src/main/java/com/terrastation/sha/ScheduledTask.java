@@ -18,7 +18,7 @@ public class ScheduledTask {
     @Autowired
     private TerrariumRepositary terrariumRepositary;
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 30000,initialDelayString="10000")
     //30s une fois
     public void reportCurrentTime() {
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
