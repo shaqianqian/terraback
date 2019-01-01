@@ -118,7 +118,7 @@ public class LumiereController {
         lumiere.setHeureDebut(0);
         lumiere.setHeureFin(23);
         lumiere.setMoisDebut(1);
-        lumiere.setMoisFin(23);
+        lumiere.setMoisFin(12);
         return ResultUtil.success(lumiereRepository.save(lumiere));
     }
 
