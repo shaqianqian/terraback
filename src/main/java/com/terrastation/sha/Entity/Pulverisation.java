@@ -22,7 +22,7 @@ public class Pulverisation {
     private String mode;
 
 
- @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+ @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
  @JoinColumn(name="pulverisationId")
     private List<Pulverisationheure> pulverisationheure;
     private double taux_hygrometrie_min;
