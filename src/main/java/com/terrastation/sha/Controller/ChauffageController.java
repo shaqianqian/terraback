@@ -97,25 +97,25 @@ public class ChauffageController {
 
 
 
-    @PostMapping("/UpdateAll")
-    public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages)
-    {
-        List<Chauffage> oldChauffageList=chauffageRepository.findAll();
-        for(Chauffage oldChauffage:oldChauffageList)
+        @PostMapping("/UpdateAll")
+        public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages)
         {
-            chauffageRepository.delete(oldChauffage);
+            List<Chauffage> oldChauffageList=chauffageRepository.findAll();
+            for(Chauffage oldChauffage:oldChauffageList)
+            {
+                chauffageRepository.delete(oldChauffage);
 
-        }
-        for(int i=0;i<chauffages.size();i++){
+            }
+            for(int i=0;i<chauffages.size();i++){
 //            chauffages.get(i).setId(i+1);
-            chauffageRepository.save(chauffages.get(i));
-        }
+                chauffageRepository.save(chauffages.get(i));
+            }
 
 
         return ResultUtil.success(chauffageRepository.findAll());
     }
 
-    @PostMapping("/UpdateTouteLannee")
+    @GetMapping("/UpdateTouteLannee")
     public ResultVO<List<Chauffage>> updateTouteLannee(  @RequestParam(value = "max", required = true, defaultValue = "40") double max,
                                                          @RequestParam(value = "min", required = true, defaultValue = "20") double min)
     {
@@ -221,7 +221,7 @@ public class ChauffageController {
 
     }
     //change le facon de controler le interrupteur
-    @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.POST)
+    @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.GET)
     public ResultVO<Interrupteur> changeControleInterrupteurChauffage( @RequestParam("isProg") boolean isProg) {
 
         Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur("chauffage",isProg);
@@ -232,7 +232,7 @@ public class ChauffageController {
 
 
     //change l'etat de chauffage quand il est controle manuellement
-    @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.POST)
+    @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.GET)
     public ResultVO<Interrupteur> changeEtatInterrupteurManuellement( @RequestParam("etat") boolean etat) {
 
         Interrupteur newInterrupteur=interrupteurService.ChangeInterrupterManuelleChauffage(etat);
@@ -240,6 +240,9 @@ public class ChauffageController {
         return ResultUtil.success(newInterrupteur);
 
     }
+
+
+
 
 
 

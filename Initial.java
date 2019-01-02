@@ -22,24 +22,14 @@ public class ScheduledTask {
     private PulverisationHeureRepository pulverisationHeureRepository;
 
 
-    @Scheduled(fixedRate = 30000,initialDelayString="10000")
-    //30s une fois
-    public void reportCurrentTime() {
-        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
-        if (interrupteurService.getControleInterrupteur("chauffage").isProg()) {
-            interrupteurService.InterrupterProgrammableChauffage("chauffage");
-        } else {
-            interrupteurService.InterrupterManuelleChauffage("chauffage");
-        }
-
-        if (interrupteurService.getControleInterrupteur("lumiere").isProg()) {
-            interrupteurService.InterrupterProgrammableLumiere("lumiere");
-        } else {
-            interrupteurService.InterrupterManuelleLumiere("lumiere");
-        }
+    public void test() {
+       System.out.println("test");
 
     }
-
+//    @Scheduled(cron = "0 19,20,21 0 * 1-5 ?")  //cron接受cron表达式，根据cron表达式确定定时规则
+//    public void testCron() {
+//        System.out.println("coucou");
+//    }
 
 
 

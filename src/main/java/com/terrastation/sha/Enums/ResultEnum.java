@@ -24,6 +24,8 @@ public enum ResultEnum {
     Valeur_temperature (7, "le valeur de la temperature doit >0 "),
 
     Facon_Controler (8, "Votre interrupteur est controle programmablement"),
+
+    Configuration_pulverisation (9, "Vous configurez pas encore la pulverisation"),
     ;
 
     private Integer code;
