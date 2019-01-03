@@ -26,6 +26,8 @@ public enum ResultEnum {
     Facon_Controler (8, "Votre interrupteur est controle programmablement"),
 
     Configuration_pulverisation (9, "Vous configurez pas encore la pulverisation"),
+
+    Mode_pulverisation (10, "Vous avez pas cette mode en pulverisation"),
     ;
 
     private Integer code;

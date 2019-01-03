@@ -23,6 +23,9 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * La methode fonctionne quand le projet lance
+ */
 @Component
 public class Initial implements CommandLineRunner {
 
@@ -42,15 +45,21 @@ public class Initial implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if (pulverisationRepository.findAll().isEmpty() ){
+        if (pulverisationRepository.findAll().isEmpty()){
             System.out.println("vous avez pas encore configurez la pulverisation");
 
-        } else {
+        }
+        else if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
+
+            System.out.println("vous avez pas encore configurez la pulverisation");
+        }
+        else {
             Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
-            if (pulverisation.getMode().equals("temps")) {
+            if (pulverisation.getMode().equals("horaire")) {
                 String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
                 String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
-                int heureCurrent = Calendar.HOUR_OF_DAY + 1;
+                Calendar c = Calendar.getInstance();
+                int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
                 int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
                 if (pulverisation.getPulverisationheure().size() > 1) {
                     for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {

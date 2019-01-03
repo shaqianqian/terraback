@@ -11,6 +11,7 @@ import com.terrastation.sha.Repositary.PulverisationHeureRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Service.DynamicTaskService;
 import com.terrastation.sha.Service.ScheduledForDynamicCron;
+import com.terrastation.sha.Service.TerrariumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class PulverisationController {
 
     @Autowired
     private DynamicTaskService dynamicTaskService;
+    @Autowired
+    private TerrariumService terrariumService;
 
 
     @RequestMapping(value = "getAll", method = RequestMethod.GET)
@@ -48,87 +51,60 @@ public class PulverisationController {
         return pulverisationRepository.findAll();
 
     }
-//
 
-    @RequestMapping(value = "add", method = RequestMethod.POST)
+    @RequestMapping(value = "addModeHoraire", method = RequestMethod.POST)
 
-    public Pulverisation add(@RequestBody Pulverisation pulverisation) {
+    public Pulverisation addModeHoraire(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
 
 
             Pulverisation pulverisationNew = pulverisationRepository.save(pulverisation);
-////////////////////////////////////////////
-
-            if (pulverisationNew.getMode().equals("temps")) {
-                String moi = pulverisationNew.getMoisDebut() + "-" + pulverisationNew.getMoisFin();
-                String heures = pulverisationNew.getPulverisationheure().get(0).getHeure() + "";
-                int heureCurrent = Calendar.HOUR_OF_DAY + 1;
-                int dureeCorrespendant = pulverisationNew.getPulverisationheure().get(0).getDuree();
-                if (pulverisationNew.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i < pulverisationNew.getPulverisationheure().size(); i++) {
-
-                        heures = heures + "," + pulverisationNew.getPulverisationheure().get(i).getHeure();
-                        if (pulverisationNew.getPulverisationheure().get(i).getHeure() == heureCurrent) {
-
-                            dureeCorrespendant = pulverisationNew.getPulverisationheure().get(i).getDuree();
-                        }
-
-                    }
-                }
-                String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
-                System.out.println(cron);
-
-                dynamicTaskService.startCron(cron, dureeCorrespendant);
-////////////////////////////////////////////
-            }
-
-
+            ////////////////////////////////////////////
+            this.activeCron(pulverisationNew);
+            ////////////////////////////////////////////
             return pulverisationNew;
 
         } else {
             Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
-            pulverisationOld.setMode(pulverisation.getMode());
             pulverisationOld.setMoisDebut(pulverisation.getMoisDebut());
             pulverisationOld.setMoisFin(pulverisation.getMoisFin());
             List<Pulverisationheure> pulverisationheures = pulverisationOld.getPulverisationheure();
-            pulverisationheures.clear();
-            pulverisationheures.addAll(pulverisation.getPulverisationheure());
-            pulverisationOld.setTaux_hygrometrie_max(pulverisation.getTaux_hygrometrie_max());
-            pulverisationOld.setTaux_hygrometrie_min(pulverisation.getTaux_hygrometrie_min());
-            pulverisationRepository.save(pulverisationOld);
-////////////////////////////////////////////
-            if (pulverisationOld.getMode().equals("temps")) {
-                String moi = pulverisationOld.getMoisDebut() + "-" + pulverisationOld.getMoisFin();
-                String heures = pulverisationOld.getPulverisationheure().get(0).getHeure() + "";
-                int heureCurrent = Calendar.HOUR_OF_DAY + 1;
-                int dureeCorrespendant = pulverisationOld.getPulverisationheure().get(0).getDuree();
-                if (pulverisationOld.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i < pulverisationOld.getPulverisationheure().size(); i++) {
-
-                        heures = heures + "," + pulverisationOld.getPulverisationheure().get(i).getHeure();
-                        if (pulverisationOld.getPulverisationheure().get(i).getHeure() == heureCurrent) {
-
-                            dureeCorrespendant = pulverisationOld.getPulverisationheure().get(i).getDuree();
-                        }
-
-                    }
-                }
-                String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
-                System.out.println(cron);
-                dynamicTaskService.startCron(cron, dureeCorrespendant);
+            if (!pulverisationheures.equals(pulverisation.getPulverisationheure())) {
+                pulverisationheures.clear();
+                pulverisationheures.addAll(pulverisation.getPulverisationheure());
             }
+            pulverisationRepository.save(pulverisationOld);
+            ////////////////////////////////////////////
+            this.activeCron(pulverisationOld);
+            ////////////////////////////////////////////
+            return pulverisationOld;
+        }
 
-////////////////////////////////////////////
+    }
 
-            return pulverisationRepository.save(pulverisationOld);
+    @RequestMapping(value = "addModeHygrometrie", method = RequestMethod.POST)
+
+    public Pulverisation addModeHygrometrie(@RequestBody Pulverisation pulverisation) {
+        if (pulverisationRepository.findAll().isEmpty()) {
+
+            Pulverisation pulverisationNew = pulverisationRepository.save(pulverisation);
+            return pulverisationNew;
+
+        } else {
+            Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
+            pulverisationOld.setTaux_hygrometrie_min(pulverisation.getTaux_hygrometrie_min());
+            pulverisationOld.setTaux_hygrometrie_max(pulverisation.getTaux_hygrometrie_max());
+            pulverisationOld.setDuree_hygrometrie(pulverisation.getDuree_hygrometrie());
+            pulverisationRepository.save(pulverisationOld);
+            return pulverisationOld;
         }
 
     }
 
 
-    @RequestMapping(value = "addHeure", method = RequestMethod.GET)
+    @RequestMapping(value = "addHeureModeHoraire", method = RequestMethod.GET)
 
-    public Pulverisation addHeure(@RequestParam("heure") int heure, @RequestParam("duree") int duree) {
+    public Pulverisation addHeureModeHoraire(@RequestParam("heure") int heure, @RequestParam("duree") int duree) {
         if (pulverisationRepository.findAll().isEmpty()) {
             throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
         }
@@ -138,107 +114,44 @@ public class PulverisationController {
         Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
         List<Pulverisationheure> pulverisationheures = pulverisationOld.getPulverisationheure();
         pulverisationheures.add(pulverisationheure);
-
-
         ////////////////////////////////////////////
-        if ( pulverisationOld.getMode().equals("temps")) {
-            String moi =  pulverisationOld.getMoisDebut() + "-" +  pulverisationOld.getMoisFin();
-            String heures = pulverisationOld.getPulverisationheure().get(0).getHeure() + "";
-            int heureCurrent = Calendar.HOUR_OF_DAY + 1;
-            int dureeCorrespendant =  pulverisationOld.getPulverisationheure().get(0).getDuree();
-            if (pulverisationOld.getPulverisationheure().size() > 1) {
-                for (int i = 1; i <  pulverisationOld.getPulverisationheure().size(); i++) {
-
-                    heures = heures + "," + pulverisationOld.getPulverisationheure().get(i).getHeure();
-                    if ( pulverisationOld.getPulverisationheure().get(i).getHeure() == heureCurrent) {
-
-                        dureeCorrespendant = pulverisationOld.getPulverisationheure().get(i).getDuree();
-                    }
-
-                }
-            }
-            String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
-            System.out.println(cron);
-            dynamicTaskService.startCron(cron, dureeCorrespendant);
-        }
-
-////////////////////////////////////////////
-
+        this.activeCron(pulverisationOld);
+        ////////////////////////////////////////////
         return pulverisationRepository.save(pulverisationOld);
 
 
     }
 
-    @PostMapping("/UpdateTouteLannee")
-    public Pulverisation updateTouteLannee(@RequestBody Pulverisation pulverisation) {
+
+    @PostMapping("/UpdateTouteLanneeModeHoraire")
+    public Pulverisation updateTouteLannee(@RequestBody List<Pulverisationheure> pulverisationheures) {
         if (pulverisationRepository.findAll().isEmpty()) {
-            pulverisation.setMoisDebut(1);
-            pulverisation.setMoisFin(12);
-
+            Pulverisation newPulveriasation = new Pulverisation();
+            newPulveriasation.setMoisDebut(1);
+            newPulveriasation.setMoisFin(12);
+            newPulveriasation.setPulverisationheure(pulverisationheures);
+            pulverisationRepository.save(newPulveriasation);
             ////////////////////////////////////////////
-            if ( pulverisation.getMode().equals("temps")) {
-                String moi =  pulverisation.getMoisDebut() + "-" +  pulverisation.getMoisFin();
-                String heures =  pulverisation.getPulverisationheure().get(0).getHeure() + "";
-                int heureCurrent = Calendar.HOUR_OF_DAY + 1;
-                int dureeCorrespendant =  pulverisation.getPulverisationheure().get(0).getDuree();
-                if ( pulverisation.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i <  pulverisation.getPulverisationheure().size(); i++) {
+            this.activeCron(newPulveriasation);
+            ////////////////////////////////////////////
 
-                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
-                        if ( pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
-
-                            dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
-                        }
-
-                    }
-                }
-                String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
-                System.out.println(cron);
-                dynamicTaskService.startCron(cron, dureeCorrespendant);
-            }
-
-////////////////////////////////////////////
-
-            return pulverisationRepository.save(pulverisation);
+            return newPulveriasation;
 
         } else {
-            Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
-            List<Pulverisationheure> pulverisationheures = pulverisationOld.getPulverisationheure();
-            pulverisationheures.clear();
-            pulverisationheures.addAll(pulverisation.getPulverisationheure());
-            pulverisationOld.setMode(pulverisation.getMode());
-            pulverisationOld.setMoisDebut(1);
-            pulverisationOld.setMoisFin(12);
-            pulverisationOld.setTaux_hygrometrie_max(pulverisation.getTaux_hygrometrie_max());
-            pulverisationOld.setTaux_hygrometrie_min(pulverisation.getTaux_hygrometrie_min());
-
-
+            Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
+            if (!pulverisationheures.equals(pulverisation.getPulverisationheure())) {
+                pulverisation.getPulverisationheure().clear();
+                pulverisation.getPulverisationheure().addAll(pulverisationheures);
+            }
+            pulverisation.setMoisDebut(1);
+            pulverisation.setMoisFin(12);
+            pulverisationRepository.save(pulverisation);
 
             ////////////////////////////////////////////
-            if ( pulverisation.getMode().equals("temps")) {
-                String moi =  pulverisation.getMoisDebut() + "-" +  pulverisation.getMoisFin();
-                String heures =  pulverisation.getPulverisationheure().get(0).getHeure() + "";
-                int heureCurrent = Calendar.HOUR_OF_DAY + 1;
-                int dureeCorrespendant =  pulverisation.getPulverisationheure().get(0).getDuree();
-                if ( pulverisation.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i <  pulverisation.getPulverisationheure().size(); i++) {
+            activeCron(pulverisation);
+            ////////////////////////////////////////////
 
-                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
-                        if ( pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
-
-                            dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
-                        }
-
-                    }
-                }
-                String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
-                System.out.println(cron);
-                dynamicTaskService.startCron(cron, dureeCorrespendant);
-            }
-
-////////////////////////////////////////////
-
-            return pulverisationRepository.save(pulverisationOld);
+            return pulverisation;
         }
 
 
@@ -264,5 +177,47 @@ public class PulverisationController {
 
     }
 
+    @GetMapping("/changeMode")
+    public Pulverisation changeMode(@RequestParam(value = "mode") String mode) {
+        if (!mode.equals("horaire") && !mode.equals("hygrometrie")) {
+            throw new ParameterErrorException(ResultEnum.Mode_pulverisation);
+
+        } else {
+            Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
+            pulverisation.setMode(mode);
+            pulverisationRepository.save(pulverisation);
+            log.info("La mode de pulverisation change a " + mode);
+            this.activeCron(pulverisation);
+
+            return pulverisation;
+        }
+    }
+
+    public void activeCron(Pulverisation pulverisation) {
+        if (pulverisation.getMode().equals("horaire")) {
+            String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
+            String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
+            Calendar c = Calendar.getInstance();
+            int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
+            log.info("当前时间" + heureCurrent);
+            int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
+            if (pulverisation.getPulverisationheure().size() > 1) {
+                for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
+
+                    heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
+                    if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
+
+                        dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
+                    }
+
+                }
+            }
+            String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
+            System.out.println(cron);
+            dynamicTaskService.startCron(cron, dureeCorrespendant);
+        }
+
+
+    }
 
 }
