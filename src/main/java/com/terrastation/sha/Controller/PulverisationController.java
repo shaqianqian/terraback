@@ -56,7 +56,11 @@ public class PulverisationController {
 
     public Pulverisation addModeHoraire(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
+            if(pulverisation.getMoisFin()<=pulverisation.getMoisDebut()){
 
+                throw new ParameterErrorException(ResultEnum.Time_Ordre);
+
+            }
 
             Pulverisation pulverisationNew = pulverisationRepository.save(pulverisation);
             ////////////////////////////////////////////
@@ -66,8 +70,15 @@ public class PulverisationController {
 
         } else {
             Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
-            pulverisationOld.setMoisDebut(pulverisation.getMoisDebut());
-            pulverisationOld.setMoisFin(pulverisation.getMoisFin());
+            if(pulverisation.getMoisDebut()!=0)
+            { pulverisationOld.setMoisDebut(pulverisation.getMoisDebut());}
+            if(pulverisation.getMoisFin()!=0)
+            { pulverisationOld.setMoisFin(pulverisation.getMoisFin());}
+            if(pulverisationOld.getMoisFin()<=pulverisationOld.getMoisDebut()){
+
+                throw new ParameterErrorException(ResultEnum.Time_Ordre);
+
+            }
             List<Pulverisationheure> pulverisationheures = pulverisationOld.getPulverisationheure();
             if (!pulverisationheures.equals(pulverisation.getPulverisationheure())) {
                 pulverisationheures.clear();
@@ -108,12 +119,30 @@ public class PulverisationController {
         if (pulverisationRepository.findAll().isEmpty()) {
             throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
         }
-        Pulverisationheure pulverisationheure = new Pulverisationheure();
-        pulverisationheure.setDuree(duree);
-        pulverisationheure.setHeure(heure);
+
         Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
         List<Pulverisationheure> pulverisationheures = pulverisationOld.getPulverisationheure();
-        pulverisationheures.add(pulverisationheure);
+        boolean isContainsHeure=false;
+        Pulverisationheure pulverisationContainsHeure=new Pulverisationheure();
+         for(Pulverisationheure pulverisationheure:pulverisationheures) {
+             if (pulverisationheure.getHeure() == heure) {
+                 isContainsHeure=true;
+                 pulverisationContainsHeure=pulverisationheure;
+                 break;
+
+             }
+         }
+        if(!isContainsHeure)
+        { Pulverisationheure pulverisationheure = new Pulverisationheure();
+           pulverisationheure.setDuree(duree);
+           pulverisationheure.setHeure(heure);
+            pulverisationheures.add(pulverisationheure);}
+        else{
+
+            pulverisationContainsHeure.setDuree(duree);
+        }
+
+
         ////////////////////////////////////////////
         this.activeCron(pulverisationOld);
         ////////////////////////////////////////////
@@ -121,10 +150,46 @@ public class PulverisationController {
 
 
     }
+    @RequestMapping(value = "deleteHeureModeHoraire", method = RequestMethod.GET)
+
+    public Pulverisation deleteHeureModeHoraire(@RequestParam("heure") int heure) {
+        if (pulverisationRepository.findAll().isEmpty()) {
+            throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
+        }
+
+        Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
+        List<Pulverisationheure> pulverisationheures = pulverisationOld.getPulverisationheure();
+        boolean isContainsHeure=false;
+        Pulverisationheure pulverisationContainsHeure=new Pulverisationheure();
+        for(Pulverisationheure pulverisationheure:pulverisationheures) {
+            if (pulverisationheure.getHeure() == heure) {
+                isContainsHeure=true;
+                pulverisationContainsHeure=pulverisationheure;
+                break;
+
+            }
+        }
+        if(!isContainsHeure)
+        {    throw new ParameterErrorException(ResultEnum.Heure_existe_pas);
+        }
+        else{
+
+            pulverisationheures.remove(pulverisationContainsHeure);
+            pulverisationRepository.save(pulverisationOld);
+        }
+
+
+        ////////////////////////////////////////////
+        this.activeCron(pulverisationOld);
+        ////////////////////////////////////////////
+        return pulverisationOld;
+
+
+    }
 
 
     @PostMapping("/UpdateTouteLanneeModeHoraire")
-    public Pulverisation updateTouteLannee(@RequestBody List<Pulverisationheure> pulverisationheures) {
+    public Pulverisation updateTouteLannee(@RequestBody List<Pulverisationheure> pulverisationheures ) {
         if (pulverisationRepository.findAll().isEmpty()) {
             Pulverisation newPulveriasation = new Pulverisation();
             newPulveriasation.setMoisDebut(1);
@@ -157,6 +222,28 @@ public class PulverisationController {
 
     }
 
+    @GetMapping("/UpdateTouteLanneeModeHoraire")
+    public Pulverisation updateTouteLannee() {
+
+        if (pulverisationRepository.findAll().isEmpty()) {
+            throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
+        } else {
+            Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
+            pulverisation.setMoisDebut(1);
+            pulverisation.setMoisFin(12);
+            pulverisationRepository.save(pulverisation);
+
+            ////////////////////////////////////////////
+            activeCron(pulverisation);
+            ////////////////////////////////////////////
+
+            return pulverisation;
+        }
+
+
+
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteulverisation(@PathVariable(value = "id") int pulverisationId) {
@@ -170,12 +257,12 @@ public class PulverisationController {
     }
 
 
-    @GetMapping("/changeCron")
-    public String changeCron(@RequestParam(value = "cron") String cron) {
-        return dynamicTaskService.changeCron(cron);
-
-
-    }
+//    @GetMapping("/changeCron")
+//    public String changeCron(@RequestParam(value = "cron") String cron) {
+//        return dynamicTaskService.changeCron(cron);
+//
+//
+//    }
 
     @GetMapping("/changeMode")
     public Pulverisation changeMode(@RequestParam(value = "mode") String mode) {
