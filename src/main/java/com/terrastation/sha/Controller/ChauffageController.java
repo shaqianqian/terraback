@@ -115,7 +115,7 @@ public class ChauffageController {
 
         return ResultUtil.success(chauffageRepository.findAll());
     }
-
+    @CrossOrigin
     @GetMapping("/UpdateTouteLannee")
     public ResultVO<List<Chauffage>> updateTouteLannee(  @RequestParam(value = "max", required = true, defaultValue = "40") double max,
                                                          @RequestParam(value = "min", required = true, defaultValue = "20") double min)
@@ -135,7 +135,7 @@ public class ChauffageController {
         chauffage.setMoisFin(12);
 
 
-        return ResultUtil.success(chauffageRepository.save(chauffage));
+        return ResultUtil.success(chauffageRepository.findAll());
     }
 
 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+    </script>
+
+
+</head>
+<body>
+<div id="terrarium"> vide </div>
+</body>
+
+<script>
+    $.ajax({
+        url: "http://localhost:8080/terrarium/getParametres",
+        // data: JSON.stringify({
+        //     humidite:40,
+        //     temperature:34
+        // }),
+        async:false,
+        type: 'get',      //请求方式
+        dataType: "json",  //返回数据的格式
+        contentType:"application/json; charset=utf-8",
+        error: function () {
+            alert('加载数据失败！');
+        },
+        success: function (data) {
+            var item=data;
+            //console.log(item);
+            for(var i=0;i<item.length;i++){
+                console.log(item[i]);
+            }
+            result = data; // 接收返回值
+            document.getElementById("terrarium").innerHTML=JSON.stringify(result.data)
+        }
+    });
+
+    // console.log(result);
+    alert(JSON.stringify(result.data))
+
+
+
+
+</script>
+</html>

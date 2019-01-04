@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -106,8 +107,8 @@ public class LumiereController {
 
         return ResultUtil.success(lumiereRepository.findAll());
     }
-    @GetMapping("/UpdateTouteLannee")
-    public ResultVO<List<Chauffage>> updateTouteLannee()
+    @PostMapping("/UpdateTouteLannee")
+    public ResultVO<List<Lumiere>> updateTouteLannee(@RequestBody List<Lumiere> lumieres)
     {
         List<Lumiere> oldChauffageList=lumiereRepository.findAll();
         for(Lumiere oldLumiere: oldChauffageList)
@@ -115,12 +116,15 @@ public class LumiereController {
             lumiereRepository.delete(oldLumiere);
 
         }
-       Lumiere lumiere=new Lumiere();
-        lumiere.setHeureDebut(0);
-        lumiere.setHeureFin(23);
+        for(Lumiere l:lumieres)
+        { Lumiere lumiere=new Lumiere();
+        lumiere.setHeureDebut(l.getHeureDebut());
+        lumiere.setHeureFin(l.getHeureFin());
         lumiere.setMoisDebut(1);
         lumiere.setMoisFin(12);
-        return ResultUtil.success(lumiereRepository.save(lumiere));
+        lumiereRepository.save(lumiere);
+        }
+        return ResultUtil.success(lumiereRepository.findAll());
     }
 
     //get l'etat de chauffage
