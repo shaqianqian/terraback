@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * La methode fonctionne quand le projet lance
@@ -55,7 +56,14 @@ public class Initial implements CommandLineRunner {
         }
         else {
             Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
-            if (pulverisation.getMode().equals("horaire")) {
+
+            if(pulverisation.getMode()==null||pulverisation.getMode().isEmpty()){
+
+                System.out.println("vous avez pas encore configurez la mode de pulverisation");
+
+            }
+
+            else if (pulverisation.getMode().equals("horaire")) {
                 String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
                 String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
                 Calendar c = Calendar.getInstance();
@@ -76,6 +84,7 @@ public class Initial implements CommandLineRunner {
                 System.out.println(cron);
                 dynamicTaskService.startCron(cron, dureeCorrespendant);
             }
+
 //        scheduledForDynamicCron.setCron("* 0 * * * ?");
             //scheduledForDynamicCron.setCron("0 0 * * * ?");
         }

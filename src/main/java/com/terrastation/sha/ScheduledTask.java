@@ -52,9 +52,17 @@ public class ScheduledTask {
             System.out.println("vous avez pas encore configurez la pulverisation");
         }
         else{
+
             Pulverisation pulverisation=pulverisationRepository.findAll().get(0);
             log.info("Humidite courant est "+terrarium_current.getHumidite());
-            if(pulverisation.getMode().equals("hygrometrie")){
+
+            if(pulverisation.getMode()==null||pulverisation.getMode().isEmpty()){
+
+                System.out.println("vous avez pas encore configurez la mode de pulverisation");
+
+            }
+
+         else if(pulverisation.getMode().equals("hygrometrie")){
                if(terrarium_current.getHumidite()<pulverisation.getTaux_hygrometrie_min())
                 {  try {
                     log.info("START : Lancer le script du pulverisation");
@@ -75,6 +83,7 @@ public class ScheduledTask {
 
 
                 }
+
 
             }
 

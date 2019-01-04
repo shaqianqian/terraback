@@ -1,12 +1,10 @@
 package com.terrastation.sha.Controller;
 
 
-import com.terrastation.sha.Entity.Lumiere;
 import com.terrastation.sha.Entity.Pulverisation;
 import com.terrastation.sha.Entity.Pulverisationheure;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.ParameterErrorException;
-import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.PulverisationHeureRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Service.DynamicTaskService;
@@ -18,10 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.text.MessageFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +29,7 @@ public class PulverisationController {
 
     @Autowired
     private PulverisationRepository pulverisationRepository;
+
     @Autowired
     private PulverisationHeureRepository pulverisationHeureRepository;
 
@@ -194,6 +191,7 @@ public class PulverisationController {
             Pulverisation newPulveriasation = new Pulverisation();
             newPulveriasation.setMoisDebut(1);
             newPulveriasation.setMoisFin(12);
+            newPulveriasation.setMode("horaire");
             newPulveriasation.setPulverisationheure(pulverisationheures);
             pulverisationRepository.save(newPulveriasation);
             ////////////////////////////////////////////
@@ -223,7 +221,7 @@ public class PulverisationController {
     }
 
     @GetMapping("/UpdateTouteLanneeModeHoraire")
-    public Pulverisation updateTouteLannee() {
+    public Pulverisation updateTouteLanneeModeHoraire() {
 
         if (pulverisationRepository.findAll().isEmpty()) {
             throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
@@ -231,6 +229,7 @@ public class PulverisationController {
             Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
             pulverisation.setMoisDebut(1);
             pulverisation.setMoisFin(12);
+
             pulverisationRepository.save(pulverisation);
 
             ////////////////////////////////////////////
