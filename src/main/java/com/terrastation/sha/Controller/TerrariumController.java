@@ -167,8 +167,8 @@ public class TerrariumController {
 
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/getParametres", method = RequestMethod.GET)
-
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();
         List<TerrariumsGenereVO> terraiumsVOList = new ArrayList<TerrariumsGenereVO>();
