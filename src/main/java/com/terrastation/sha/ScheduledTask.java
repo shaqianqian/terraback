@@ -58,7 +58,7 @@ public class ScheduledTask {
                if(terrarium_current.getHumidite()<pulverisation.getTaux_hygrometrie_min())
                 {  try {
                     log.info("START : Lancer le script du pulverisation");
-                    Process pr = Runtime.getRuntime().exec("python ./python/pulverisation_test.py "+pulverisation.getDuree_hygrometrie());
+                    Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py "+pulverisation.getDuree_hygrometrie());
 
                     BufferedReader in = new BufferedReader(new
                             InputStreamReader(pr.getInputStream()));

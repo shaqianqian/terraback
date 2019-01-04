@@ -52,7 +52,7 @@ public class DynamicTaskService {
                 System.out.println("MyRunnable.run()，" + new Date()+" cron 值是"+cron+" duree est "+duree);
                 try {
                     log.info("START : Lancer le script du pulverisation");
-                    Process pr = Runtime.getRuntime().exec("python ./python/pulverisation_test.py "+duree);
+                    Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py "+duree);
 
                     BufferedReader in = new BufferedReader(new
                             InputStreamReader(pr.getInputStream()));
