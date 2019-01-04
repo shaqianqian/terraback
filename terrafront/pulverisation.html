@@ -5,102 +5,10 @@
     <title>Title</title>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
     </script>
-    <script>
-        function configure_hygrometrie() {
-
-                $.ajax({
-                    url: "http://localhost:8080/terrarium/pulverisation/addModeHygrometrie",
-                    data: JSON.stringify({
-                        "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
-                        "taux_hygrometrie_min": document.getElementById('min').value,
-                    }),
-                    async: false,
-                    type: 'post',      //请求方式
-                    dataType: "json",  //返回数据的格式
-                    contentType: "application/json; charset=utf-8",
-                    error: function () {
-                        alert('加载数据失败！');
-                    },
-                    success: function (data) {
-                        var item = data;
-                        //console.log(item);
-                        for (var i = 0; i < item.length; i++) {
-                            console.log(item[i]);
-                        }
-                        result = data; // 接收返回值
-                        alert(JSON.stringify(result.data))
-                    }
-                });
-
-
-
-        }
-
-     function configure_horaire() {
-         if (document.getElementById('touteAnnee').checked) {
-             $.ajax({
-                 url: "http://localhost:8080/terrarium/pulverisation/UpdateTouteLanneeModeHoraire",
-                 data: JSON.stringify([{
-                         duree: document.getElementById('duree').value,
-                         heure: document.getElementById('heure').value
-                     }]),
-                 async: false,
-                 type: 'post',      //请求方式
-                 dataType: "json",  //返回数据的格式
-                 contentType: "application/json; charset=utf-8",
-                 error: function () {
-                     alert('加载数据失败！');
-                 },
-                 success: function (data) {
-                     var item = data;
-                     //console.log(item);
-                     for (var i = 0; i < item.length; i++) {
-                         console.log(item[i]);
-                     }
-                     result = data; // 接收返回值
-                     alert(JSON.stringify(result.data))
-                 }
-             });
-
-         } else {
-             $.ajax({
-                 url: "http://localhost:8080/terrarium/pulverisation/addModeHoraire",
-                 data: JSON.stringify({
-                   "moisDebut":document.getElementById('mois_debut').value,
-                     "moisFin":document.getElementById('mois_fin').value,
-                     "pulverisationheure":[{
-                     duree: document.getElementById('duree').value,
-                     heure: document.getElementById('heure').value
-                 }]}),
-                 async: false,
-                 type: 'post',      //请求方式
-                 dataType: "json",  //返回数据的格式
-                 contentType: "application/json; charset=utf-8",
-                 error: function () {
-                     alert('加载数据失败！');
-                 },
-                 success: function (data) {
-                     var item = data;
-                     //console.log(item);
-                     for (var i = 0; i < item.length; i++) {
-                         console.log(item[i]);
-                     }
-                     result = data; // 接收返回值
-                     alert(JSON.stringify(result.data))
-                 }
-             });
-
-
-         }
-     }
-
-
-    </script>
-
 </head>
 <body>
 <h1>Pulverisation</h1>
-<div><div>mode : <div/><div id="mode"> vide </div><button onclick="mode()">Changer la mode de controler la pulverisation</button></div>
+<div><div>mode : <div/><div id="mode"> vide </div><button onclick="changeMode()">Changer la mode de controler la pulverisation</button></div>
 
 <div>
     <h3>Configurer le pulverisation en mode horaire</h3>
@@ -127,9 +35,6 @@
         }
         else{  document.getElementById("mois_debut").removeAttribute("disabled");
             document.getElementById("mois_fin").removeAttribute("disabled");
-
-
-
         }
     });
     $.ajax({
@@ -152,7 +57,97 @@
 
         }
     });
-    function mode() {
+    //configurer la pulveristaion en mode hygrometrie
+    function configure_hygrometrie() {
+
+        $.ajax({
+            url: "http://localhost:8080/terrarium/pulverisation/addModeHygrometrie",
+            data: JSON.stringify({
+                "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
+                "taux_hygrometrie_min": document.getElementById('min').value,
+            }),
+            async: false,
+            type: 'post',      //请求方式
+            dataType: "json",  //返回数据的格式
+            contentType: "application/json; charset=utf-8",
+            error: function () {
+                alert('加载数据失败！');
+            },
+            success: function (data) {
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
+                }
+                result = data; // 接收返回值
+                alert(JSON.stringify(result.data))
+            }
+        });
+
+
+
+    }
+    //configurer la pulveristaion en mode horaire
+    function configure_horaire() {
+        if (document.getElementById('touteAnnee').checked) {
+            $.ajax({
+                url: "http://localhost:8080/terrarium/pulverisation/UpdateTouteLanneeModeHoraire",
+                data: JSON.stringify([{
+                    duree: document.getElementById('duree').value,
+                    heure: document.getElementById('heure').value
+                }]),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function () {
+                    alert('加载数据失败！');
+                },
+                success: function (data) {
+                    var item = data;
+                    //console.log(item);
+                    for (var i = 0; i < item.length; i++) {
+                        console.log(item[i]);
+                    }
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
+
+        } else {
+            $.ajax({
+                url: "http://localhost:8080/terrarium/pulverisation/addModeHoraire",
+                data: JSON.stringify({
+                    "moisDebut":document.getElementById('mois_debut').value,
+                    "moisFin":document.getElementById('mois_fin').value,
+                    "pulverisationheure":[{
+                        duree: document.getElementById('duree').value,
+                        heure: document.getElementById('heure').value
+                    }]}),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function () {
+                    alert('加载数据失败！');
+                },
+                success: function (data) {
+                    var item = data;
+                    //console.log(item);
+                    for (var i = 0; i < item.length; i++) {
+                        console.log(item[i]);
+                    }
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
+
+
+        }
+    }
+//changer la mode pour controler la pulverisation(horaire ou hygrometrie)
+
+    function changeMode() {
         var mode;
         if( document.getElementById("mode").innerHTML=="horaire"){
 

@@ -5,81 +5,17 @@
     <title>Title</title>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
     </script>
-    <script>
-
-      function changetext() {
-          if (document.getElementById('touteAnnee').checked) {
-              $.ajax({
-                  url: "http://localhost:8080/terrarium/lumiere/UpdateTouteLannee",
-                  data:  JSON.stringify([{
-                      heureDebut:document.getElementById('heure_debut').value,
-                      heureFin:document.getElementById('heure_fin').value,
-
-                  }]),
-                  async: false,
-                  type: 'post',      //请求方式
-                  dataType: "json",  //返回数据的格式
-                  contentType: "application/json; charset=utf-8",
-                  error: function () {
-                      alert('加载数据失败！');
-                  },
-                  success: function (data) {
-                      var item = data;
-                      //console.log(item);
-                      for (var i = 0; i < item.length; i++) {
-                          console.log(item[i]);
-                      }
-                      result = data; // 接收返回值
-                      alert(JSON.stringify(result.data))
-                  }
-              });
-
-          } else {
-              $.ajax({
-                  url: "http://localhost:8080/terrarium/lumiere/UpdateAll",
-                  data:  JSON.stringify([{
-                      moisDebut:document.getElementById('mois_debut').value,
-                      moisFin:document.getElementById('mois_fin').value,
-                      heureDebut:document.getElementById('heure_debut').value,
-                      heureFin:document.getElementById('heure_fin').value,
-
-                  }]),
-                  async: false,
-                  type: 'post',      //请求方式
-                  dataType: "json",  //返回数据的格式
-                  contentType: "application/json; charset=utf-8",
-                  error: function () {
-                      alert('加载数据失败！');
-                  },
-                  success: function (data) {
-                      var item = data;
-                      //console.log(item);
-                      for (var i = 0; i < item.length; i++) {
-                          console.log(item[i]);
-                      }
-                      result = data; // 接收返回值
-                      alert(JSON.stringify(result.data))
-                  }
-              });
-
-
-          }
-      }
-
-
-    </script>
-
 </head>
 <body>
 <h1>LUMIERE</h1>
-<div><div>isProgrammable : <div/><div id="isProg"> vide </div><button onclick="prog()">Changer la facon de controler le lumiere</button></div>
-    <div><div>etat de lumiere : </div><div id="etat"> vide </div><button onclick="etat()" id="btn_etat">Changer l'etat de lumiere manuellement</button></div>
+<div><div>isProgrammable : <div/><div id="isProg"> vide </div><button onclick="changeFaconControlerChauffage()">Changer la facon de controler le lumiere</button></div>
+    <div><div>etat de lumiere : </div><div id="etat"> vide </div><button onclick="changeEtat()" id="btn_etat">Changer l'etat de lumiere manuellement</button></div>
 <div>  <input type="checkbox" name="touteAnnee" id="touteAnnee" value="touteAnnee"> toute l'annee<br>
     <p>mois debut: <input type="text" name="mois_debut" id="mois_debut" /></p>
     <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
     <p>heure debut: <input type="text" name="heure_debut" id="heure_debut"/></p>
     <p>heure fin: <input type="text" name="heure_fin" id="heure_fin"/></p>
-    <button onclick="changetext()">Configure la lumiere</button></div>
+    <button onclick="configurerChauffage()">Configure la lumiere</button></div>
 </div>
 </body>
 
@@ -121,7 +57,68 @@
             }
         }
     });
-    function prog() {
+    function configurerChauffage() {
+        //configurer la lumiere pour toute l'annee
+        if (document.getElementById('touteAnnee').checked) {
+            $.ajax({
+                url: "http://localhost:8080/terrarium/lumiere/UpdateTouteLannee",
+                data:  JSON.stringify([{
+                    heureDebut:document.getElementById('heure_debut').value,
+                    heureFin:document.getElementById('heure_fin').value,
+
+                }]),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function () {
+                    alert('加载数据失败！');
+                },
+                success: function (data) {
+                    var item = data;
+                    //console.log(item);
+                    for (var i = 0; i < item.length; i++) {
+                        console.log(item[i]);
+                    }
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
+
+        } else {
+            //configurer la lumiere pour certains mois
+            $.ajax({
+                url: "http://localhost:8080/terrarium/lumiere/UpdateAll",
+                data:  JSON.stringify([{
+                    moisDebut:document.getElementById('mois_debut').value,
+                    moisFin:document.getElementById('mois_fin').value,
+                    heureDebut:document.getElementById('heure_debut').value,
+                    heureFin:document.getElementById('heure_fin').value,
+
+                }]),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function () {
+                    alert('加载数据失败！');
+                },
+                success: function (data) {
+                    var item = data;
+                    //console.log(item);
+                    for (var i = 0; i < item.length; i++) {
+                        console.log(item[i]);
+                    }
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
+
+
+        }
+    }
+    //changer le facon de controler la lumiere(programmble ou manuelle)
+    function changeFaconControlerChauffage() {
         var isProg;
         if( document.getElementById("isProg").innerHTML=="true"){
 
@@ -165,8 +162,8 @@
         });
 
     }
-
-    function etat() {
+    //changer l'etat de lumiere quand il est controle manuellement
+    function changeEtat() {
         var etat;
         if( document.getElementById("etat").innerHTML=="true"){
 
