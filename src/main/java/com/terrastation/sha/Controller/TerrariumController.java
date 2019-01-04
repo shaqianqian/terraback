@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/terrarium")
 public class TerrariumController {
     Logger log = LoggerFactory.getLogger(TerrariumController.class);
@@ -85,6 +86,7 @@ public class TerrariumController {
 //modifier une ligne de parametre au terraium
 
     @PutMapping(value = "/update/{id}")
+    @CrossOrigin
     public ResultVO<Terrarium> updateTerraium(@PathVariable(value = "id") int terraiumId,
                                               @RequestParam(value = "temperature", required = false, defaultValue = "0") double temperature,
                                               @RequestParam(value = "humidite", required = false, defaultValue = "0") double humidite) {
@@ -111,6 +113,7 @@ public class TerrariumController {
     }
 
     //supprimer une ligne de parametre au terraium
+    @CrossOrigin
     @DeleteMapping("/delete/{id}")
     public ResultVO<String> deleteTerraium(@PathVariable(value = "id") int noteId) {
         Optional<Terrarium> terraiumOriginal = terrariumService.findById(noteId);
@@ -126,6 +129,7 @@ public class TerrariumController {
     }
 
     //recuperer tous le plus recente des parametres
+    @CrossOrigin
     @RequestMapping(value = "/getCurrentParametre", method = RequestMethod.GET)
 
     public ResultVO<List<TerrariumCurrentVO>> getCurrentParametresGenereVO() {

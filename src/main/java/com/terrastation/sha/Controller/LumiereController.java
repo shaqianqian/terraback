@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/terrarium/lumiere")
 public class LumiereController {
 
