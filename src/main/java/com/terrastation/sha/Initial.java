@@ -66,23 +66,11 @@ public class Initial implements CommandLineRunner {
             else if (pulverisation.getMode().equals("horaire")) {
                 String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
                 String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
-                Calendar c = Calendar.getInstance();
-                int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
-                int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
-                if (pulverisation.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
 
-                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
-                        if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
 
-                            dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
-                        }
-
-                    }
-                }
                 String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
                 System.out.println(cron);
-                dynamicTaskService.startCron(cron, dureeCorrespendant);
+                dynamicTaskService.startCron(cron);
             }
 
 //        scheduledForDynamicCron.setCron("* 0 * * * ?");

@@ -300,7 +300,7 @@ public class PulverisationController {
             }
             String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
             System.out.println(cron);
-            dynamicTaskService.startCron(cron, dureeCorrespendant);
+            dynamicTaskService.startCron(cron);
         }
 
 
