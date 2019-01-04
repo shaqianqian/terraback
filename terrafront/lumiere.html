@@ -11,12 +11,13 @@
           if (document.getElementById('touteAnnee').checked) {
               $.ajax({
                   url: "http://localhost:8080/terrarium/lumiere/UpdateTouteLannee",
-                  data: {
-                      max: document.getElementById('max').value,
-                      min: document.getElementById('min').value
-                  },
+                  data:  JSON.stringify([{
+                      heureDebut:document.getElementById('heure_debut').value,
+                      heureFin:document.getElementById('heure_fin').value,
+
+                  }]),
                   async: false,
-                  type: 'get',      //请求方式
+                  type: 'post',      //请求方式
                   dataType: "json",  //返回数据的格式
                   contentType: "application/json; charset=utf-8",
                   error: function () {
@@ -41,8 +42,6 @@
                       moisFin:document.getElementById('mois_fin').value,
                       heureDebut:document.getElementById('heure_debut').value,
                       heureFin:document.getElementById('heure_fin').value,
-                      max: document.getElementById('max').value,
-                      min: document.getElementById('min').value,
 
                   }]),
                   async: false,
@@ -73,17 +72,15 @@
 </head>
 <body>
 <h1>LUMIERE</h1>
-<div><div>isProgrammable : <div/><div id="isProg"> vide </div><button onclick="prog()">Changer la facon de controler le chauffage</button></div>
-    <div><div>etat de lumiere : </div><div id="etat"> vide </div><button onclick="etat()" id="btn_etat">Changer l'etat de chauffage manuellement</button></div>
+<div><div>isProgrammable : <div/><div id="isProg"> vide </div><button onclick="prog()">Changer la facon de controler le lumiere</button></div>
+    <div><div>etat de lumiere : </div><div id="etat"> vide </div><button onclick="etat()" id="btn_etat">Changer l'etat de lumiere manuellement</button></div>
 <div>  <input type="checkbox" name="touteAnnee" id="touteAnnee" value="touteAnnee"> toute l'annee<br>
     <p>mois debut: <input type="text" name="mois_debut" id="mois_debut" /></p>
     <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
     <p>heure debut: <input type="text" name="heure_debut" id="heure_debut"/></p>
     <p>heure fin: <input type="text" name="heure_fin" id="heure_fin"/></p>
-    <p>max: <input type="text" name="max" id="max"/></p>
-    <p>min: <input type="text" name="min" id="min"/></p>
     <button onclick="changetext()">Configure la lumiere</button></div>
-
+</div>
 </body>
 
 <script>
@@ -91,13 +88,9 @@
         if(this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled","disabled");
             document.getElementById("mois_fin").setAttribute("disabled","disabled");
-            document.getElementById("heure_fin").setAttribute("disabled","disabled");
-            document.getElementById("heure_debut").setAttribute("disabled","disabled");
         }
         else{  document.getElementById("mois_debut").removeAttribute("disabled");
             document.getElementById("mois_fin").removeAttribute("disabled");
-            document.getElementById("heure_fin").removeAttribute("disabled");
-            document.getElementById("heure_debut").removeAttribute("disabled");
 
 
         }

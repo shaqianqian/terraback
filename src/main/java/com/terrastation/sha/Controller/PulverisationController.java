@@ -10,6 +10,8 @@ import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Service.DynamicTaskService;
 import com.terrastation.sha.Service.ScheduledForDynamicCron;
 import com.terrastation.sha.Service.TerrariumService;
+import com.terrastation.sha.Util.ResultUtil;
+import com.terrastation.sha.VO.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +47,17 @@ public class PulverisationController {
 
     @RequestMapping(value = "getAll", method = RequestMethod.GET)
 
-    public List<Pulverisation> findall() {
-        return pulverisationRepository.findAll();
+    public ResultVO<Pulverisation> findall() {
+        Pulverisation pulverisation=pulverisationRepository.findAll().get(0);
+
+
+        return ResultUtil.success(pulverisation);
 
     }
 
     @RequestMapping(value = "addModeHoraire", method = RequestMethod.POST)
 
-    public Pulverisation addModeHoraire(@RequestBody Pulverisation pulverisation) {
+    public  ResultVO<Pulverisation> addModeHoraire(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
             if(pulverisation.getMoisFin()<=pulverisation.getMoisDebut()){
 
@@ -64,7 +69,7 @@ public class PulverisationController {
             ////////////////////////////////////////////
             this.activeCron(pulverisationNew);
             ////////////////////////////////////////////
-            return pulverisationNew;
+            return ResultUtil.success(pulverisationNew);
 
         } else {
             Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
@@ -86,18 +91,19 @@ public class PulverisationController {
             ////////////////////////////////////////////
             this.activeCron(pulverisationOld);
             ////////////////////////////////////////////
-            return pulverisationOld;
+
+            return ResultUtil.success(pulverisationOld);
         }
 
     }
 
     @RequestMapping(value = "addModeHygrometrie", method = RequestMethod.POST)
 
-    public Pulverisation addModeHygrometrie(@RequestBody Pulverisation pulverisation) {
+    public ResultVO<Pulverisation> addModeHygrometrie(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
 
             Pulverisation pulverisationNew = pulverisationRepository.save(pulverisation);
-            return pulverisationNew;
+            return ResultUtil.success(pulverisationNew);
 
         } else {
             Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
@@ -105,7 +111,7 @@ public class PulverisationController {
             pulverisationOld.setTaux_hygrometrie_max(pulverisation.getTaux_hygrometrie_max());
             pulverisationOld.setDuree_hygrometrie(pulverisation.getDuree_hygrometrie());
             pulverisationRepository.save(pulverisationOld);
-            return pulverisationOld;
+            return ResultUtil.success(pulverisationOld);
         }
 
     }
@@ -113,7 +119,7 @@ public class PulverisationController {
 
     @RequestMapping(value = "addHeureModeHoraire", method = RequestMethod.GET)
 
-    public Pulverisation addHeureModeHoraire(@RequestParam("heure") int heure, @RequestParam("duree") int duree) {
+    public ResultVO<Pulverisation>  addHeureModeHoraire(@RequestParam("heure") int heure, @RequestParam("duree") int duree) {
         if (pulverisationRepository.findAll().isEmpty()) {
             throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
         }
@@ -144,13 +150,14 @@ public class PulverisationController {
         ////////////////////////////////////////////
         this.activeCron(pulverisationOld);
         ////////////////////////////////////////////
-        return pulverisationRepository.save(pulverisationOld);
+        Pulverisation p=pulverisationRepository.save(pulverisationOld);
+        return ResultUtil.success(p);
 
 
     }
     @RequestMapping(value = "deleteHeureModeHoraire", method = RequestMethod.GET)
 
-    public Pulverisation deleteHeureModeHoraire(@RequestParam("heure") int heure) {
+    public ResultVO<Pulverisation> deleteHeureModeHoraire(@RequestParam("heure") int heure) {
         if (pulverisationRepository.findAll().isEmpty()) {
             throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
         }
@@ -180,14 +187,15 @@ public class PulverisationController {
         ////////////////////////////////////////////
         this.activeCron(pulverisationOld);
         ////////////////////////////////////////////
-        return pulverisationOld;
+        return ResultUtil.success(pulverisationOld);
+
 
 
     }
 
 
     @PostMapping("/UpdateTouteLanneeModeHoraire")
-    public Pulverisation updateTouteLannee(@RequestBody List<Pulverisationheure> pulverisationheures ) {
+    public ResultVO<Pulverisation> updateTouteLannee(@RequestBody List<Pulverisationheure> pulverisationheures ) {
         if (pulverisationRepository.findAll().isEmpty()) {
             Pulverisation newPulveriasation = new Pulverisation();
             newPulveriasation.setMoisDebut(1);
@@ -199,7 +207,7 @@ public class PulverisationController {
             this.activeCron(newPulveriasation);
             ////////////////////////////////////////////
 
-            return newPulveriasation;
+            return ResultUtil.success(newPulveriasation);
 
         } else {
             Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
@@ -214,15 +222,14 @@ public class PulverisationController {
             ////////////////////////////////////////////
             activeCron(pulverisation);
             ////////////////////////////////////////////
-
-            return pulverisation;
+            return ResultUtil.success(pulverisation);
         }
 
 
     }
 
     @GetMapping("/UpdateTouteLanneeModeHoraire")
-    public Pulverisation updateTouteLanneeModeHoraire() {
+    public ResultVO<Pulverisation> updateTouteLanneeModeHoraire() {
 
         if (pulverisationRepository.findAll().isEmpty()) {
             throw new ParameterErrorException(ResultEnum.Configuration_pulverisation);
@@ -236,8 +243,7 @@ public class PulverisationController {
             ////////////////////////////////////////////
             activeCron(pulverisation);
             ////////////////////////////////////////////
-
-            return pulverisation;
+            return ResultUtil.success(pulverisation);
         }
 
 
@@ -265,7 +271,7 @@ public class PulverisationController {
 //    }
 
     @GetMapping("/changeMode")
-    public Pulverisation changeMode(@RequestParam(value = "mode") String mode) {
+    public ResultVO<Pulverisation> changeMode(@RequestParam(value = "mode") String mode) {
         if (!mode.equals("horaire") && !mode.equals("hygrometrie")) {
             throw new ParameterErrorException(ResultEnum.Mode_pulverisation);
 
@@ -275,8 +281,8 @@ public class PulverisationController {
             pulverisationRepository.save(pulverisation);
             log.info("La mode de pulverisation change a " + mode);
             this.activeCron(pulverisation);
+            return ResultUtil.success(pulverisation);
 
-            return pulverisation;
         }
     }
 

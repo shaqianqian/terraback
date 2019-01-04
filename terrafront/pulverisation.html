@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+    </script>
+    <script>
+        function configure_hygrometrie() {
+
+                $.ajax({
+                    url: "http://localhost:8080/terrarium/pulverisation/addModeHygrometrie",
+                    data: JSON.stringify({
+                        "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
+                        "taux_hygrometrie_min": document.getElementById('min').value,
+                    }),
+                    async: false,
+                    type: 'post',      //请求方式
+                    dataType: "json",  //返回数据的格式
+                    contentType: "application/json; charset=utf-8",
+                    error: function () {
+                        alert('加载数据失败！');
+                    },
+                    success: function (data) {
+                        var item = data;
+                        //console.log(item);
+                        for (var i = 0; i < item.length; i++) {
+                            console.log(item[i]);
+                        }
+                        result = data; // 接收返回值
+                        alert(JSON.stringify(result.data))
+                    }
+                });
+
+
+
+        }
+
+     function configure_horaire() {
+         if (document.getElementById('touteAnnee').checked) {
+             $.ajax({
+                 url: "http://localhost:8080/terrarium/pulverisation/UpdateTouteLanneeModeHoraire",
+                 data: JSON.stringify([{
+                         duree: document.getElementById('duree').value,
+                         heure: document.getElementById('heure').value
+                     }]),
+                 async: false,
+                 type: 'post',      //请求方式
+                 dataType: "json",  //返回数据的格式
+                 contentType: "application/json; charset=utf-8",
+                 error: function () {
+                     alert('加载数据失败！');
+                 },
+                 success: function (data) {
+                     var item = data;
+                     //console.log(item);
+                     for (var i = 0; i < item.length; i++) {
+                         console.log(item[i]);
+                     }
+                     result = data; // 接收返回值
+                     alert(JSON.stringify(result.data))
+                 }
+             });
+
+         } else {
+             $.ajax({
+                 url: "http://localhost:8080/terrarium/pulverisation/addModeHoraire",
+                 data: JSON.stringify({
+                   "moisDebut":document.getElementById('mois_debut').value,
+                     "moisFin":document.getElementById('mois_fin').value,
+                     "pulverisationheure":[{
+                     duree: document.getElementById('duree').value,
+                     heure: document.getElementById('heure').value
+                 }]}),
+                 async: false,
+                 type: 'post',      //请求方式
+                 dataType: "json",  //返回数据的格式
+                 contentType: "application/json; charset=utf-8",
+                 error: function () {
+                     alert('加载数据失败！');
+                 },
+                 success: function (data) {
+                     var item = data;
+                     //console.log(item);
+                     for (var i = 0; i < item.length; i++) {
+                         console.log(item[i]);
+                     }
+                     result = data; // 接收返回值
+                     alert(JSON.stringify(result.data))
+                 }
+             });
+
+
+         }
+     }
+
+
+    </script>
+
+</head>
+<body>
+<h1>Pulverisation</h1>
+<div><div>mode : <div/><div id="mode"> vide </div><button onclick="mode()">Changer la mode de controler la pulverisation</button></div>
+
+<div>
+    <h3>Configurer le pulverisation en mode horaire</h3>
+    <input type="checkbox" name="touteAnnee" id="touteAnnee" value="touteAnnee"> toute l'annee<br>
+    <p>mois debut: <input type="text" name="mois_debut" id="mois_debut" /></p>
+    <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
+    <p>duree: <input type="text" name="duree" id="duree" /></p>
+    <p>heure: <input type="text" name="heure" id="heure"/></p>
+    <button onclick="configure_horaire()">Configure le pulverisation en mode horaire</button></div>
+    <div>
+        <h3>Configurer le pulverisation en mode hygrometrie</h3>
+        <p>min: <input type="text" name="min" id="min"/></p>
+        <p>duree_hygrometrie: <input type="text" name="duree_hygrometrie" id="duree_hygrometrie"/></p>
+        <button onclick="configure_hygrometrie()">Configure le pulverisation en mode hygrometrie</button></div>
+</div>
+</body>
+
+<script>
+    $("#touteAnnee").change(function() {
+        if(this.checked) {
+            document.getElementById("mois_debut").setAttribute("disabled","disabled");
+            document.getElementById("mois_fin").setAttribute("disabled","disabled");
+
+        }
+        else{  document.getElementById("mois_debut").removeAttribute("disabled");
+            document.getElementById("mois_fin").removeAttribute("disabled");
+
+
+
+        }
+    });
+    $.ajax({
+        url: "http://localhost:8080/terrarium/pulverisation/getAll",
+        async: false,
+        type: 'get',      //请求方式
+        dataType: "json",  //返回数据的格式
+        contentType: "application/json; charset=utf-8",
+        error: function () {
+            alert('加载数据失败！');
+        },
+        success: function (data) {
+            var item = data;
+            //console.log(item);
+            for (var i = 0; i < item.length; i++) {
+                console.log(item[i]);
+            }
+            result = data; // 接收返回值
+            document.getElementById("mode").innerHTML = result.data.mode;
+
+        }
+    });
+    function mode() {
+        var mode;
+        if( document.getElementById("mode").innerHTML=="horaire"){
+
+            mode="hygrometrie";
+
+
+        } else if (document.getElementById("mode").innerHTML == "hygrometrie") {
+
+            mode = "horaire";
+        }
+
+        $.ajax({
+            url: "http://localhost:8080/terrarium/pulverisation/changeMode",
+            data: {
+                mode: mode
+            },
+            async: false,
+            type: 'get',      //请求方式
+            dataType: "json",  //返回数据的格式
+            contentType: "application/json; charset=utf-8",
+            error: function () {
+                alert('加载数据失败！');
+            },
+            success: function (data) {
+
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
+                }
+                result = data; // 接收返回值
+                // alert(JSON.stringify(result.data))
+                document.getElementById("mode").innerHTML = result.data.mode;
+            }
+        });
+
+    }
+    //
+    // function etat() {
+    //     var etat;
+    //     if( document.getElementById("etat").innerHTML=="true"){
+    //
+    //         etat="false";
+    //
+    //
+    //     }
+    //     else if(document.getElementById("etat").innerHTML=="false"){
+    //
+    //         etat="true";
+    //     }
+    //
+    //     $.ajax({
+    //         url: "http://localhost:8080/terrarium/chauffage/changeEtatInterrupteurManuellement",
+    //         data:  {
+    //             etat:etat
+    //         },
+    //         async: false,
+    //         type: 'get',      //请求方式
+    //         dataType: "json",  //返回数据的格式
+    //         contentType: "application/json; charset=utf-8",
+    //         error: function () {
+    //             alert('加载数据失败！');
+    //         },
+    //         success: function (data) {
+    //
+    //             var item = data;
+    //             //console.log(item);
+    //             for (var i = 0; i < item.length; i++) {
+    //                 console.log(item[i]);
+    //             }
+    //             result = data; // 接收返回值
+    //             // alert(JSON.stringify(result.data))
+    //             document.getElementById("etat").innerHTML = result.data.etat;
+    //         }
+    //     });
+    //
+    // }
+</script>
+</html>
