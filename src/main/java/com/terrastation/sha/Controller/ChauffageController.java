@@ -133,7 +133,7 @@ public class ChauffageController {
         chauffage.setMin(min);
         chauffage.setMoisDebut(1);
         chauffage.setMoisFin(12);
-
+        chauffageRepository.save(chauffage);
 
         return ResultUtil.success(chauffageRepository.findAll());
     }
@@ -241,10 +241,6 @@ public class ChauffageController {
         return ResultUtil.success(newInterrupteur);
 
     }
-
-
-
-
 
 
 }

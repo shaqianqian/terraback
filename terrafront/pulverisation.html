@@ -38,7 +38,7 @@
         }
     });
     $.ajax({
-        url: "http://localhost:8080/terrarium/pulverisation/getAll",
+        url: "http://localhost:8080/terrarium/pulverisation/getConfiguration",
         async: false,
         type: 'get',      //请求方式
         dataType: "json",  //返回数据的格式
@@ -61,7 +61,7 @@
     function configure_hygrometrie() {
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/pulverisation/addModeHygrometrie",
+            url: "http://localhost:8080/terrarium/pulverisation/configureModeHygrometrie",
             data: JSON.stringify({
                 "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
                 "taux_hygrometrie_min": document.getElementById('min').value,
@@ -116,7 +116,7 @@
 
         } else {
             $.ajax({
-                url: "http://localhost:8080/terrarium/pulverisation/addModeHoraire",
+                url: "http://localhost:8080/terrarium/pulverisation/configureModeHoraire",
                 data: JSON.stringify({
                     "moisDebut":document.getElementById('mois_debut').value,
                     "moisFin":document.getElementById('mois_fin').value,

@@ -45,9 +45,9 @@ public class PulverisationController {
     private TerrariumService terrariumService;
 
 
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "getConfiguration", method = RequestMethod.GET)
 
-    public ResultVO<Pulverisation> findall() {
+    public ResultVO<Pulverisation> getConfiguration() {
         Pulverisation pulverisation=pulverisationRepository.findAll().get(0);
 
 
@@ -55,7 +55,7 @@ public class PulverisationController {
 
     }
 
-    @RequestMapping(value = "addModeHoraire", method = RequestMethod.POST)
+    @RequestMapping(value = "configureModeHoraire", method = RequestMethod.POST)
 
     public  ResultVO<Pulverisation> addModeHoraire(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
@@ -64,8 +64,12 @@ public class PulverisationController {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
 
             }
+            Pulverisation pulverisationNew=new Pulverisation();
+            if(pulverisation.getMode()==null){
+                pulverisation.setMode("");
+            }
+             pulverisationNew = pulverisationRepository.save(pulverisation);
 
-            Pulverisation pulverisationNew = pulverisationRepository.save(pulverisation);
             ////////////////////////////////////////////
             this.activeCron(pulverisationNew);
             ////////////////////////////////////////////
@@ -87,6 +91,9 @@ public class PulverisationController {
                 pulverisationheures.clear();
                 pulverisationheures.addAll(pulverisation.getPulverisationheure());
             }
+            if(pulverisationOld.getMode()==null){
+                pulverisationOld.setMode("");
+            }
             pulverisationRepository.save(pulverisationOld);
             ////////////////////////////////////////////
             this.activeCron(pulverisationOld);
@@ -97,16 +104,21 @@ public class PulverisationController {
 
     }
 
-    @RequestMapping(value = "addModeHygrometrie", method = RequestMethod.POST)
+    @RequestMapping(value = "configureModeHygrometrie", method = RequestMethod.POST)
 
     public ResultVO<Pulverisation> addModeHygrometrie(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
-
+            if(pulverisation.getMode()==null){
+                pulverisation.setMode("");
+            }
             Pulverisation pulverisationNew = pulverisationRepository.save(pulverisation);
             return ResultUtil.success(pulverisationNew);
 
         } else {
             Pulverisation pulverisationOld = pulverisationRepository.findAll().get(0);
+            if(pulverisationOld.getMode()==null){
+                pulverisationOld.setMode("");
+            }
             pulverisationOld.setTaux_hygrometrie_min(pulverisation.getTaux_hygrometrie_min());
             pulverisationOld.setTaux_hygrometrie_max(pulverisation.getTaux_hygrometrie_max());
             pulverisationOld.setDuree_hygrometrie(pulverisation.getDuree_hygrometrie());
@@ -200,7 +212,7 @@ public class PulverisationController {
             Pulverisation newPulveriasation = new Pulverisation();
             newPulveriasation.setMoisDebut(1);
             newPulveriasation.setMoisFin(12);
-            newPulveriasation.setMode("horaire");
+            newPulveriasation.setMode("");
             newPulveriasation.setPulverisationheure(pulverisationheures);
             pulverisationRepository.save(newPulveriasation);
             ////////////////////////////////////////////
@@ -214,6 +226,9 @@ public class PulverisationController {
             if (!pulverisationheures.equals(pulverisation.getPulverisationheure())) {
                 pulverisation.getPulverisationheure().clear();
                 pulverisation.getPulverisationheure().addAll(pulverisationheures);
+            }
+            if(pulverisation.getMode()==null){
+                pulverisation.setMode("");
             }
             pulverisation.setMoisDebut(1);
             pulverisation.setMoisFin(12);
