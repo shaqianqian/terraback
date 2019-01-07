@@ -280,7 +280,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         List<Lumiere> lumieres = lumiereRepositary.findAll();
         if (lumieres.size() == 0) {
 
-            log.info("Vous configurez pas encore la lumiere. On change pas l'etat du  chauffage ");
+            log.info("Vous configurez pas encore la lumiere. On change pas l'etat du  lumiere ");
 
         } else {
             boolean isConfigurationLumiere = false;
@@ -335,7 +335,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                         }
                         in.close();
                         pr.waitFor();
-                        log.info("END : on a reussi à eteindre le chauffage");
+                        log.info("END : on a reussi à eteindre le lumiere");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
