@@ -59,6 +59,7 @@ public class ScheduledTask {
                 log.info("vous avez pas encore configurez la mode de pulverisation");
 
             } else if (pulverisation.getMode().equals("hygrometrie")) {
+
                 log.info("vous controlez le pulverisation en mode hygrometrie ,Humidite courant est " + terrarium_current.getHumidite());
                 if(pulverisation.getDuree_hygrometrie()==0){
                     log.info("vous avez pas encore configurez la mode hygrometrie de pulverisation");
