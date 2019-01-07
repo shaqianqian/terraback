@@ -7,8 +7,11 @@ import javax.persistence.*;
 @Data
 @Entity
 public class Alarme {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
     private String type;
 
     private double min;

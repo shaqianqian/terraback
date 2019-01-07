@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AlarmeServiceImpl implements AlarmeService {
@@ -59,59 +56,72 @@ public class AlarmeServiceImpl implements AlarmeService {
 
     }
      public List<Terrarium> alarmeTemperature() {
-         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-         Terrarium terrarium = terrariumService.getCurrentParameter();
-         Date current = terrarium.getCreateTime();
-         String currentString = df.format(current);
-         Alarme alarme = alarmeRepository.findByType("temperature").get();
 
-         Date debut = new Date();
+         Optional<Alarme> alarmeOptional=alarmeRepository.findByType("temperature");
+         if(alarmeOptional.isPresent()){
+             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+             Terrarium terrarium = terrariumService.getCurrentParameter();
+             Date current = terrarium.getCreateTime();
+             String currentString = df.format(current);
+             Alarme alarme = alarmeOptional.get();
 
-         debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
+             Date debut = new Date();
+
+             debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
 
 
-         log.info("debut is " + debut.toString());
-         String debutString = df.format(debut);
+             log.info("debut is " + debut.toString());
+             String debutString = df.format(debut);
 
 
-         List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
-         sortListByTemperature(terrariumList);
+             List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
+             sortListByTemperature(terrariumList);
 
-         double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();
-         log.info("max_temperature is " + max_Temperature);
-         double min_Temperature = terrariumList.get(0).getTemperature();
-         log.info("min_temperature is " + min_Temperature);
-         if (max_Temperature - min_Temperature > alarme.getVariation() || terrarium.getTemperature() > alarme.getMax() || terrarium.getTemperature() < alarme.getMin()) {
-             alarmeService.send();
-             log.info("send a email" + alarme.getMessage());
+             double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();
+             log.info("max_temperature is " + max_Temperature);
+             double min_Temperature = terrariumList.get(0).getTemperature();
+             log.info("min_temperature is " + min_Temperature);
+             if (max_Temperature - min_Temperature > alarme.getVariation() || terrarium.getTemperature() > alarme.getMax() || terrarium.getTemperature() < alarme.getMin()) {
+                 alarmeService.send();
+                 log.info("send a email" + alarme.getMessage());
+             }
+             return terrariumList;
+
          }
-         return terrariumList;
+        else{
 
+            return null;
+         }
 
      }
 
     public List<Terrarium> alarmeHygrometrie() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Terrarium terrarium = terrariumService.getCurrentParameter();
-        Date current = terrarium.getCreateTime();
-        String currentString = df.format(current);
-        Alarme alarme = alarmeRepository.findByType("hygrometrie").get();
-        Date debut = new Date();
-        debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
-        log.info("debut is " + debut.toString());
-        String debutString = df.format(debut);
-        List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
-        sortListByHumidity(terrariumList);
+        Optional<Alarme> alarmeOptional = alarmeRepository.findByType("hygrometrie");
+        if (alarmeOptional.isPresent()) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Terrarium terrarium = terrariumService.getCurrentParameter();
+            Date current = terrarium.getCreateTime();
+            String currentString = df.format(current);
+            Alarme alarme = alarmeRepository.findByType("hygrometrie").get();
+            Date debut = new Date();
+            debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
+            log.info("debut is " + debut.toString());
+            String debutString = df.format(debut);
+            List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
+            sortListByHumidity(terrariumList);
 
-        double max_humidity = terrariumList.get(terrariumList.size() - 1).getHumidite();
-        log.info("max_humidity is " + max_humidity);
-        double min_humidity = terrariumList.get(0).getHumidite();
-        log.info("min_humidity is " + min_humidity);
-        if (max_humidity - min_humidity > alarme.getVariation() || terrarium.getHumidite() > alarme.getMax() || terrarium.getHumidite() < alarme.getMin()) {
-            alarmeService.send();
-            log.info("send a email" + alarme.getMessage());
+            double max_humidity = terrariumList.get(terrariumList.size() - 1).getHumidite();
+            log.info("max_humidity is " + max_humidity);
+            double min_humidity = terrariumList.get(0).getHumidite();
+            log.info("min_humidity is " + min_humidity);
+            if (max_humidity - min_humidity > alarme.getVariation() || terrarium.getHumidite() > alarme.getMax() || terrarium.getHumidite() < alarme.getMin()) {
+                alarmeService.send();
+                log.info("send a email" + alarme.getMessage());
+            }
+            return terrariumList;
+        } else {
+            return null;
         }
-        return terrariumList;
     }
 
 
