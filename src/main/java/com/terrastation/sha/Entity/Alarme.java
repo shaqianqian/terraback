@@ -10,6 +10,7 @@ public class Alarme {
 
     @Id
     private String type;
+
     private double min;
     private double max;
     private double variation;

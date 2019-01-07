@@ -18,12 +18,16 @@
     <p>max: <input type="text" name="max" id="max"/></p>
     <p>min: <input type="text" name="min" id="min"/></p>
     <button onclick="configurerChauffage()">Configure le chauffage</button></div>
+    <div id="tableAjax"></div>
 </div>
+
 </body>
 
 <script>
     // const url="http://127.0.0.1:8080";
     const url="http://192.168.1.94:8080";
+
+
     $("#touteAnnee").change(function() {
         if(this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled","disabled");
@@ -43,7 +47,28 @@
         setInterval("startRequest()",1000);
     });
     function startRequest()
-    {
+    { $.ajax({
+
+        url: url+"/terrarium/chauffage/getAll",
+        async: false,
+        type: 'get',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        error: function () {
+            alert('加载数据失败！');
+        },
+        success: function (data) {
+            var item = data;
+            //console.log(item);
+            for (var i = 0; i < item.length; i++) {
+                console.log(item[i]);
+            }
+            result = data;
+            createShowingTable(data.data);
+
+        }
+    });
+
 
         $.ajax({
         url: url+"/terrarium/chauffage/getEtatChauffage",
@@ -71,6 +96,32 @@
             }
         }
     });}
+    function createShowingTable(data) {
+        var tableStr = "<table class='tab-list' width='40%' border='1px'>";
+        tableStr = tableStr
+            + "<tr class='list-header'>"
+            +"<td width='5%'>mois debut</td>"
+            +"<td width='5%'>mois fin</td>"
+            +"<td width='5%'>heure debut</td>"
+            +"<td width='5%'>heure fin</td>"
+            +"<td width='5%'>min</td>"
+            +"<td width='5%'>max</td>"
+            +"</tr>";
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            tableStr = tableStr + "<tr>"
+                +"<td>"+ data[i].moisDebut + "</td>"
+                +"<td>"+ data[i].moisFin + "</td>"
+                + "<td>"+ data[i].heureDebut+ "</td>"
+                + "<td>"+ data[i].heureFin + "</td>"
+                +"<td>"+data[i].min+"</td>"
+                +"<td>"+data[i].max+"</td>"
+                +"</tr>";
+        }
+        tableStr = tableStr + "</table>";
+        $("#tableAjax").html(tableStr);
+    }
+
     function configurerChauffage() {
         if (document.getElementById('touteAnnee').checked) {
             //configurer le chauffage pour toute l'annee
