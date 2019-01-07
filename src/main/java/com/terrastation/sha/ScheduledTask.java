@@ -27,7 +27,7 @@ public class ScheduledTask {
     private PulverisationRepository pulverisationRepository;
 
 
-    @Scheduled(fixedRate = 30000,initialDelayString="10000")
+    @Scheduled(fixedRate = 30000, initialDelayString = "10000")
     //30s une fois
     public void reportCurrentTime() {
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
@@ -43,43 +43,44 @@ public class ScheduledTask {
             interrupteurService.InterrupterManuelleLumiere("lumiere");
         }
 
-        if (pulverisationRepository.findAll().isEmpty()){
-            System.out.println("vous avez pas encore configurez la pulverisation");
+        if (pulverisationRepository.findAll().isEmpty()) {
+            log.info("vous avez pas encore configurez la pulverisation");
 
         }
-        else if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
+//        else if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
+//
+//          log.info("vous avez pas encore configurez la pulverisation");
+//        }
+        else {
 
-            System.out.println("vous avez pas encore configurez la pulverisation");
-        }
-        else{
+            Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
+            if (pulverisation.getMode() == null || pulverisation.getMode().isEmpty()) {
 
-            Pulverisation pulverisation=pulverisationRepository.findAll().get(0);
-            log.info("Humidite courant est "+terrarium_current.getHumidite());
+                log.info("vous avez pas encore configurez la mode de pulverisation");
 
-            if(pulverisation.getMode()==null||pulverisation.getMode().isEmpty()){
+            } else if (pulverisation.getMode().equals("hygrometrie")) {
+                log.info("vous controlez le pulverisation en mode hygrometrie ,Humidite courant est " + terrarium_current.getHumidite());
+                if(pulverisation.getDuree_hygrometrie()==0){
+                    log.info("vous avez pas encore configurez la mode hygrometrie de pulverisation");
 
-                System.out.println("vous avez pas encore configurez la mode de pulverisation");
-
-            }
-
-         else if(pulverisation.getMode().equals("hygrometrie")){
-               if(terrarium_current.getHumidite()<pulverisation.getTaux_hygrometrie_min())
-                {  try {
-                    log.info("START : Lancer le script du pulverisation");
-                    Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py "+pulverisation.getDuree_hygrometrie());
-
-                    BufferedReader in = new BufferedReader(new
-                            InputStreamReader(pr.getInputStream()));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        System.out.println(line);
-                    }
-                    in.close();
-                    pr.waitFor();
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                else if (terrarium_current.getHumidite() < pulverisation.getTaux_hygrometrie_min()) {
+                    try {
+                        log.info("Votre terrarium n'est pas assez humide, lancer la pulverisation, la duree est "+pulverisation.getDuree_hygrometrie());
+                        log.info("START : Lancer le script du pulverisation");
+                        Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py " + pulverisation.getDuree_hygrometrie());
 
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
 
                 }
@@ -90,8 +91,6 @@ public class ScheduledTask {
         }
 
     }
-
-
 
 
 }

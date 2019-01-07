@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * La methode fonctionne quand le projet lance
@@ -46,29 +47,32 @@ public class Initial implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+
         if (pulverisationRepository.findAll().isEmpty()){
-            System.out.println("vous avez pas encore configurez la pulverisation");
+            log.info("vous avez pas encore configurez la pulverisation");
 
         }
-        else if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
 
-            System.out.println("vous avez pas encore configurez la pulverisation");
-        }
         else {
             Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
 
             if(pulverisation.getMode()==null||pulverisation.getMode().isEmpty()){
 
-                System.out.println("vous avez pas encore configurez la mode de pulverisation");
+                log.info("vous avez pas encore configurez la mode de pulverisation");
 
             }
 
             else if (pulverisation.getMode().equals("horaire")) {
+                if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
+
+                    log.info("vous avez pas encore configurez les details de pulverisation en mode horaire ");
+                }
+                else{
                 String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
                 String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
                 Calendar c = Calendar.getInstance();
                 int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
-                log.info("当前时间" + heureCurrent);
+//                log.info("当前时间" + heureCurrent);
                 int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
                 if (pulverisation.getPulverisationheure().size() > 1) {
                     for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
@@ -83,7 +87,7 @@ public class Initial implements CommandLineRunner {
                 }
                 String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
                 System.out.println(cron);
-                dynamicTaskService.startCron(cron);
+                dynamicTaskService.startCron(cron);}
             }
 
 //        scheduledForDynamicCron.setCron("* 0 * * * ?");

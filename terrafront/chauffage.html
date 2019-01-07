@@ -17,11 +17,12 @@
     <p>heure fin: <input type="text" name="heure_fin" id="heure_fin"/></p>
     <p>max: <input type="text" name="max" id="max"/></p>
     <p>min: <input type="text" name="min" id="min"/></p>
-    <button onclick="configurerChauffage">Configure le chauffage</button></div>
+    <button onclick="configurerChauffage()">Configure le chauffage</button></div>
 </div>
 </body>
 
 <script>
+    const url="http://127.0.0.1:8080";
     $("#touteAnnee").change(function() {
         if(this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled","disabled");
@@ -37,8 +38,14 @@
 
         }
     });
-    $.ajax({
-        url: "http://localhost:8080/terrarium/chauffage/getEtatChauffage",
+    $(document).ready(function () {
+        setInterval("startRequest()",1000);
+    });
+    function startRequest()
+    {
+
+        $.ajax({
+        url: url+"/terrarium/chauffage/getEtatChauffage",
         async: false,
         type: 'get',
         dataType: "json",
@@ -62,12 +69,12 @@
                 document.getElementById("btn_etat").style.display="";
             }
         }
-    });
+    });}
     function configurerChauffage() {
         if (document.getElementById('touteAnnee').checked) {
             //configurer le chauffage pour toute l'annee
             $.ajax({
-                url: "http://localhost:8080/terrarium/chauffage/UpdateTouteLannee",
+                url: url+"/terrarium/chauffage/UpdateTouteLannee",
                 data: {
                     max: document.getElementById('max').value,
                     min: document.getElementById('min').value
@@ -93,7 +100,7 @@
         } else {
             //configurer le chauffage pour certains mois
             $.ajax({
-                url: "http://localhost:8080/terrarium/chauffage/UpdateAll",
+                url: url+"/terrarium/chauffage/UpdateAll",
                 data:  JSON.stringify([{
                     moisDebut:document.getElementById('mois_debut').value,
                     moisFin:document.getElementById('mois_fin').value,
@@ -139,7 +146,7 @@
         }
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/chauffage/changeControleInterrupteur",
+            url: url+"/terrarium/chauffage/changeControleInterrupteur",
             data: {
                 isProg: isProg
             },
@@ -185,7 +192,7 @@
         }
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/chauffage/changeEtatInterrupteurManuellement",
+            url: url+"/terrarium/chauffage/changeEtatInterrupteurManuellement",
             data:  {
                 etat:etat
             },

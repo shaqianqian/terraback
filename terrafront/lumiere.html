@@ -20,6 +20,8 @@
 </body>
 
 <script>
+    // const url="http://192.168.1.94:8080";
+    const url="http://127.0.0.1:8080";
     $("#touteAnnee").change(function() {
         if(this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled","disabled");
@@ -31,37 +33,44 @@
 
         }
     });
-    $.ajax({
-        url: "http://localhost:8080/terrarium/lumiere/getEtatLumiere",
-        async: false,
-        type: 'get',      //请求方式
-        dataType: "json",  //返回数据的格式
-        contentType: "application/json; charset=utf-8",
-        error: function () {
-            alert('加载数据失败！');
-        },
-        success: function (data) {
-            var item = data;
-            //console.log(item);
-            for (var i = 0; i < item.length; i++) {
-                console.log(item[i]);
-            }
-            result = data; // 接收返回值
-            document.getElementById("isProg").innerHTML = result.data.prog;
-            document.getElementById("etat").innerHTML = result.data.etat;
-            if(document.getElementById("isProg").innerHTML=="true"){
-                document.getElementById("btn_etat").style.display="none";
-            }
-            else if(document.getElementById("isProg").innerHTML=="false"){
-                document.getElementById("btn_etat").style.display="";
-            }
-        }
+    $(document).ready(function () {
+        setInterval("startRequest()",1000);
     });
+    function startRequest()
+    {
+        $.ajax({
+            url: url+"/terrarium/lumiere/getEtatLumiere",
+            async: false,
+            type: 'get',      //请求方式
+            dataType: "json",  //返回数据的格式
+            contentType: "application/json; charset=utf-8",
+            error: function () {
+                alert('加载数据失败！');
+            },
+            success: function (data) {
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
+                }
+                result = data; // 接收返回值
+                document.getElementById("isProg").innerHTML = result.data.prog;
+                document.getElementById("etat").innerHTML = result.data.etat;
+                if(document.getElementById("isProg").innerHTML=="true"){
+                    document.getElementById("btn_etat").style.display="none";
+                }
+                else if(document.getElementById("isProg").innerHTML=="false"){
+                    document.getElementById("btn_etat").style.display="";
+                }
+            }
+        });
+    }
+
     function configurerChauffage() {
         //configurer la lumiere pour toute l'annee
         if (document.getElementById('touteAnnee').checked) {
             $.ajax({
-                url: "http://localhost:8080/terrarium/lumiere/UpdateTouteLannee",
+                url: url+"/terrarium/lumiere/UpdateTouteLannee",
                 data:  JSON.stringify([{
                     heureDebut:document.getElementById('heure_debut').value,
                     heureFin:document.getElementById('heure_fin').value,
@@ -88,7 +97,7 @@
         } else {
             //configurer la lumiere pour certains mois
             $.ajax({
-                url: "http://localhost:8080/terrarium/lumiere/UpdateAll",
+                url: url+"/terrarium/lumiere/UpdateAll",
                 data:  JSON.stringify([{
                     moisDebut:document.getElementById('mois_debut').value,
                     moisFin:document.getElementById('mois_fin').value,
@@ -131,7 +140,7 @@
         }
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/lumiere/changeControleInterrupteur",
+            url: url+"/terrarium/lumiere/changeControleInterrupteur",
             data: {
                 isProg: isProg
             },
@@ -177,7 +186,7 @@
         }
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/lumiere/changeEtatInterrupteurManuellement",
+            url: url+"/terrarium/lumiere/changeEtatInterrupteurManuellement",
             data:  {
                 etat:etat
             },

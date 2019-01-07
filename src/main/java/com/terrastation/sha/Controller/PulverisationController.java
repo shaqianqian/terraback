@@ -48,10 +48,17 @@ public class PulverisationController {
     @RequestMapping(value = "getConfiguration", method = RequestMethod.GET)
 
     public ResultVO<Pulverisation> getConfiguration() {
+        if (!pulverisationRepository.findAll().isEmpty()) {
         Pulverisation pulverisation=pulverisationRepository.findAll().get(0);
+            return ResultUtil.success(pulverisation);}
+            else{
+                log.info("Vous configurez pas encore pulverisation");
+                return null;
+
+        }
 
 
-        return ResultUtil.success(pulverisation);
+
 
     }
 
@@ -96,6 +103,7 @@ public class PulverisationController {
             }
             pulverisationRepository.save(pulverisationOld);
             ////////////////////////////////////////////
+
             this.activeCron(pulverisationOld);
             ////////////////////////////////////////////
 
@@ -159,10 +167,11 @@ public class PulverisationController {
         }
 
 
+
+        Pulverisation p=pulverisationRepository.save(pulverisationOld);
         ////////////////////////////////////////////
         this.activeCron(pulverisationOld);
         ////////////////////////////////////////////
-        Pulverisation p=pulverisationRepository.save(pulverisationOld);
         return ResultUtil.success(p);
 
 
@@ -307,7 +316,7 @@ public class PulverisationController {
             String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
             Calendar c = Calendar.getInstance();
             int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
-            log.info("当前时间" + heureCurrent);
+//            log.info("当前时间" + heureCurrent);
             int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
             if (pulverisation.getPulverisationheure().size() > 1) {
                 for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {

@@ -27,6 +27,7 @@
 </body>
 
 <script>
+    const url="http://127.0.0.1:8080";
     $("#touteAnnee").change(function() {
         if(this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled","disabled");
@@ -38,7 +39,7 @@
         }
     });
     $.ajax({
-        url: "http://localhost:8080/terrarium/pulverisation/getConfiguration",
+        url: url+"/terrarium/pulverisation/getConfiguration",
         async: false,
         type: 'get',      //请求方式
         dataType: "json",  //返回数据的格式
@@ -53,7 +54,9 @@
                 console.log(item[i]);
             }
             result = data; // 接收返回值
-            document.getElementById("mode").innerHTML = result.data.mode;
+            if(data!=null)
+            {document.getElementById("mode").innerHTML = result.data.mode;}
+            else{document.getElementById("mode").innerHTML = "pas encore configurer";}
 
         }
     });
@@ -61,7 +64,7 @@
     function configure_hygrometrie() {
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/pulverisation/configureModeHygrometrie",
+            url: url+"/terrarium/pulverisation/configureModeHygrometrie",
             data: JSON.stringify({
                 "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
                 "taux_hygrometrie_min": document.getElementById('min').value,
@@ -91,7 +94,7 @@
     function configure_horaire() {
         if (document.getElementById('touteAnnee').checked) {
             $.ajax({
-                url: "http://localhost:8080/terrarium/pulverisation/UpdateTouteLanneeModeHoraire",
+                url: url+"/terrarium/pulverisation/UpdateTouteLanneeModeHoraire",
                 data: JSON.stringify([{
                     duree: document.getElementById('duree').value,
                     heure: document.getElementById('heure').value
@@ -116,7 +119,7 @@
 
         } else {
             $.ajax({
-                url: "http://localhost:8080/terrarium/pulverisation/configureModeHoraire",
+                url: url+"/terrarium/pulverisation/configureModeHoraire",
                 data: JSON.stringify({
                     "moisDebut":document.getElementById('mois_debut').value,
                     "moisFin":document.getElementById('mois_fin').value,
@@ -160,7 +163,7 @@
         }
 
         $.ajax({
-            url: "http://localhost:8080/terrarium/pulverisation/changeMode",
+            url: url+"/terrarium/pulverisation/changeMode",
             data: {
                 mode: mode
             },

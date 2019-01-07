@@ -15,7 +15,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+#    show-sql: true
+    show-sql: false
   mail:
     host: smtp.gmail.com
     username: terrastation111@gmail.com

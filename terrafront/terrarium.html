@@ -13,8 +13,9 @@
 </body>
 
 <script>
+    const url="http://192.168.1.94:8080";
     $.ajax({
-        url: "http://localhost:8080/terrarium/getParametres",
+        url: url+"/terrarium/getParametres",
         // data: JSON.stringify({
         //     humidite:40,
         //     temperature:34
@@ -38,7 +39,7 @@
     });
 
     // console.log(result);
-    alert(JSON.stringify(result.data))
+    // alert(JSON.stringify(result.data))
 
 
 
