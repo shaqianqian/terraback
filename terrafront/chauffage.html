@@ -17,7 +17,9 @@
     <p>heure fin: <input type="text" name="heure_fin" id="heure_fin"/></p>
     <p>max: <input type="text" name="max" id="max"/></p>
     <p>min: <input type="text" name="min" id="min"/></p>
-    <button onclick="configurerChauffage()">Configure le chauffage</button></div>
+    <button onclick="AjouterConfigurerChauffage()" id="addConfiguration" >Ajouter une Configuration pour le chauffage</button></div>
+    <button onclick="supprimeChauffage()"> Supprimer toutes la Configuration pour le chauffage</button></div>
+    <button onclick="configurerChauffage()">Configure pour le chauffage</button></div>
     <div id="tableAjax"></div>
 </div>
 
@@ -31,14 +33,17 @@
     $("#touteAnnee").change(function() {
         if(this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled","disabled");
+            document.getElementById("mois_debut").setAttribute("disabled","disabled");
             document.getElementById("mois_fin").setAttribute("disabled","disabled");
             document.getElementById("heure_fin").setAttribute("disabled","disabled");
             document.getElementById("heure_debut").setAttribute("disabled","disabled");
+            document.getElementById("addConfiguration").style.visibility='hidden';
         }
         else{  document.getElementById("mois_debut").removeAttribute("disabled");
             document.getElementById("mois_fin").removeAttribute("disabled");
             document.getElementById("heure_fin").removeAttribute("disabled");
             document.getElementById("heure_debut").removeAttribute("disabled");
+            document.getElementById("addConfiguration").removeAttribute("disabled","disabled");
 
 
         }
@@ -121,7 +126,67 @@
         tableStr = tableStr + "</table>";
         $("#tableAjax").html(tableStr);
     }
+     function supprimeChauffage(){
 
+         $.ajax({
+             url: url+"/terrarium/chauffage/DeleteAll",
+             async: false,
+             type: 'get',      //请求方式
+             dataType: "json",  //返回数据的格式
+             contentType: "application/json; charset=utf-8",
+             error: function () {
+                 alert('加载数据失败！');
+             },
+             success: function (data) {
+                 var item = data;
+                 //console.log(item);
+                 for (var i = 0; i < item.length; i++) {
+                     console.log(item[i]);
+                 }
+                 result = data; // 接收返回值
+                 alert(JSON.stringify(result.data))
+             }
+         });
+
+
+     }
+    function AjouterConfigurerChauffage(){
+
+            //configurer le chauffage pour certains mois
+            $.ajax({
+                url: url+"/terrarium/chauffage/add",
+                data:  JSON.stringify({
+                    moisDebut:document.getElementById('mois_debut').value,
+                    moisFin:document.getElementById('mois_fin').value,
+                    heureDebut:document.getElementById('heure_debut').value,
+                    heureFin:document.getElementById('heure_fin').value,
+                    max: document.getElementById('max').value,
+                    min: document.getElementById('min').value,
+
+                }),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function () {
+                    alert('加载数据失败！');
+                },
+                success: function (data) {
+                    var item = data;
+                    //console.log(item);
+                    for (var i = 0; i < item.length; i++) {
+                        console.log(item[i]);
+                    }
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
+
+
+
+
+
+     }
     function configurerChauffage() {
         if (document.getElementById('touteAnnee').checked) {
             //configurer le chauffage pour toute l'annee

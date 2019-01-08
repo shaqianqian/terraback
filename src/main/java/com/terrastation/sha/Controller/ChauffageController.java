@@ -20,8 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
 @CrossOrigin
+@RestController
 @RequestMapping(value = "/terrarium/chauffage")
 public class ChauffageController {
 
@@ -96,9 +96,22 @@ public class ChauffageController {
     }
 
 
+    @GetMapping("/DeleteAll")
+    public ResultVO<String> deleteAll()
+    {
+        List<Chauffage> oldChauffageList=chauffageRepository.findAll();
+        for(Chauffage oldChauffage:oldChauffageList)
+        {
+            chauffageRepository.delete(oldChauffage);
+
+        }
+
+        return ResultUtil.success("vous avez supprime toute la configuration de chauffage");
+    }
 
 
-        @PostMapping("/UpdateAll")
+
+    @PostMapping("/UpdateAll")
         public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages)
         {
             List<Chauffage> oldChauffageList=chauffageRepository.findAll();

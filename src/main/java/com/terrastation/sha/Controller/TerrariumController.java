@@ -232,7 +232,7 @@ public class TerrariumController {
         return ResultUtil.success(sensorsVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/listSensors/{id}", method = RequestMethod.GET)
 
     public ResultVO<SensorVO> getListSensors(@PathVariable(value = "id") int index, @RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
