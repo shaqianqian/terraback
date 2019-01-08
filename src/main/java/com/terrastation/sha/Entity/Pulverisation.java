@@ -19,7 +19,7 @@ public class Pulverisation {
     private int id;
     private int moisDebut;
     private int moisFin;
-   private String mode;
+    private String mode;
     private int duree_hygrometrie;
 
  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

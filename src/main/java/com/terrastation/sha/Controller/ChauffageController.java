@@ -121,6 +121,9 @@ public class ChauffageController {
 
             }
             for(int i=0;i<chauffages.size();i++){
+                if (chauffages.get(i).getHeureDebut() > chauffages.get(i).getHeureFin() ||chauffages.get(i).getMoisDebut() > chauffages.get(i).getMoisFin()) {
+                    throw new ParameterErrorException(ResultEnum.Time_Ordre);
+                }
 //            chauffages.get(i).setId(i+1);
                 chauffageRepository.save(chauffages.get(i));
             }
@@ -128,7 +131,7 @@ public class ChauffageController {
 
         return ResultUtil.success(chauffageRepository.findAll());
     }
-    @CrossOrigin
+    //TODO AJOUTE UPDATEALL POUR LES HEURES
     @GetMapping("/UpdateTouteLannee")
     public ResultVO<List<Chauffage>> updateTouteLannee(  @RequestParam(value = "max", required = true, defaultValue = "40") double max,
                                                          @RequestParam(value = "min", required = true, defaultValue = "20") double min)
@@ -136,6 +139,8 @@ public class ChauffageController {
         List<Chauffage> oldChauffageList=chauffageRepository.findAll();
         for(Chauffage oldChauffage:oldChauffageList)
         {
+
+
             chauffageRepository.delete(oldChauffage);
 
         }
@@ -150,7 +155,6 @@ public class ChauffageController {
 
         return ResultUtil.success(chauffageRepository.findAll());
     }
-
 
 
 

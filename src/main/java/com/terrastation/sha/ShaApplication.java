@@ -1,15 +1,7 @@
 package com.terrastation.sha;
-import com.terrastation.sha.Repositary.PulverisationHeureRepository;
-import com.terrastation.sha.Repositary.PulverisationRepository;
-import com.terrastation.sha.Service.ScheduledForDynamicCron;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import javax.annotation.PostConstruct;
-import java.io.*;
-import java.util.logging.Level;
 
 @EnableScheduling
 @SpringBootApplication

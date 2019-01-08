@@ -8,7 +8,6 @@ import com.terrastation.sha.Exception.ParameterErrorException;
 import com.terrastation.sha.Repositary.PulverisationHeureRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Service.DynamicTaskService;
-import com.terrastation.sha.Service.ScheduledForDynamicCron;
 import com.terrastation.sha.Service.TerrariumService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.ResultVO;
@@ -36,8 +35,6 @@ public class PulverisationController {
     @Autowired
     private PulverisationHeureRepository pulverisationHeureRepository;
 
-    @Autowired
-    private ScheduledForDynamicCron scheduledForDynamicCron;
 
     @Autowired
     private DynamicTaskService dynamicTaskService;
@@ -54,7 +51,6 @@ public class PulverisationController {
         } else {
             log.info("Vous configurez pas encore pulverisation");
             return null;
-
         }
 
 
@@ -62,7 +58,7 @@ public class PulverisationController {
 
     @RequestMapping(value = "configureModeHoraire", method = RequestMethod.POST)
 
-    public ResultVO<Pulverisation> addModeHoraire(@RequestBody Pulverisation pulverisation) {
+    public ResultVO<Pulverisation> configureModeHoraire(@RequestBody Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().isEmpty()) {
             if (pulverisation.getMoisFin() <= pulverisation.getMoisDebut()) {
 

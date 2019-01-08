@@ -8,190 +8,180 @@
 </head>
 <body>
 <h1>CHAUFFAGE</h1>
-<div><div>isProgrammable : <div/><div id="isProg"> vide </div><button onclick="changeFaconControlerChauffage()">Changer la facon de controler le chauffage</button></div>
-    <div><div>etat de chauffage : </div><div id="etat"> vide </div><button onclick="changeEtat()" id="btn_etat">Changer l'etat de chauffage manuellement</button></div>
-<div>  <input type="checkbox" name="touteAnnee" id="touteAnnee" value="touteAnnee"> toute l'annee<br>
-    <p>mois debut: <input type="text" name="mois_debut" id="mois_debut" /></p>
-    <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
-    <p>heure debut: <input type="text" name="heure_debut" id="heure_debut"/></p>
-    <p>heure fin: <input type="text" name="heure_fin" id="heure_fin"/></p>
-    <p>max: <input type="text" name="max" id="max"/></p>
-    <p>min: <input type="text" name="min" id="min"/></p>
-    <button onclick="AjouterConfigurerChauffage()" id="addConfiguration" >Ajouter une Configuration pour le chauffage</button></div>
-    <button onclick="supprimeChauffage()"> Supprimer toutes la Configuration pour le chauffage</button></div>
-    <button onclick="configurerChauffage()">Configure pour le chauffage</button></div>
-    <div id="tableAjax"></div>
+<div>
+    <div>isProgrammable :
+        <div/>
+        <div id="isProg"> vide</div>
+        <button onclick="changeFaconControlerChauffage()">Changer la facon de controler le chauffage</button>
+    </div>
+    <div>
+        <div>etat de chauffage :</div>
+        <div id="etat"> vide</div>
+        <button onclick="changeEtat()" id="btn_etat">Changer l'etat de chauffage manuellement</button>
+    </div>
+    <div><input type="checkbox" name="touteAnnee" id="touteAnnee" value="touteAnnee"> toute l'annee<br>
+        <p>mois debut: <input type="text" name="mois_debut" id="mois_debut"/></p>
+        <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
+        <p>heure debut: <input type="text" name="heure_debut" id="heure_debut"/></p>
+        <p>heure fin: <input type="text" name="heure_fin" id="heure_fin"/></p>
+        <p>max: <input type="text" name="max" id="max"/></p>
+        <p>min: <input type="text" name="min" id="min"/></p>
+        <button onclick="AjouterConfigurerChauffage()" id="addConfiguration">Ajouter une Configuration pour le
+            chauffage
+        </button>
+    </div>
+    <button onclick="supprimeChauffage()"> Supprimer toutes la Configuration pour le chauffage</button>
+</div>
+<!--<button onclick="configurerChauffage()">Configure pour le chauffage</button>-->
+</div>
+<div id="tableAjax"></div>
 </div>
 
 </body>
 
 <script>
-     const url="http://127.0.0.1:8080";
+    const url = "http://127.0.0.1:8080";
     //const url="http://192.168.1.94:8080";
 
 
-    $("#touteAnnee").change(function() {
-        if(this.checked) {
-            document.getElementById("mois_debut").setAttribute("disabled","disabled");
-            document.getElementById("mois_debut").setAttribute("disabled","disabled");
-            document.getElementById("mois_fin").setAttribute("disabled","disabled");
-            document.getElementById("heure_fin").setAttribute("disabled","disabled");
-            document.getElementById("heure_debut").setAttribute("disabled","disabled");
-            document.getElementById("addConfiguration").style.visibility='hidden';
-        }
-        else{  document.getElementById("mois_debut").removeAttribute("disabled");
+    $("#touteAnnee").change(function () {
+        if (this.checked) {
+            document.getElementById("mois_debut").setAttribute("disabled", "disabled");
+            document.getElementById("mois_debut").style.visibility = 'hidden';
+            document.getElementById("mois_fin").setAttribute("disabled", "disabled");
+            document.getElementById("mois_fin").style.visibility = 'hidden';
+            document.getElementById("heure_fin").setAttribute("disabled", "disabled");
+            document.getElementById("heure_fin").style.visibility = 'hidden';
+            document.getElementById("heure_debut").setAttribute("disabled", "disabled");
+            document.getElementById("heure_debut").style.visibility = 'hidden';
+        } else {
+            document.getElementById("mois_debut").removeAttribute("disabled");
+            document.getElementById("mois_debut").style.visibility = 'visible';
             document.getElementById("mois_fin").removeAttribute("disabled");
+            document.getElementById("mois_fin").style.visibility = 'visible';
             document.getElementById("heure_fin").removeAttribute("disabled");
+            document.getElementById("heure_fin").style.visibility = 'visible';
             document.getElementById("heure_debut").removeAttribute("disabled");
-            document.getElementById("addConfiguration").removeAttribute("disabled","disabled");
-
-
+            document.getElementById("heure_debut").style.visibility = 'visible';
         }
     });
     $(document).ready(function () {
-        setInterval("startRequest()",1000);
+        setInterval("startRequest()", 1000);
     });
-    function startRequest()
-    { $.ajax({
 
-        url: url+"/terrarium/chauffage/getAll",
-        async: false,
-        type: 'get',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        error: function () {
-            alert('加载数据失败！');
-        },
-        success: function (data) {
-            var item = data;
-            //console.log(item);
-            for (var i = 0; i < item.length; i++) {
-                console.log(item[i]);
+    function startRequest() {
+        $.ajax({
+
+            url: url + "/terrarium/chauffage/getAll",
+            async: false,
+            type: 'get',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
+            },
+            success: function (data) {
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
+                }
+                result = data;
+                createShowingTable(data.data);
+
             }
-            result = data;
-            createShowingTable(data.data);
-
-        }
-    });
+        });
 
 
         $.ajax({
-        url: url+"/terrarium/chauffage/getEtatChauffage",
-        async: false,
-        type: 'get',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        error: function () {
-            alert('加载数据失败！');
-        },
-        success: function (data) {
-            var item = data;
-            //console.log(item);
-            for (var i = 0; i < item.length; i++) {
-                console.log(item[i]);
+            url: url + "/terrarium/chauffage/getEtatChauffage",
+            async: false,
+            type: 'get',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
+            },
+            success: function (data) {
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
+                }
+                result = data;
+                document.getElementById("isProg").innerHTML = result.data.prog;
+                document.getElementById("etat").innerHTML = result.data.etat;
+                if (document.getElementById("isProg").innerHTML == "true") {
+                    document.getElementById("btn_etat").style.display = "none";
+                } else if (document.getElementById("isProg").innerHTML == "false") {
+                    document.getElementById("btn_etat").style.display = "";
+                }
             }
-            result = data;
-            document.getElementById("isProg").innerHTML = result.data.prog;
-            document.getElementById("etat").innerHTML = result.data.etat;
-            if(document.getElementById("isProg").innerHTML=="true"){
-                document.getElementById("btn_etat").style.display="none";
-            }
-            else if(document.getElementById("isProg").innerHTML=="false"){
-                document.getElementById("btn_etat").style.display="";
-            }
-        }
-    });}
+        });
+    }
+
     function createShowingTable(data) {
         var tableStr = "<table class='tab-list' width='40%' border='1px'>";
         tableStr = tableStr
             + "<tr class='list-header'>"
-            +"<td width='5%'>mois debut</td>"
-            +"<td width='5%'>mois fin</td>"
-            +"<td width='5%'>heure debut</td>"
-            +"<td width='5%'>heure fin</td>"
-            +"<td width='5%'>min</td>"
-            +"<td width='5%'>max</td>"
-            +"</tr>";
+            + "<td width='5%'>mois debut</td>"
+            + "<td width='5%'>mois fin</td>"
+            + "<td width='5%'>heure debut</td>"
+            + "<td width='5%'>heure fin</td>"
+            + "<td width='5%'>min</td>"
+            + "<td width='5%'>max</td>"
+            + "</tr>";
         var len = data.length;
-        for ( var i = 0; i < len; i++) {
+        for (var i = 0; i < len; i++) {
             tableStr = tableStr + "<tr>"
-                +"<td>"+ data[i].moisDebut + "</td>"
-                +"<td>"+ data[i].moisFin + "</td>"
-                + "<td>"+ data[i].heureDebut+ "</td>"
-                + "<td>"+ data[i].heureFin + "</td>"
-                +"<td>"+data[i].min+"</td>"
-                +"<td>"+data[i].max+"</td>"
-                +"</tr>";
+                + "<td>" + data[i].moisDebut + "</td>"
+                + "<td>" + data[i].moisFin + "</td>"
+                + "<td>" + data[i].heureDebut + "</td>"
+                + "<td>" + data[i].heureFin + "</td>"
+                + "<td>" + data[i].min + "</td>"
+                + "<td>" + data[i].max + "</td>"
+                + "</tr>";
         }
         tableStr = tableStr + "</table>";
         $("#tableAjax").html(tableStr);
     }
-     function supprimeChauffage(){
 
-         $.ajax({
-             url: url+"/terrarium/chauffage/DeleteAll",
-             async: false,
-             type: 'get',      //请求方式
-             dataType: "json",  //返回数据的格式
-             contentType: "application/json; charset=utf-8",
-             error: function () {
-                 alert('加载数据失败！');
-             },
-             success: function (data) {
-                 var item = data;
-                 //console.log(item);
-                 for (var i = 0; i < item.length; i++) {
-                     console.log(item[i]);
-                 }
-                 result = data; // 接收返回值
-                 alert(JSON.stringify(result.data))
-             }
-         });
+    function supprimeChauffage() {
 
+        $.ajax({
+            url: url + "/terrarium/chauffage/DeleteAll",
+            async: false,
+            type: 'get',      //请求方式
+            dataType: "json",  //返回数据的格式
+            contentType: "application/json; charset=utf-8",
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
 
-     }
-    function AjouterConfigurerChauffage(){
-
-            //configurer le chauffage pour certains mois
-            $.ajax({
-                url: url+"/terrarium/chauffage/add",
-                data:  JSON.stringify({
-                    moisDebut:document.getElementById('mois_debut').value,
-                    moisFin:document.getElementById('mois_fin').value,
-                    heureDebut:document.getElementById('heure_debut').value,
-                    heureFin:document.getElementById('heure_fin').value,
-                    max: document.getElementById('max').value,
-                    min: document.getElementById('min').value,
-
-                }),
-                async: false,
-                type: 'post',      //请求方式
-                dataType: "json",  //返回数据的格式
-                contentType: "application/json; charset=utf-8",
-                error: function () {
-                    alert('加载数据失败！');
-                },
-                success: function (data) {
-                    var item = data;
-                    //console.log(item);
-                    for (var i = 0; i < item.length; i++) {
-                        console.log(item[i]);
-                    }
-                    result = data; // 接收返回值
-                    alert(JSON.stringify(result.data))
+            },
+            success: function (data) {
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
                 }
-            });
+                result = data; // 接收返回值
+                alert(JSON.stringify(result.data))
+            }
+        });
 
 
+    }
 
-
-
-     }
-    function configurerChauffage() {
+    function AjouterConfigurerChauffage() {
         if (document.getElementById('touteAnnee').checked) {
             //configurer le chauffage pour toute l'annee
             $.ajax({
-                url: url+"/terrarium/chauffage/UpdateTouteLannee",
+                url: url + "/terrarium/chauffage/UpdateTouteLannee",
                 data: {
                     max: document.getElementById('max').value,
                     min: document.getElementById('min').value
@@ -200,8 +190,10 @@
                 type: 'get',
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                error: function () {
-                    alert('echouter de charger les donnee！');
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // alert('加载数据失败！');
+                    alert(jqXHR.responseText);
+
                 },
                 success: function (data) {
                     var item = data;
@@ -215,24 +207,27 @@
             });
 
         } else {
+
             //configurer le chauffage pour certains mois
             $.ajax({
-                url: url+"/terrarium/chauffage/UpdateAll",
-                data:  JSON.stringify([{
-                    moisDebut:document.getElementById('mois_debut').value,
-                    moisFin:document.getElementById('mois_fin').value,
-                    heureDebut:document.getElementById('heure_debut').value,
-                    heureFin:document.getElementById('heure_fin').value,
+                url: url + "/terrarium/chauffage/add",
+                data: JSON.stringify({
+                    moisDebut: document.getElementById('mois_debut').value,
+                    moisFin: document.getElementById('mois_fin').value,
+                    heureDebut: document.getElementById('heure_debut').value,
+                    heureFin: document.getElementById('heure_fin').value,
                     max: document.getElementById('max').value,
                     min: document.getElementById('min').value,
 
-                }]),
+                }),
                 async: false,
                 type: 'post',      //请求方式
                 dataType: "json",  //返回数据的格式
                 contentType: "application/json; charset=utf-8",
-                error: function () {
-                    alert('加载数据失败！');
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // alert('加载数据失败！');
+                    alert(jqXHR.responseText);
+
                 },
                 success: function (data) {
                     var item = data;
@@ -245,16 +240,83 @@
                 }
             });
 
-
         }
+
+
     }
+
+    // function configurerChauffage() {
+    //     if (document.getElementById('touteAnnee').checked) {
+    //         //configurer le chauffage pour toute l'annee
+    //         $.ajax({
+    //             url: url+"/terrarium/chauffage/UpdateTouteLannee",
+    //             data: {
+    //                 max: document.getElementById('max').value,
+    //                 min: document.getElementById('min').value
+    //             },
+    //             async: false,
+    //             type: 'get',
+    //             dataType: "json",
+    //             contentType: "application/json; charset=utf-8",
+    //             error: function (jqXHR, textStatus, errorThrown) {
+    //                 // alert('加载数据失败！');
+    //                 alert(jqXHR.responseText);
+    //
+    //             },
+    //             success: function (data) {
+    //                 var item = data;
+    //                 //console.log(item);
+    //                 for (var i = 0; i < item.length; i++) {
+    //                     console.log(item[i]);
+    //                 }
+    //                 result = data;
+    //                 alert(JSON.stringify(result.data))
+    //             }
+    //         });
+    //
+    //     } else {
+    //         //configurer le chauffage pour certains mois
+    //         $.ajax({
+    //             url: url+"/terrarium/chauffage/UpdateAll",
+    //             data:  JSON.stringify([{
+    //                 moisDebut:document.getElementById('mois_debut').value,
+    //                 moisFin:document.getElementById('mois_fin').value,
+    //                 heureDebut:document.getElementById('heure_debut').value,
+    //                 heureFin:document.getElementById('heure_fin').value,
+    //                 max: document.getElementById('max').value,
+    //                 min: document.getElementById('min').value,
+    //
+    //             }]),
+    //             async: false,
+    //             type: 'post',      //请求方式
+    //             dataType: "json",  //返回数据的格式
+    //             contentType: "application/json; charset=utf-8",
+    //             error: function (jqXHR, textStatus, errorThrown) {
+    //                 // alert('加载数据失败！');
+    //                 alert(jqXHR.responseText);
+    //
+    //             },
+    //             success: function (data) {
+    //                 var item = data;
+    //                 //console.log(item);
+    //                 for (var i = 0; i < item.length; i++) {
+    //                     console.log(item[i]);
+    //                 }
+    //                 result = data; // 接收返回值
+    //                 alert(JSON.stringify(result.data))
+    //             }
+    //         });
+    //
+    //
+    //     }
+    // }
 
     //changer le facon de controler le chauffage(programmble ou manuelle)
     function changeFaconControlerChauffage() {
         var isProg;
-        if( document.getElementById("isProg").innerHTML=="true"){
+        if (document.getElementById("isProg").innerHTML == "true") {
 
-            isProg="false";
+            isProg = "false";
 
 
         } else if (document.getElementById("isProg").innerHTML == "false") {
@@ -263,7 +325,7 @@
         }
 
         $.ajax({
-            url: url+"/terrarium/chauffage/changeControleInterrupteur",
+            url: url + "/terrarium/chauffage/changeControleInterrupteur",
             data: {
                 isProg: isProg
             },
@@ -271,8 +333,10 @@
             type: 'get',      //请求方式
             dataType: "json",  //返回数据的格式
             contentType: "application/json; charset=utf-8",
-            error: function () {
-                alert('加载数据失败！');
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
             },
             success: function (data) {
 
@@ -284,41 +348,42 @@
                 result = data; // 接收返回值
                 // alert(JSON.stringify(result.data))
                 document.getElementById("isProg").innerHTML = result.data.prog;
-                if(document.getElementById("isProg").innerHTML=="true"){
-                    document.getElementById("btn_etat").style.display="none";
-                }
-               else if(document.getElementById("isProg").innerHTML=="false"){
-                    document.getElementById("btn_etat").style.display="";
+                if (document.getElementById("isProg").innerHTML == "true") {
+                    document.getElementById("btn_etat").style.display = "none";
+                } else if (document.getElementById("isProg").innerHTML == "false") {
+                    document.getElementById("btn_etat").style.display = "";
                 }
             }
         });
 
     }
-//changer l'etat de chauffage quand il est controle manuellement
+
+    //changer l'etat de chauffage quand il est controle manuellement
     function changeEtat() {
         var etat;
-        if( document.getElementById("etat").innerHTML=="true"){
+        if (document.getElementById("etat").innerHTML == "true") {
 
-            etat="false";
+            etat = "false";
 
 
-        }
-        else if(document.getElementById("etat").innerHTML=="false"){
+        } else if (document.getElementById("etat").innerHTML == "false") {
 
-            etat="true";
+            etat = "true";
         }
 
         $.ajax({
-            url: url+"/terrarium/chauffage/changeEtatInterrupteurManuellement",
-            data:  {
-                etat:etat
+            url: url + "/terrarium/chauffage/changeEtatInterrupteurManuellement",
+            data: {
+                etat: etat
             },
             async: false,
             type: 'get',      //请求方式
             dataType: "json",  //返回数据的格式
             contentType: "application/json; charset=utf-8",
-            error: function () {
-                alert('加载数据失败！');
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
             },
             success: function (data) {
 

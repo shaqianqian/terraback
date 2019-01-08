@@ -45,8 +45,10 @@
         type: 'get',      //请求方式
         dataType: "json",  //返回数据的格式
         contentType: "application/json; charset=utf-8",
-        error: function () {
-            alert('加载数据失败！');
+        error: function (jqXHR, textStatus, errorThrown) {
+            // alert('加载数据失败！');
+            alert(jqXHR.responseText);
+
         },
         success: function (data) {
             var item = data;
@@ -74,8 +76,10 @@
             type: 'post',      //请求方式
             dataType: "json",  //返回数据的格式
             contentType: "application/json; charset=utf-8",
-            error: function () {
-                alert('加载数据失败！');
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
             },
             success: function (data) {
                 var item = data;
@@ -104,8 +108,10 @@
                 type: 'post',      //请求方式
                 dataType: "json",  //返回数据的格式
                 contentType: "application/json; charset=utf-8",
-                error: function () {
-                    alert('加载数据失败！');
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // alert('加载数据失败！');
+                    alert(jqXHR.responseText);
+
                 },
                 success: function (data) {
                     var item = data;
@@ -132,8 +138,10 @@
                 type: 'post',      //请求方式
                 dataType: "json",  //返回数据的格式
                 contentType: "application/json; charset=utf-8",
-                error: function () {
-                    alert('加载数据失败！');
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // alert('加载数据失败！');
+                    alert(jqXHR.responseText);
+
                 },
                 success: function (data) {
                     var item = data;
@@ -172,8 +180,10 @@
             type: 'get',      //请求方式
             dataType: "json",  //返回数据的格式
             contentType: "application/json; charset=utf-8",
-            error: function () {
-                alert('加载数据失败！');
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
             },
             success: function (data) {
 

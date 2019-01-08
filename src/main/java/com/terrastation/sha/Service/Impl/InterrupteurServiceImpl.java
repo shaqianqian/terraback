@@ -164,7 +164,6 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                            e.printStackTrace();
                        }
 
-//                    log.info("trop chaud, eteindre le chauffage");
 
                    } else {
                        log.info("Le chauffage est deja eteint, on ne change pas l'état du chauffage");

@@ -2,28 +2,19 @@ package com.terrastation.sha;
 
 import com.terrastation.sha.Controller.TerrariumController;
 import com.terrastation.sha.Entity.Pulverisation;
-import com.terrastation.sha.Entity.Pulverisationheure;
-import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Repositary.PulverisationHeureRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
 import com.terrastation.sha.Service.DynamicTaskService;
 import com.terrastation.sha.Service.InterrupteurService;
-import com.terrastation.sha.Service.ScheduledForDynamicCron;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
 
 /**
  * La methode fonctionne quand le projet lance

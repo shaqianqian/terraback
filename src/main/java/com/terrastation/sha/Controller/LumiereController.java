@@ -4,6 +4,7 @@ import com.terrastation.sha.Entity.Chauffage;
 import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Lumiere;
 import com.terrastation.sha.Enums.ResultEnum;
+import com.terrastation.sha.Exception.ParameterErrorException;
 import com.terrastation.sha.Exception.TerraiumException;
 import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.LumiereRepository;
@@ -36,11 +37,10 @@ public class LumiereController {
     private InterrupteurRepository interrupteurRepository;
 
 
-
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
 
     public ResultVO<List<Lumiere>> findall() {
-        return  ResultUtil.success(lumiereRepository.findAll());
+        return ResultUtil.success(lumiereRepository.findAll());
 
     }
 
@@ -48,24 +48,21 @@ public class LumiereController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
 
     public ResultVO<Lumiere> add(@RequestBody Lumiere lumiere) {
-//        Lumiere lum=new Lumiere();
-//        lum.setMoisDebut(moisDebut);
-//        lum.setMoisFin(moisFin);
-//        lum.setHeureDebut(heureDebut);
-//        lum.setHeureFin(heureFin);
-        return  ResultUtil.success(lumiereRepository.save(lumiere));
+        if (lumiere.getHeureDebut() > lumiere.getHeureFin() || lumiere.getMoisDebut() > lumiere.getMoisFin()||lumiere.getHeureDebut() == lumiere.getHeureFin() || lumiere.getMoisDebut() == lumiere.getMoisFin()) {
+            throw new ParameterErrorException(ResultEnum.Time_Ordre);
+        }
+        return ResultUtil.success(lumiereRepository.save(lumiere));
 
     }
 
 
-
     @PutMapping("/{id}")
-    public  ResultVO<Lumiere> updateLumiere(@PathVariable(value = "id") int lumiereId,
-                              @Valid @RequestBody Lumiere lumiereDetails) {
+    public ResultVO<Lumiere> updateLumiere(@PathVariable(value = "id") int lumiereId,
+                                           @Valid @RequestBody Lumiere lumiereDetails) {
         Optional<Lumiere> lumiere = lumiereRepository.findById(lumiereId);
-        Lumiere lumiere1=null;
-        if(lumiere.isPresent()) {
-            lumiere1=lumiere.get();
+        Lumiere lumiere1 = null;
+        if (lumiere.isPresent()) {
+            lumiere1 = lumiere.get();
             lumiere1.setMoisDebut(lumiereDetails.getMoisDebut());
             lumiere1.setMoisFin(lumiereDetails.getMoisFin());
             lumiere1.setHeureFin(lumiereDetails.getHeureFin());
@@ -76,53 +73,65 @@ public class LumiereController {
     }
 
 
-
-
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLumiere(@PathVariable(value = "id") int noteId) {
         Optional<Lumiere> lumieres = lumiereRepository.findById(noteId);
-        Lumiere lumieres1=null;
-        if(lumieres.isPresent()) {
-            lumieres1=lumieres.get();
-            lumiereRepository.delete(lumieres1);}
+        Lumiere lumieres1 = null;
+        if (lumieres.isPresent()) {
+            lumieres1 = lumieres.get();
+            lumiereRepository.delete(lumieres1);
+        }
         return ResponseEntity.ok().build();
     }
 
 
     @PostMapping("/UpdateAll")
-    public ResultVO<List<Lumiere>> updateAll(@RequestBody List<Lumiere> lumieres)
-    {
-        List<Lumiere> oldChauffageList=lumiereRepository.findAll();
-        for(Lumiere oldLumiere: oldChauffageList)
-        {
+    public ResultVO<List<Lumiere>> updateAll(@RequestBody List<Lumiere> lumieres) {
+        List<Lumiere> oldChauffageList = lumiereRepository.findAll();
+        for (Lumiere oldLumiere : oldChauffageList) {
             lumiereRepository.delete(oldLumiere);
-
         }
-        for(int i=0;i<lumieres.size();i++){
+        for (int i = 0; i < lumieres.size(); i++) {
+            if (lumieres.get(0).getHeureDebut() > lumieres.get(0).getHeureFin() || lumieres.get(0).getMoisDebut() > lumieres.get(0).getMoisFin()||lumieres.get(0).getHeureDebut() ==lumieres.get(0).getHeureFin()||lumieres.get(0).getMoisDebut() == lumieres.get(0).getMoisFin()) {
+                throw new ParameterErrorException(ResultEnum.Time_Ordre);
+            }
+
             lumiereRepository.save(lumieres.get(i));
         }
 
 
         return ResultUtil.success(lumiereRepository.findAll());
     }
-    @PostMapping("/UpdateTouteLannee")
-    public ResultVO<List<Lumiere>> updateTouteLannee(@RequestBody List<Lumiere> lumieres)
-    {
-        List<Lumiere> oldChauffageList=lumiereRepository.findAll();
-        for(Lumiere oldLumiere: oldChauffageList)
-        {
+
+    @GetMapping("/DeleteAll")
+    public ResultVO<String> deleteAll() {
+        List<Lumiere> oldChauffageList = lumiereRepository.findAll();
+        for (Lumiere oldLumiere : oldChauffageList) {
             lumiereRepository.delete(oldLumiere);
 
         }
-        for(Lumiere l:lumieres)
-        { Lumiere lumiere=new Lumiere();
-        lumiere.setHeureDebut(l.getHeureDebut());
-        lumiere.setHeureFin(l.getHeureFin());
-        lumiere.setMoisDebut(1);
-        lumiere.setMoisFin(12);
-        lumiereRepository.save(lumiere);
+
+        return ResultUtil.success("Vous avez supprime toute la configuration de lumiere");
+    }
+
+    @PostMapping("/UpdateTouteLannee")
+    public ResultVO<List<Lumiere>> updateTouteLannee(@RequestBody List<Lumiere> lumieres) {
+        List<Lumiere> oldChauffageList = lumiereRepository.findAll();
+        for (Lumiere oldLumiere : oldChauffageList) {
+            if(oldLumiere.getMoisDebut()!=1||oldLumiere.getMoisFin()!=12)
+            {lumiereRepository.delete(oldLumiere);}
+        }
+        for (Lumiere l : lumieres) {
+            Lumiere lumiere = new Lumiere();
+            if (l.getHeureDebut() > l.getHeureFin() || l.getMoisDebut() > l.getMoisFin()||l.getHeureDebut() == l.getHeureFin()||l.getMoisDebut() == l.getMoisFin()) {
+                throw new ParameterErrorException(ResultEnum.Time_Ordre);
+            }
+
+            lumiere.setHeureDebut(l.getHeureDebut());
+            lumiere.setHeureFin(l.getHeureFin());
+            lumiere.setMoisDebut(1);
+            lumiere.setMoisFin(12);
+            lumiereRepository.save(lumiere);
         }
         return ResultUtil.success(lumiereRepository.findAll());
     }
@@ -130,15 +139,16 @@ public class LumiereController {
     //get l'etat de chauffage
     @RequestMapping(value = "/getEtatLumiere", method = RequestMethod.GET)
     public ResultVO<Interrupteur> getEtatInterrupterLumiere() {
-        Interrupteur interrupteur= interrupteurService.getControleInterrupteur("lumiere");
+        Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
         return ResultUtil.success(interrupteur);
 
     }
+
     //change le facon de controler le interrupteur
     @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeControleInterrupteurLumiere( @RequestParam("isProg") boolean isProg) {
+    public ResultVO<Interrupteur> changeControleInterrupteurLumiere(@RequestParam("isProg") boolean isProg) {
 
-        Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur("lumiere",isProg);
+        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("lumiere", isProg);
 
         return ResultUtil.success(newInterrupteur);
 
@@ -146,12 +156,11 @@ public class LumiereController {
 
     //change l'etat de la lumiere quand il est controle manuellement
     @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement( @RequestParam("etat") boolean etat) {
-        Interrupteur newInterrupteur=interrupteurService.ChangeInterrupterManuelleLumiere(etat);
+    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement(@RequestParam("etat") boolean etat) {
+        Interrupteur newInterrupteur = interrupteurService.ChangeInterrupterManuelleLumiere(etat);
         return ResultUtil.success(newInterrupteur);
 
     }
-
 
 
 }
