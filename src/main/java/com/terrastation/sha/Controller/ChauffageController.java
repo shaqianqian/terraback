@@ -3,6 +3,7 @@ package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.Entity.Chauffage;
 import com.terrastation.sha.Entity.Interrupteur;
+import com.terrastation.sha.Entity.Lumiere;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Exception.ParameterErrorException;
@@ -131,27 +132,30 @@ public class ChauffageController {
 
         return ResultUtil.success(chauffageRepository.findAll());
     }
-    //TODO AJOUTE UPDATEALL POUR LES HEURES
-    @GetMapping("/UpdateTouteLannee")
-    public ResultVO<List<Chauffage>> updateTouteLannee(  @RequestParam(value = "max", required = true, defaultValue = "40") double max,
-                                                         @RequestParam(value = "min", required = true, defaultValue = "20") double min)
+    @PostMapping("/UpdateTouteLannee")
+    public ResultVO<List<Chauffage>> updateTouteLannee( @RequestBody List<Chauffage> chauffages)
     {
         List<Chauffage> oldChauffageList=chauffageRepository.findAll();
         for(Chauffage oldChauffage:oldChauffageList)
         {
-
-
-            chauffageRepository.delete(oldChauffage);
-
+            if(oldChauffage.getMoisDebut()!=1||oldChauffage.getMoisFin()!=12)
+            {  chauffageRepository.delete(oldChauffage);}
         }
-        Chauffage chauffage=new Chauffage();
-        chauffage.setHeureDebut(0);
-        chauffage.setHeureFin(23);
-        chauffage.setMax(max);
-        chauffage.setMin(min);
-        chauffage.setMoisDebut(1);
-        chauffage.setMoisFin(12);
-        chauffageRepository.save(chauffage);
+        for (Chauffage c : chauffages) {
+            Chauffage chauffage=new Chauffage();
+            if (c.getHeureDebut() >=c.getHeureFin() ||c.getMin()>=c.getMax()) {
+                throw new ParameterErrorException(ResultEnum.Time_Ordre);
+            }
+
+           chauffage.setHeureDebut(c.getHeureDebut());
+           chauffage.setHeureFin(c.getHeureFin());
+           chauffage.setMoisDebut(1);
+           chauffage.setMoisFin(12);
+           chauffage.setMax(c.getMax());
+           chauffage.setMin(c.getMin());
+            chauffageRepository.save(chauffage);
+        }
+
 
         return ResultUtil.success(chauffageRepository.findAll());
     }

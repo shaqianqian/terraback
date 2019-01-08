@@ -50,19 +50,12 @@
             document.getElementById("mois_debut").style.visibility = 'hidden';
             document.getElementById("mois_fin").setAttribute("disabled", "disabled");
             document.getElementById("mois_fin").style.visibility = 'hidden';
-            document.getElementById("heure_fin").setAttribute("disabled", "disabled");
-            document.getElementById("heure_fin").style.visibility = 'hidden';
-            document.getElementById("heure_debut").setAttribute("disabled", "disabled");
-            document.getElementById("heure_debut").style.visibility = 'hidden';
+
         } else {
             document.getElementById("mois_debut").removeAttribute("disabled");
             document.getElementById("mois_debut").style.visibility = 'visible';
             document.getElementById("mois_fin").removeAttribute("disabled");
             document.getElementById("mois_fin").style.visibility = 'visible';
-            document.getElementById("heure_fin").removeAttribute("disabled");
-            document.getElementById("heure_fin").style.visibility = 'visible';
-            document.getElementById("heure_debut").removeAttribute("disabled");
-            document.getElementById("heure_debut").style.visibility = 'visible';
         }
     });
     $(document).ready(function () {
@@ -182,12 +175,15 @@
             //configurer le chauffage pour toute l'annee
             $.ajax({
                 url: url + "/terrarium/chauffage/UpdateTouteLannee",
-                data: {
+                data: JSON.stringify([{
+                    heureDebut: document.getElementById('heure_debut').value,
+                    heureFin: document.getElementById('heure_fin').value,
                     max: document.getElementById('max').value,
                     min: document.getElementById('min').value
-                },
+
+                }]),
                 async: false,
-                type: 'get',
+                type: 'post',
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 error: function (jqXHR, textStatus, errorThrown) {

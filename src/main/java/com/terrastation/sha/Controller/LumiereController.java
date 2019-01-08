@@ -48,7 +48,7 @@ public class LumiereController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
 
     public ResultVO<Lumiere> add(@RequestBody Lumiere lumiere) {
-        if (lumiere.getHeureDebut() > lumiere.getHeureFin() || lumiere.getMoisDebut() > lumiere.getMoisFin()||lumiere.getHeureDebut() == lumiere.getHeureFin() || lumiere.getMoisDebut() == lumiere.getMoisFin()) {
+        if (lumiere.getHeureDebut() >= lumiere.getHeureFin() || lumiere.getMoisDebut() >=lumiere.getMoisFin()) {
             throw new ParameterErrorException(ResultEnum.Time_Ordre);
         }
         return ResultUtil.success(lumiereRepository.save(lumiere));
@@ -92,7 +92,7 @@ public class LumiereController {
             lumiereRepository.delete(oldLumiere);
         }
         for (int i = 0; i < lumieres.size(); i++) {
-            if (lumieres.get(0).getHeureDebut() > lumieres.get(0).getHeureFin() || lumieres.get(0).getMoisDebut() > lumieres.get(0).getMoisFin()||lumieres.get(0).getHeureDebut() ==lumieres.get(0).getHeureFin()||lumieres.get(0).getMoisDebut() == lumieres.get(0).getMoisFin()) {
+            if (lumieres.get(0).getHeureDebut() >=lumieres.get(0).getHeureFin() ||lumieres.get(0).getMoisDebut() >= lumieres.get(0).getMoisFin()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
 
@@ -123,7 +123,7 @@ public class LumiereController {
         }
         for (Lumiere l : lumieres) {
             Lumiere lumiere = new Lumiere();
-            if (l.getHeureDebut() > l.getHeureFin() || l.getMoisDebut() > l.getMoisFin()||l.getHeureDebut() == l.getHeureFin()||l.getMoisDebut() == l.getMoisFin()) {
+            if (l.getHeureDebut() >= l.getHeureFin()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
 
@@ -131,8 +131,7 @@ public class LumiereController {
             lumiere.setHeureFin(l.getHeureFin());
             lumiere.setMoisDebut(1);
             lumiere.setMoisFin(12);
-            lumiereRepository.save(lumiere);
-        }
+            lumiereRepository.save(lumiere);}
         return ResultUtil.success(lumiereRepository.findAll());
     }
 
