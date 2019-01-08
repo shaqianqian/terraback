@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/terrarium")
 public class TerrariumController {
     Logger log = LoggerFactory.getLogger(TerrariumController.class);
@@ -85,7 +86,6 @@ public class TerrariumController {
 //modifier une ligne de parametre au terraium
 
     @PutMapping(value = "/update/{id}")
-    @CrossOrigin
     public ResultVO<Terrarium> updateTerraium(@PathVariable(value = "id") int terraiumId,
                                               @RequestParam(value = "temperature", required = false, defaultValue = "0") double temperature,
                                               @RequestParam(value = "humidite", required = false, defaultValue = "0") double humidite) {
@@ -112,7 +112,6 @@ public class TerrariumController {
     }
 
     //supprimer une ligne de parametre au terraium
-    @CrossOrigin
     @DeleteMapping("/delete/{id}")
     public ResultVO<String> deleteTerraium(@PathVariable(value = "id") int noteId) {
         Optional<Terrarium> terraiumOriginal = terrariumService.findById(noteId);
@@ -128,7 +127,6 @@ public class TerrariumController {
     }
 
     //recuperer tous le plus recente des parametres
-    @CrossOrigin
     @RequestMapping(value = "/getCurrentParametre", method = RequestMethod.GET)
 
     public ResultVO<List<TerrariumCurrentVO>> getCurrentParametresGenereVO() {
@@ -170,7 +168,6 @@ public class TerrariumController {
 
     }
 
-    @CrossOrigin
     @RequestMapping(value = "/getParametres", method = RequestMethod.GET)
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();
@@ -187,7 +184,6 @@ public class TerrariumController {
     }
 
     @RequestMapping(value = "/getParametres/{id}", method = RequestMethod.GET)
-    @CrossOrigin
     public ResultVO<SensorVO> getCurrentParametresGenereVOById(@PathVariable(value = "id") int index, @RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
         SensorVO sensorVO = new SensorVO();
         sensorVO = terraiumServiceSensor.getSensorByIdVO(index, quantite);
@@ -199,14 +195,12 @@ public class TerrariumController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //recuperer tous les lignes recentes des parametres
-    @CrossOrigin
     @RequestMapping(value = "/getCurrentParametres", method = RequestMethod.GET)
     public ResultVO<List<Terrarium>> getCurrentParametres(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
 
         return ResultUtil.success(terrariumService.getCurrentParameters(quantite));
 
     }
-    @CrossOrigin
     @RequestMapping(value = "/getCurrentParametresVO", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsSensorVO> getCurrentParametresVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
@@ -223,8 +217,7 @@ public class TerrariumController {
 
     }
 
-    //
-    @CrossOrigin
+
     @RequestMapping(value = "/listSensors", method = RequestMethod.GET)
 
     public ResultVO<SensorsVO> getListSensors() {
@@ -248,14 +241,13 @@ public class TerrariumController {
         return ResultUtil.success(sensorVO);
 
     }
-    @CrossOrigin
     @RequestMapping(value = "/getDonneeUneSemaine", method = RequestMethod.GET)
 
     public List<Terrarium> getDonneeUneSemaine() {
         List<Terrarium> terrariums = terrariumGenereService.getDonneeUneSemaine();
         return terrariums;
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getParametresUneSemaine", method = RequestMethod.GET)
 
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUneSemaine() {
@@ -271,7 +263,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getParametresUneSemaine/{id}", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsGenereVO> getParametresUneSemaineById(@PathVariable(value = "id") int index) {
@@ -284,7 +276,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getTemperaturesUneSemaine", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsGenereVO> getCurrentTemperatureUneSemaine() {
@@ -293,7 +285,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getHumiditeUneSemaine", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsGenereVO> getCurrentHumiditeUneSemaine() {
@@ -302,14 +294,13 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
     @RequestMapping(value = "/getDonneeUnMois", method = RequestMethod.GET)
 
     public List<Terrarium> getDonneeUnMois() {
         List<Terrarium> terrariums = terrariumGenereService.getDonneeUnMois();
         return terrariums;
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getParametresUnMois", method = RequestMethod.GET)
 
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUnMois() {
@@ -325,7 +316,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getTemperaturesUnMois", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsGenereVO> getCurrentTemperatureUnMois() {
@@ -334,7 +325,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getHumiditeUnMois", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsGenereVO> getCurrentHumiditeUnMois() {
@@ -343,7 +334,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
-    @CrossOrigin
+
     @RequestMapping(value = "/getParametresUnMois/{id}", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsGenereVO> getParametresUnMoisById(@PathVariable(value = "id") int index) {

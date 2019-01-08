@@ -44,7 +44,7 @@ public class PulverisationController {
     @Autowired
     private TerrariumService terrariumService;
 
-
+    @CrossOrigin
     @RequestMapping(value = "getConfiguration", method = RequestMethod.GET)
 
     public ResultVO<Pulverisation> getConfiguration() {
@@ -59,7 +59,7 @@ public class PulverisationController {
 
 
     }
-
+    @CrossOrigin
     @RequestMapping(value = "configureModeHoraire", method = RequestMethod.POST)
 
     public ResultVO<Pulverisation> addModeHoraire(@RequestBody Pulverisation pulverisation) {
@@ -111,7 +111,7 @@ public class PulverisationController {
         }
 
     }
-
+    @CrossOrigin
     @RequestMapping(value = "configureModeHygrometrie", method = RequestMethod.POST)
 
     public ResultVO<Pulverisation> addModeHygrometrie(@RequestBody Pulverisation pulverisation) {
@@ -136,7 +136,7 @@ public class PulverisationController {
 
     }
 
-
+    @CrossOrigin
     @RequestMapping(value = "addHeureModeHoraire", method = RequestMethod.GET)
 
     public ResultVO<Pulverisation> addHeureModeHoraire(@RequestParam("heure") int heure, @RequestParam("duree") int duree) {
@@ -175,7 +175,7 @@ public class PulverisationController {
 
 
     }
-
+    @CrossOrigin
     @RequestMapping(value = "deleteHeureModeHoraire", method = RequestMethod.GET)
 
     public ResultVO<Pulverisation> deleteHeureModeHoraire(@RequestParam("heure") int heure) {
@@ -212,7 +212,7 @@ public class PulverisationController {
 
     }
 
-
+    @CrossOrigin
     @PostMapping("/UpdateTouteLanneeModeHoraire")
     public ResultVO<Pulverisation> updateTouteLannee(@RequestBody List<Pulverisationheure> pulverisationheures) {
         if (pulverisationRepository.findAll().isEmpty()) {
