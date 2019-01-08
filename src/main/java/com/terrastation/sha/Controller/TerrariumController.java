@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
 @CrossOrigin
+@RestController
 @RequestMapping(value = "/terrarium")
 public class TerrariumController {
     Logger log = LoggerFactory.getLogger(TerrariumController.class);
