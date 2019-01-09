@@ -5,7 +5,6 @@ import com.terrastation.sha.Entity.Pulverisation;
 import com.terrastation.sha.Repositary.PulverisationHeureRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
-import com.terrastation.sha.Service.ChaqueMoisTaskService;
 import com.terrastation.sha.Service.DynamicTaskService;
 import com.terrastation.sha.Service.InterrupteurService;
 import org.slf4j.Logger;
@@ -34,14 +33,11 @@ public class Initial implements CommandLineRunner {
     private PulverisationRepository pulverisationRepository;
     @Autowired
     private DynamicTaskService dynamicTaskService;
-    @Autowired
-    private ChaqueMoisTaskService chaqueMoisTaskService;
 
 
     @Override
     public void run(String... args) throws Exception {
 
-         chaqueMoisTaskService.startCron("0 0 0 1 * ?");
 
         if (pulverisationRepository.findAll().isEmpty()) {
             log.info("vous avez pas encore configurez la pulverisation");

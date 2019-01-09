@@ -74,7 +74,7 @@ public class DynamicTaskService {
                 if (pulverisation.getPulverisationheure().size() > 1) {
                     for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
 
-                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
+//                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
                         if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
 
                             dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
