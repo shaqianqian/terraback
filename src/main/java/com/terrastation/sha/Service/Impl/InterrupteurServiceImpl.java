@@ -111,9 +111,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         int month = cal.get(Calendar.MONTH) + 1;
-//        log.info("月份"+month);
-        int heure = cal.get(Calendar.HOUR) + 12;
-//        log.info("月份 "+month+" 小时 "+heure);
+        int heure = cal.get(Calendar.HOUR_OF_DAY);
+
         double currentTemperature = terrarium_current.getTemperature();
         Boolean etat = chauffageInterrupteur.isEtat();
         if (etat) {
@@ -274,8 +273,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         cal.setTime(time_current);
         int month = cal.get(Calendar.MONTH) + 1;
 //        log.info("月份" + month);
-        int heure = cal.get(Calendar.HOUR) + 12;
-//        log.info("月份 " + month + " 小时 " + heure);
+        int heure = cal.get(Calendar.HOUR_OF_DAY) ;
+       // log.info("月份 " + month + " 小时 " + heure);
         List<Lumiere> lumieres = lumiereRepositary.findAll();
         if (lumieres.size() == 0) {
 

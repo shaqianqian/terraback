@@ -64,7 +64,7 @@ public class ScheduledTask {
         }
 
     }
-    @Scheduled(cron = "0 0/1 * * * ?")  //cron接受cron表达式，根据cron表达式确定定时规则
+    @Scheduled(cron = "0 0 0 1 * ?")  //cron接受cron表达式，根据cron表达式确定定时规则
     public void chaqueMoisTaskServiceCron() {
         Pulverisation pulverisationCourant = pulverisationRepository.findAll().get(0);
         Calendar c = Calendar.getInstance();
