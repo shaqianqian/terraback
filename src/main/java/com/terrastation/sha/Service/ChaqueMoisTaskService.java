@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
@@ -25,6 +26,8 @@ public class ChaqueMoisTaskService {
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
     @Autowired
     private DynamicTaskService dynamicTaskService;
+    @Autowired
+    private PulverisationRepository pulverisationRepository;
 
 
     /**
@@ -57,7 +60,18 @@ public class ChaqueMoisTaskService {
 
             @Override
             public void run() {
-                //TODO CHANGE MONTH
+
+                Pulverisation pulverisationCourant = pulverisationRepository.findAll().get(0);
+                Calendar c = Calendar.getInstance();
+                int mois = c.get(Calendar.MONTH) + 1;
+                for (Pulverisation p : pulverisationRepository.findAll()) {
+                    if (p.getMoisDebut() <= mois && mois <= p.getMoisFin()) {
+                        pulverisationCourant = p;
+                        break;
+                    }
+
+                }
+                activeCron(pulverisationCourant);
 
             }
 
@@ -95,5 +109,32 @@ public class ChaqueMoisTaskService {
         System.out.println("DynamicTaskController.changeCron()");
         return "changeCron";
     }
+
+    public void activeCron(Pulverisation pulverisation) {
+        if (pulverisationRepository.findAll().get(0).getMode().equals("horaire")) {
+            String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
+            String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
+            Calendar c = Calendar.getInstance();
+            int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
+//            log.info("当前时间" + heureCurrent);
+            int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
+            if (pulverisation.getPulverisationheure().size() > 1) {
+                for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
+
+                    heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
+                    if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
+                        dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
+                    }
+
+                }
+            }
+            String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
+            System.out.println(cron);
+            dynamicTaskService.startCron(pulverisation, cron);
+        }
+
+
+    }
+
 
 }

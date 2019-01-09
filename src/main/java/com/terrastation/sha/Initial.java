@@ -41,7 +41,7 @@ public class Initial implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        chaqueMoisTaskService.startCron("0 0 0 1 * ?");
+         chaqueMoisTaskService.startCron("0 0 0 1 * ?");
 
         if (pulverisationRepository.findAll().isEmpty()) {
             log.info("vous avez pas encore configurez la pulverisation");
