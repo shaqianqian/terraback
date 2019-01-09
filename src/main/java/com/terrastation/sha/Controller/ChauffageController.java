@@ -68,12 +68,10 @@ public class ChauffageController {
 //            rep.setDateDebut(timeDebut);
 //            rep.setDateFin(timeFin);
 
-        if (chauffage.getMoisDebut() >= chauffage.getMoisFin()) {
+        if (chauffage.getMoisDebut() >= chauffage.getMoisFin()||chauffage.getHeureDebut() >= chauffage.getHeureFin()||chauffage.getMin()>=chauffage.getMax()) {
             throw new ParameterErrorException(ResultEnum.Time_Ordre);
         }
-        else if (chauffage.getHeureDebut() >= chauffage.getHeureFin()) {
-            throw new ParameterErrorException(ResultEnum.Time_Ordre);
-        }
+
         else {newChauffage=chauffageRepository.save(chauffage);}
 
 
@@ -122,7 +120,7 @@ public class ChauffageController {
 
             }
             for(int i=0;i<chauffages.size();i++){
-                if (chauffages.get(i).getHeureDebut() > chauffages.get(i).getHeureFin() ||chauffages.get(i).getMoisDebut() > chauffages.get(i).getMoisFin()) {
+                if (chauffages.get(i).getHeureDebut() >=chauffages.get(i).getHeureFin() ||chauffages.get(i).getMoisDebut() >= chauffages.get(i).getMoisFin()||chauffages.get(i).getMin()>=chauffages.get(i).getMax()) {
                     throw new ParameterErrorException(ResultEnum.Time_Ordre);
                 }
 //            chauffages.get(i).setId(i+1);

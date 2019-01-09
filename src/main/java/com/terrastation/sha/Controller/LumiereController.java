@@ -73,7 +73,7 @@ public class LumiereController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteLumiere(@PathVariable(value = "id") int noteId) {
         Optional<Lumiere> lumieres = lumiereRepository.findById(noteId);
         Lumiere lumieres1 = null;

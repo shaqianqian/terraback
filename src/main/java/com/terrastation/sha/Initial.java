@@ -59,26 +59,26 @@ public class Initial implements CommandLineRunner {
                     log.info("vous avez pas encore configurez les details de pulverisation en mode horaire ");
                 }
                 else{
-                String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
-                String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
-                Calendar c = Calendar.getInstance();
-                int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
+                    String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
+                    String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
+                    Calendar c = Calendar.getInstance();
+                    int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
 //                log.info("当前时间" + heureCurrent);
-                int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
-                if (pulverisation.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
+                    int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
+                    if (pulverisation.getPulverisationheure().size() > 1) {
+                        for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
 
-                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
-                        if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
+                            heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
+                            if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
 
-                            dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
+                                dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
+                            }
+
                         }
-
                     }
-                }
-                String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
-                System.out.println(cron);
-                dynamicTaskService.startCron(cron);}
+                    String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
+                    System.out.println(cron);
+                    dynamicTaskService.startCron(cron);}
             }
 
 //        scheduledForDynamicCron.setCron("* 0 * * * ?");

@@ -50,7 +50,12 @@ public class ScheduledTask {
             log.info("vous avez pas encore configurez la pulverisation");
 
         }
+//        else if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
+//
+//          log.info("vous avez pas encore configurez la pulverisation");
+//        }
         else {
+
           pulverisationService.pulverisationModeHygrometrie();
 
         }

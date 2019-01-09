@@ -105,6 +105,33 @@
             }
         });
     }
+    function deleteUnConfiguration(i) {
+
+        $.ajax({
+            url: url + "/terrarium/lumiere/delete/"+i,
+            async: false,
+            type: 'delete',      //请求方式
+            dataType: "json",  //返回数据的格式
+            contentType: "application/json; charset=utf-8",
+
+            error: function (jqXHR, textStatus, errorThrown) {
+                // alert('加载数据失败！');
+                alert(jqXHR.responseText);
+
+            },
+            success: function (data) {
+                var item = data;
+                //console.log(item);
+                for (var i = 0; i < item.length; i++) {
+                    console.log(item[i]);
+                }
+                result = data; // 接收返回值
+                alert(JSON.stringify(result.data))
+            }
+        });
+
+
+    }
     function supprimeLumiere(){
 
         $.ajax({
@@ -200,6 +227,7 @@
             + "<td width='5%'>mois fin</td>"
             + "<td width='5%'>heure debut</td>"
             + "<td width='5%'>heure fin</td>"
+            + "<td width='5%'>delete</td>"
             + "</tr>";
         var len = data.length;
         for (var i = 0; i < len; i++) {
@@ -208,6 +236,7 @@
                 + "<td>" + data[i].moisFin + "</td>"
                 + "<td>" + data[i].heureDebut + "</td>"
                 + "<td>" + data[i].heureFin + "</td>"
+                + "<td> <button onclick='deleteUnConfiguration("+data[i].id+")'> delete</button></td>"
                 + "</tr>";
         }
         tableStr = tableStr + "</table>";
