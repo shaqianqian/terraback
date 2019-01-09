@@ -262,17 +262,18 @@
             + "<td width='5%'>taux_hygrometrie_min</td>"
             + "<td width='5%'>duree_hygrometrie</td>"
             + "</tr>";
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            tableStr = tableStr + "<tr>"
+                + "<td>" + data[i].moisDebut + "</td>"
+                + "<td>" + data[i].moisFin + "</td>"
+                + "<td>" + data[i].mode + "</td>"
 
-        tableStr = tableStr + "<tr>"
-            + "<td>" + data.moisDebut + "</td>"
-            + "<td>" + data.moisFin + "</td>"
-            + "<td>" + data.mode + "</td>"
-
-            + "<td id='pulverisationheure'>" + pulverisationheure(data.pulverisationheure) + "</td>"
-            + "<td>" + data.taux_hygrometrie_min + "</td>"
-            + "<td>" + data.duree_hygrometrie + "</td>"
-            + "</tr>";
-
+                + "<td id='pulverisationheure'>" + pulverisationheure(data[i].pulverisationheure) + "</td>"
+                + "<td>" + data[i].taux_hygrometrie_min + "</td>"
+                + "<td>" + data[i].duree_hygrometrie + "</td>"
+                + "</tr>";
+        }
         tableStr = tableStr + "</table>";
         $("#tableAjax").html(tableStr);
     }
@@ -281,17 +282,17 @@
     function pulverisationheure(data) {
         var pulverisation = "";
         for (var i = 0; i < data.length; i++) {
-            pulverisation = pulverisation + "<tr><td>" + data[i].heure + "</td><td>" + data[i].duree + "</td><td> <button onclick='deleteUnConfiguration(" + data[i].heure + ")'> Delete</button></td></tr>";
+            pulverisation = pulverisation + "<tr><td>" + data[i].heure + "</td><td>" + data[i].duree + "</td><td> <button onclick='deleteUnConfiguration(" + data[i].id + ")'> Delete</button></td></tr>";
         }
         return "<table border='1px'><tr><td width='5%'>heure</td><td width='5%'>duree</td><td>Delete</td></tr>" + pulverisation + " </table>";
     }
-    function deleteUnConfiguration(heure) {
+    function deleteUnConfiguration(id) {
 
         $.ajax({
-            url: url + "/terrarium/pulverisation/deleteHeureModeHoraire",
+            url: url + "/terrarium/pulverisation/deleteHeureById",
             async: false,
             data:{
-             heure:heure
+             id:id
             },
             type: 'get',      //请求方式
             dataType: "json",  //返回数据的格式

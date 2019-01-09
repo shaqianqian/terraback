@@ -9,12 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,16 +19,13 @@ import java.util.concurrent.ScheduledFuture;
 
 @Service
 @Slf4j
-public class DynamicTaskService {
-    @Autowired
-    private TerrariumRepositary terrariumRepositary;
+public class ChaqueMoisTaskService {
 
     @Autowired
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
     @Autowired
-    private PulverisationRepository pulverisationRepository;
-    @Autowired
     private DynamicTaskService dynamicTaskService;
+
 
     /**
      * 在ScheduledFuture中有一个cancel可以停止定时任务。
@@ -57,50 +49,18 @@ public class DynamicTaskService {
      * 启动任务
      * lancer le cron
      **/
-    public String startCron(Pulverisation pulverisation ,String cron) {
+    public String startCron(String cron) {
         if (future != null) {
             future.cancel(true);
         }
         future = threadPoolTaskScheduler.schedule(new Runnable() {
+
             @Override
             public void run() {
-                Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
-                log.info("vous controlez le pulverisation en mode horaire ,Humidite courant est " + terrarium_current.getHumidite());
-//                Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
-                String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
-                Calendar c = Calendar.getInstance();
-                int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
-                int dureeCorrespendant = pulverisation.getPulverisationheure().get(0).getDuree();
-                if (pulverisation.getPulverisationheure().size() > 1) {
-                    for (int i = 1; i < pulverisation.getPulverisationheure().size(); i++) {
-
-                        heures = heures + "," + pulverisation.getPulverisationheure().get(i).getHeure();
-                        if (pulverisation.getPulverisationheure().get(i).getHeure() == heureCurrent) {
-
-                            dureeCorrespendant = pulverisation.getPulverisationheure().get(i).getDuree();
-                        }
-
-                    }
-                }
-                System.out.println("MyRunnable.run()，" + new Date() + " cron 值是" + cron + " duree est " + dureeCorrespendant);
-                try {
-                    log.info("START : Lancer le script du pulverisation");
-                    Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py " + dureeCorrespendant);
-
-                    BufferedReader in = new BufferedReader(new
-                            InputStreamReader(pr.getInputStream()));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-
-                        System.out.println(line);
-                    }
-                    in.close();
-                    pr.waitFor();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                //TODO CHANGE MONTH
 
             }
+
         }, new CronTrigger(cron));
         System.out.println("DynamicTaskController.startCron()");
         return "startTask";
