@@ -1,6 +1,7 @@
 package com.terrastation.sha;
 
 import com.terrastation.sha.Controller.TerrariumController;
+import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Pulverisation;
 import com.terrastation.sha.Repositary.PulverisationHeureRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
@@ -38,6 +39,8 @@ public class Initial implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
         if (pulverisationRepository.findAll().isEmpty()) {
             log.info("vous avez pas encore configurez la pulverisation");
@@ -82,4 +85,5 @@ public class Initial implements CommandLineRunner {
             }
         }
     }
+//////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -12,7 +12,9 @@ import com.terrastation.sha.Repositary.ChauffageRepository;
 import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Service.InterrupteurService;
 import com.terrastation.sha.Util.ResultUtil;
+import com.terrastation.sha.Util.TimeOverlappingintervals;
 import com.terrastation.sha.VO.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
+@Slf4j
 @RestController
 @RequestMapping(value = "/terrarium/chauffage")
 public class ChauffageController {
@@ -45,7 +48,7 @@ public class ChauffageController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
 
     public ResultVO add(@RequestBody Chauffage chauffage) {
-       Chauffage newChauffage=new Chauffage();
+        Chauffage newChauffage = new Chauffage();
 //        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        Date timeDebut = null;
 //        Date timeFin = null;
@@ -68,11 +71,11 @@ public class ChauffageController {
 //            rep.setDateDebut(timeDebut);
 //            rep.setDateFin(timeFin);
 
-        if (chauffage.getMoisDebut() >= chauffage.getMoisFin()||chauffage.getHeureDebut() >= chauffage.getHeureFin()||chauffage.getMin()>=chauffage.getMax()) {
+        if (chauffage.getMoisDebut() >= chauffage.getMoisFin() || chauffage.getHeureDebut() >= chauffage.getHeureFin() || chauffage.getMin() >= chauffage.getMax()) {
             throw new ParameterErrorException(ResultEnum.Time_Ordre);
+        } else {
+            newChauffage = chauffageRepository.save(chauffage);
         }
-
-        else {newChauffage=chauffageRepository.save(chauffage);}
 
 
         return ResultUtil.success(newChauffage);
@@ -96,11 +99,9 @@ public class ChauffageController {
 
 
     @GetMapping("/DeleteAll")
-    public ResultVO<String> deleteAll()
-    {
-        List<Chauffage> oldChauffageList=chauffageRepository.findAll();
-        for(Chauffage oldChauffage:oldChauffageList)
-        {
+    public ResultVO<String> deleteAll() {
+        List<Chauffage> oldChauffageList = chauffageRepository.findAll();
+        for (Chauffage oldChauffage : oldChauffageList) {
             chauffageRepository.delete(oldChauffage);
 
         }
@@ -109,48 +110,59 @@ public class ChauffageController {
     }
 
 
-
     @PostMapping("/UpdateAll")
-        public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages)
-        {
-            List<Chauffage> oldChauffageList=chauffageRepository.findAll();
-            for(Chauffage oldChauffage:oldChauffageList)
-            {
-                chauffageRepository.delete(oldChauffage);
+    public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages) {
+        if (!TimeOverlappingintervals.analyeMoisChauffage(chauffages)) {
 
-            }
-            for(int i=0;i<chauffages.size();i++){
-                if (chauffages.get(i).getHeureDebut() >=chauffages.get(i).getHeureFin() ||chauffages.get(i).getMoisDebut() >= chauffages.get(i).getMoisFin()||chauffages.get(i).getMin()>=chauffages.get(i).getMax()) {
-                    throw new ParameterErrorException(ResultEnum.Time_Ordre);
-                }
+                log.info("il existe les chevauchements d'heure ou mois");
+                throw new ParameterErrorException(ResultEnum.Existe_chevauchement);
+
+        }
+        List<Chauffage> oldChauffageList = chauffageRepository.findAll();
+        for (Chauffage oldChauffage : oldChauffageList) {
+            chauffageRepository.delete(oldChauffage);
+
+        }
+
+        for (int i = 0; i < chauffages.size(); i++) {
+        if (chauffages.get(i).getHeureDebut() >= chauffages.get(i).getHeureFin() || chauffages.get(i).getMoisDebut() >= chauffages.get(i).getMoisFin() || chauffages.get(i).getMin() >= chauffages.get(i).getMax()) {
+            throw new ParameterErrorException(ResultEnum.Time_Ordre);
+        }
 //            chauffages.get(i).setId(i+1);
-                chauffageRepository.save(chauffages.get(i));
-            }
+            chauffages.get(i).setId(0);
+        chauffageRepository.save(chauffages.get(i));
+    }
 
 
         return ResultUtil.success(chauffageRepository.findAll());
-    }
+}
+
     @PostMapping("/UpdateTouteLannee")
-    public ResultVO<List<Chauffage>> updateTouteLannee( @RequestBody List<Chauffage> chauffages)
-    {
-        List<Chauffage> oldChauffageList=chauffageRepository.findAll();
-        for(Chauffage oldChauffage:oldChauffageList)
-        {
-            if(oldChauffage.getMoisDebut()!=1||oldChauffage.getMoisFin()!=12)
-            {  chauffageRepository.delete(oldChauffage);}
+    public ResultVO<List<Chauffage>> updateTouteLannee(@RequestBody List<Chauffage> chauffages) {
+        if (!TimeOverlappingintervals.analyeMoisTouteAnneeChauffage(chauffages)) {
+
+            log.info("il existe les chevauchements d'heure");
+            throw new ParameterErrorException(ResultEnum.Existe_chevauchement);
+
+        }
+        List<Chauffage> oldChauffageList = chauffageRepository.findAll();
+        for (Chauffage oldChauffage : oldChauffageList) {
+//            if (oldChauffage.getMoisDebut() != 1 || oldChauffage.getMoisFin() != 12) {
+                chauffageRepository.delete(oldChauffage);
+//            }
         }
         for (Chauffage c : chauffages) {
-            Chauffage chauffage=new Chauffage();
-            if (c.getHeureDebut() >=c.getHeureFin() ||c.getMin()>=c.getMax()) {
+            Chauffage chauffage = new Chauffage();
+            if (c.getHeureDebut() >= c.getHeureFin() || c.getMin() >= c.getMax()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
 
-           chauffage.setHeureDebut(c.getHeureDebut());
-           chauffage.setHeureFin(c.getHeureFin());
-           chauffage.setMoisDebut(1);
-           chauffage.setMoisFin(12);
-           chauffage.setMax(c.getMax());
-           chauffage.setMin(c.getMin());
+            chauffage.setHeureDebut(c.getHeureDebut());
+            chauffage.setHeureFin(c.getHeureFin());
+            chauffage.setMoisDebut(1);
+            chauffage.setMoisFin(12);
+            chauffage.setMax(c.getMax());
+            chauffage.setMin(c.getMin());
             chauffageRepository.save(chauffage);
         }
 
@@ -159,17 +171,16 @@ public class ChauffageController {
     }
 
 
-
     @PutMapping("/update/{id}")
-    public ResultVO<Chauffage> updateNote(@PathVariable(value = "id") int chauffageId,
+    public ResultVO<Chauffage> update(@PathVariable(value = "id") int chauffageId,
 //                                          @RequestParam(value = "dateDebut", required = true, defaultValue = "1900-01-01 00:00:00") String dateDebut,
 //                                          @RequestParam(value = "dateFin", required = true, defaultValue = "1900-01-01 00:00:00") String dateFin,
-                                          @RequestParam(value = "max", required = true, defaultValue = "0") double max,
-                                          @RequestParam(value = "min", required = true, defaultValue = "0") double min,
-                                          @RequestParam(value = "moisDebut", required = true, defaultValue = "0") int moisDebut,
-                                          @RequestParam(value = "moisFin", required = true, defaultValue = "12") int moisFin,
-                                          @RequestParam(value = "heureDebut", required = true, defaultValue = "0") int heureDebut,
-                                          @RequestParam(value = "heureFin", required = true, defaultValue = "24") int heureFin) {
+                                      @RequestParam(value = "max", required = true, defaultValue = "0") double max,
+                                      @RequestParam(value = "min", required = true, defaultValue = "0") double min,
+                                      @RequestParam(value = "moisDebut", required = true, defaultValue = "0") int moisDebut,
+                                      @RequestParam(value = "moisFin", required = true, defaultValue = "12") int moisFin,
+                                      @RequestParam(value = "heureDebut", required = true, defaultValue = "0") int heureDebut,
+                                      @RequestParam(value = "heureFin", required = true, defaultValue = "24") int heureFin) {
 
         Optional<Chauffage> chauffageOptional = chauffageRepository.findById(chauffageId);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -236,16 +247,19 @@ public class ChauffageController {
 
 
     public ResultVO<Interrupteur> getEtatChauffage() {
-        Interrupteur interrupteur= interrupteurService.getControleInterrupteur("chauffage");
+        Interrupteur interrupteur = interrupteurService.getControleInterrupteur("chauffage");
         return ResultUtil.success(interrupteur);
 
     }
+
     //change le facon de controler le interrupteur
     @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeControleInterrupteurChauffage( @RequestParam("isProg") boolean isProg) {
+    public ResultVO<Interrupteur> changeControleInterrupteurChauffage(@RequestParam("isProg") boolean isProg) {
 
-        Interrupteur newInterrupteur=interrupteurService.changeControleInterrupteur("chauffage",isProg);
-
+        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("chauffage", isProg);
+        if(!newInterrupteur.isEtat()&&!newInterrupteur.isProg()){
+            {interrupteurService.InitInterrupterManuelleChauffage();}
+        }
         return ResultUtil.success(newInterrupteur);
 
     }
@@ -253,9 +267,9 @@ public class ChauffageController {
 
     //change l'etat de chauffage quand il est controle manuellement
     @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement( @RequestParam("etat") boolean etat) {
+    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement(@RequestParam("etat") boolean etat) {
 
-        Interrupteur newInterrupteur=interrupteurService.ChangeInterrupterManuelleChauffage(etat);
+        Interrupteur newInterrupteur = interrupteurService.ChangeInterrupterManuelleChauffage(etat);
 
         return ResultUtil.success(newInterrupteur);
 

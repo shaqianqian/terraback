@@ -90,15 +90,83 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
     }
 
+    public void InitInterrupterManuelleChauffage() {
+        Interrupteur interrupteur = getControleInterrupteur("chauffage");
+
+        if (interrupteur.isEtat()) {
+            try {
+                log.info("START : Lancer le script du chauffage pour l'allumer");
+                Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(pr.getInputStream()));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    System.out.println(line);
+                }
+                in.close();
+                pr.waitFor();
+                log.info("END : On a reussi à l'allumer");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
 
     public Interrupteur ChangeInterrupterManuelleChauffage(boolean etat) {
         Interrupteur interrupteur = getControleInterrupteur("chauffage");
         if (!interrupteur.isProg()) {
-            interrupteur.setEtat(etat);
+            if (etat != interrupteur.isEtat()) {
+                interrupteur.setEtat(etat);
+                if (etat) {
+                    try {
+                        log.info("START : Lancer le script du chauffage pour l'allumer");
+                        Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");
+
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                        log.info("END : On a reussi à l'allumer");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                } else {
+                    try {
+                        log.info("START : Lancer le script du chauffage pour l'eteindre");
+                        Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
+
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                        log.info("END : On a reussi à l'eteindre");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+            }
         } else {
             throw new ParameterErrorException(ResultEnum.Facon_Controler);
 
         }
+
         interrupteurRepository.save(interrupteur);
         return interrupteur;
     }
@@ -112,7 +180,6 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         cal.setTime(currentTime);
         int month = cal.get(Calendar.MONTH) + 1;
         int heure = cal.get(Calendar.HOUR_OF_DAY);
-
         double currentTemperature = terrarium_current.getTemperature();
         Boolean etat = chauffageInterrupteur.isEtat();
         if (etat) {
@@ -122,96 +189,94 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
         log.info("La temperature courante est :" + currentTemperature);
         List<Chauffage> chauffages = chauffageRepositary.findAll();
-       if(chauffages.size()==0){
+        if (chauffages.size() == 0) {
 
-           log.info("Vous configurez pas encore le chauffage. On change pas l'etat du  chauffage ");
+            log.info("Vous configurez pas encore le chauffage. On change pas l'etat du  chauffage ");
 
-       }
+        } else {
+            Chauffage chauffageConfigurationCourant = new Chauffage();
+            boolean isChauffageConfiguration = false;
+            for (Chauffage c : chauffages) {
+                if (c.getMoisDebut() <= month && c.getMoisFin() >= month && c.getHeureDebut() <= heure && heure <= c.getHeureFin()) {
+                    chauffageConfigurationCourant = c;
+                    isChauffageConfiguration = true;
+                    break;
+                }
+            }
 
-      else {
-           Chauffage chauffageConfigurationCourant = new Chauffage();
-           boolean isChauffageConfiguration = false;
-           for (Chauffage c : chauffages) {
-               if (c.getMoisDebut() <= month && c.getMoisFin() >= month && c.getHeureDebut() <= heure && heure <= c.getHeureFin()) {
-                   chauffageConfigurationCourant = c;
-                   isChauffageConfiguration = true;
-                   break;
-               }
-           }
+            if (isChauffageConfiguration) {
+                log.info("Le MAXIMUM de temperautre est " + chauffageConfigurationCourant.getMax());
+                log.info("Le MINIMUM de temperautre est " + chauffageConfigurationCourant.getMin());
+                if (chauffageConfigurationCourant.getMax() < currentTemperature) {
+                    if (etat) {
+                        chauffageInterrupteur.setEtat(false);
+                        interrupteurRepository.save(chauffageInterrupteur);
+                        try {
+                            log.info("START : Lancer le script du chauffage pour l'eteindre");
+                            Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
 
-           if (isChauffageConfiguration) {
-               log.info("Le MAXIMUM de temperautre est " + chauffageConfigurationCourant.getMax());
-               log.info("Le MINIMUM de temperautre est " + chauffageConfigurationCourant.getMin());
-               if (chauffageConfigurationCourant.getMax() < currentTemperature) {
-                   if (etat) {
-                       chauffageInterrupteur.setEtat(false);
-                       interrupteurRepository.save(chauffageInterrupteur);
-                       try {
-                           log.info("START : Lancer le script du chauffage pour l'eteindre");
-                           Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
-
-                           BufferedReader in = new BufferedReader(new
-                                   InputStreamReader(pr.getInputStream()));
-                           String line;
-                           while ((line = in.readLine()) != null) {
-                               System.out.println(line);
-                           }
-                           in.close();
-                           pr.waitFor();
-                           log.info("END : On a reussi à l'eteindre");
-                       } catch (Exception e) {
-                           e.printStackTrace();
-                       }
+                            BufferedReader in = new BufferedReader(new
+                                    InputStreamReader(pr.getInputStream()));
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                System.out.println(line);
+                            }
+                            in.close();
+                            pr.waitFor();
+                            log.info("END : On a reussi à l'eteindre");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
 
-                   } else {
-                       log.info("Le chauffage est deja eteint, on ne change pas l'état du chauffage");
-                   }
+                    } else {
+                        log.info("Le chauffage est deja eteint, on ne change pas l'état du chauffage");
+                    }
 
-               } else if (chauffageConfigurationCourant.getMin() > currentTemperature) {
-                   if (!etat) {
-                       chauffageInterrupteur.setEtat(true);
-                       interrupteurRepository.save(chauffageInterrupteur);
-                       log.info("Trop froid, allumer le chauffage");
+                } else if (chauffageConfigurationCourant.getMin() > currentTemperature) {
+                    if (!etat) {
+                        chauffageInterrupteur.setEtat(true);
+                        interrupteurRepository.save(chauffageInterrupteur);
+                        log.info("Trop froid, allumer le chauffage");
 
-                       try {
-                           log.info("START : Lancer le script de chauffage pour allumer le chauffage");
-                           Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");
+                        try {
+                            log.info("START : Lancer le script de chauffage pour allumer le chauffage");
+                            Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 1");
 
-                           BufferedReader in = new BufferedReader(new
-                                   InputStreamReader(pr.getInputStream()));
-                           String line;
-                           while ((line = in.readLine()) != null) {
-                               System.out.println(line);
-                           }
-                           in.close();
-                           pr.waitFor();
-                           log.info("END : on a reussi à allumer le chauffage");
-                       } catch (Exception e) {
-                           e.printStackTrace();
-                       }
+                            BufferedReader in = new BufferedReader(new
+                                    InputStreamReader(pr.getInputStream()));
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                System.out.println(line);
+                            }
+                            in.close();
+                            pr.waitFor();
+                            log.info("END : on a reussi à allumer le chauffage");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                   } else {
-                       log.info("Le chauffage est deja allume, on ne change pas l'etat du chauffage");
-                   }
-               } else if (currentTemperature <= chauffageConfigurationCourant.getMax() && currentTemperature >= chauffageConfigurationCourant.getMin()) {
-                   log.info("La temperature a l'air correcte manintenant, on ne change pas l'etat du chauffage");
+                    } else {
+                        log.info("Le chauffage est deja allume, on ne change pas l'etat du chauffage");
+                    }
+                } else if (currentTemperature <= chauffageConfigurationCourant.getMax() && currentTemperature >= chauffageConfigurationCourant.getMin()) {
+                    log.info("La temperature a l'air correcte manintenant, on ne change pas l'etat du chauffage");
 
-               }
-
-
-           } else {
-               if (chauffageInterrupteur.isEtat()) {
-                   log.info("Le temps ne correspond pas à la configuration. On change pas l'etat du  chauffage , le chauffage reste allume");
-               } else {
-                   log.info("Le temps ne correspond pas à la configuration. On ne change pas l'etat du  chauffage, le chauffage reste eteint");
+                }
 
 
-               }
+            } else {
+                if (chauffageInterrupteur.isEtat()) {
+                    log.info("Le temps ne correspond pas à la configuration. On change pas l'etat du  chauffage , le chauffage reste allume");
+                } else {
+                    log.info("Le temps ne correspond pas à la configuration. On ne change pas l'etat du  chauffage, le chauffage reste eteint");
 
 
-           }
-       }
+                }
+
+
+            }
+        }
 //            if (c.getDateDebut().before(currentTime) && c.getDateFin().after(currentTime)) {
 //                log.info("max_limite_temperautre "+c.getMax());
 //                log.info("min_limite_temperautre "+c.getMin());
@@ -248,16 +313,79 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             log.info("Votre lumiere est eteint, il est controlé manuellement.");
         }
     }
+    public void InitInterrupterManuelleLumiere() {
+        Interrupteur interrupteur = getControleInterrupteur("lumiere");
+        if (interrupteur.isEtat()) {
+            try {
+                log.info("START : Lancer le script de la lumiere pour allumer la lumiere");
+                Process pr = Runtime.getRuntime().exec("python ../python/lumiere_test.py 1");
 
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(pr.getInputStream()));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    System.out.println(line);
+                }
+                in.close();
+                pr.waitFor();
+                log.info("END : on a reussi à allumer le chauffage");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public Interrupteur ChangeInterrupterManuelleLumiere(boolean etat) {
 
         Interrupteur interrupteur = getControleInterrupteur("lumiere");
         if (!interrupteur.isProg()) {
-            interrupteur.setEtat(etat);
+            if (etat != interrupteur.isEtat()) {
+                interrupteur.setEtat(etat);
+                if (etat) {
+                    try {
+                        log.info("START : Lancer le script de la lumiere pour allumer la lumiere");
+                        Process pr = Runtime.getRuntime().exec("python ../python/lumiere_test.py 1");
+
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                        log.info("END : on a reussi à allumer le chauffage");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    try {
+                        log.info("START : Lancer le script de la lumiere pour eteindre la lumiere");
+                        Process pr = Runtime.getRuntime().exec("python ../python/lumiere_test.py 0");
+
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                        log.info("END : on a reussi à eteindre le lumiere");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+            }
         } else {
             throw new ParameterErrorException(ResultEnum.Facon_Controler);
 
         }
+
+
         interrupteurRepository.save(interrupteur);
 
         return interrupteur;
@@ -273,8 +401,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         cal.setTime(time_current);
         int month = cal.get(Calendar.MONTH) + 1;
 //        log.info("月份" + month);
-        int heure = cal.get(Calendar.HOUR_OF_DAY) ;
-       // log.info("月份 " + month + " 小时 " + heure);
+        int heure = cal.get(Calendar.HOUR_OF_DAY);
+        //log.info("月份 " + month + " 小时 " + heure);
         List<Lumiere> lumieres = lumiereRepositary.findAll();
         if (lumieres.size() == 0) {
 
@@ -342,12 +470,12 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                 }
 
             }
-            }
-
-
-            return lumiereInterrupteur;
-
         }
+
+
+        return lumiereInterrupteur;
+
+    }
 
 
 }

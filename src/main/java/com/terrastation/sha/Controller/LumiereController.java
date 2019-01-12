@@ -10,7 +10,9 @@ import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.LumiereRepository;
 import com.terrastation.sha.Service.InterrupteurService;
 import com.terrastation.sha.Util.ResultUtil;
+import com.terrastation.sha.Util.TimeOverlappingintervals;
 import com.terrastation.sha.VO.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
+@Slf4j
 @CrossOrigin
 @RequestMapping(value = "/terrarium/lumiere")
 public class LumiereController {
@@ -87,6 +90,11 @@ public class LumiereController {
 
     @PostMapping("/UpdateAll")
     public ResultVO<List<Lumiere>> updateAll(@RequestBody List<Lumiere> lumieres) {
+        if (!TimeOverlappingintervals.analyeMoisLumiere(lumieres)) {
+            log.info("il existe les chevauchements d'heure ou mois");
+            throw new ParameterErrorException(ResultEnum.Existe_chevauchement);
+
+        }
         List<Lumiere> oldChauffageList = lumiereRepository.findAll();
         for (Lumiere oldLumiere : oldChauffageList) {
             lumiereRepository.delete(oldLumiere);
@@ -95,7 +103,7 @@ public class LumiereController {
             if (lumieres.get(0).getHeureDebut() >=lumieres.get(0).getHeureFin() ||lumieres.get(0).getMoisDebut() >= lumieres.get(0).getMoisFin()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
-
+             lumieres.get(i).setId(0);
             lumiereRepository.save(lumieres.get(i));
         }
 
@@ -116,10 +124,18 @@ public class LumiereController {
 
     @PostMapping("/UpdateTouteLannee")
     public ResultVO<List<Lumiere>> updateTouteLannee(@RequestBody List<Lumiere> lumieres) {
+
+        if (!TimeOverlappingintervals.analyeMoisTouteAnneeLumiere(lumieres)) {
+            log.info("il existe les chevauchements d'heure");
+            throw new ParameterErrorException(ResultEnum.Existe_chevauchement);
+
+        }
         List<Lumiere> oldChauffageList = lumiereRepository.findAll();
         for (Lumiere oldLumiere : oldChauffageList) {
-            if(oldLumiere.getMoisDebut()!=1||oldLumiere.getMoisFin()!=12)
-            {lumiereRepository.delete(oldLumiere);}
+//            if(oldLumiere.getMoisDebut()!=1||oldLumiere.getMoisFin()!=12)
+            //{
+                lumiereRepository.delete(oldLumiere);
+            //}
         }
         for (Lumiere l : lumieres) {
             Lumiere lumiere = new Lumiere();
@@ -148,6 +164,9 @@ public class LumiereController {
     public ResultVO<Interrupteur> changeControleInterrupteurLumiere(@RequestParam("isProg") boolean isProg) {
 
         Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("lumiere", isProg);
+        if(!newInterrupteur.isEtat()&&!newInterrupteur.isProg()){
+            interrupteurService.InitInterrupterManuelleLumiere();
+        }
 
         return ResultUtil.success(newInterrupteur);
 

@@ -30,6 +30,8 @@ public enum ResultEnum {
     Mode_pulverisation (10, "Vous n'avez pas ce mode en pulverisation"),
 
     Heure_existe_pas (11, "Vous n'avez pas configuré le pulverisateur pour cette heure"),
+
+    Existe_chevauchement (12, "Il existe les chevauchements d'heure ou mois"),
     ;
 
     private Integer code;

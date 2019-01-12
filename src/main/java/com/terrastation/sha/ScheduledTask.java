@@ -1,6 +1,7 @@
 package com.terrastation.sha;
 
 import com.terrastation.sha.Controller.TerrariumController;
+import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Pulverisation;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Repositary.PulverisationRepository;
@@ -31,22 +32,35 @@ public class ScheduledTask {
     @Autowired
     private DynamicTaskService dynamicTaskService;
 
+    static Boolean isFirstChauffage = true;
+    static Boolean isFirstLumiere = true;
 
-
-    @Scheduled(fixedRate = 30000, initialDelayString = "10000")
+    @Scheduled(fixedRate = 30000)
     //30s une fois
     public void reportCurrentTime() {
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
-        if (interrupteurService.getControleInterrupteur("chauffage").isProg()) {
+        Interrupteur chauffageInterrupeur = interrupteurService.getControleInterrupteur("chauffage");
+        if (chauffageInterrupeur.isProg()) {
             interrupteurService.InterrupterProgrammableChauffage("chauffage");
         } else {
             interrupteurService.InterrupterManuelleChauffage("chauffage");
-        }
 
-        if (interrupteurService.getControleInterrupteur("lumiere").isProg()) {
+            if (isFirstChauffage) {
+                interrupteurService.InitInterrupterManuelleChauffage();
+            }
+        }
+        Interrupteur lumiereInterrupeur = interrupteurService.getControleInterrupteur("lumiere");
+        if (lumiereInterrupeur.isProg()) {
             interrupteurService.InterrupterProgrammableLumiere("lumiere");
+            isFirstLumiere = false;
         } else {
             interrupteurService.InterrupterManuelleLumiere("lumiere");
+
+            if (isFirstLumiere) {
+                interrupteurService.InitInterrupterManuelleLumiere();
+
+
+            }
         }
 
         if (pulverisationRepository.findAll().isEmpty()) {
@@ -59,11 +73,14 @@ public class ScheduledTask {
 //        }
         else {
 
-          pulverisationService.pulverisationModeHygrometrie();
+            pulverisationService.pulverisationModeHygrometrie();
 
         }
+        isFirstChauffage = false;
+        isFirstLumiere = false;
 
     }
+
     @Scheduled(cron = "0 0 0 1 * ?")  //cron接受cron表达式，根据cron表达式确定定时规则
     public void chaqueMoisTaskServiceCron() {
         Pulverisation pulverisationCourant = pulverisationRepository.findAll().get(0);
@@ -79,6 +96,7 @@ public class ScheduledTask {
         activeCron(pulverisationCourant);
 
     }
+
     public void activeCron(Pulverisation pulverisation) {
         if (pulverisationRepository.findAll().get(0).getMode().equals("horaire")) {
             String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();

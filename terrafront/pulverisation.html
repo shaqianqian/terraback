@@ -37,8 +37,8 @@
 </body>
 
 <script>
-    const url="http://192.168.1.94:8080";
-    //const url = "http://127.0.0.1:8080";
+    //const url="http://192.168.1.94:8080";
+    const url = "http://127.0.0.1:8080";
 
     $("#touteAnnee").change(function () {
         if (this.checked) {
@@ -257,7 +257,6 @@
             + "<tr class='list-header'>"
             + "<td width='5%'>mois debut</td>"
             + "<td width='5%'>mois fin</td>"
-            + "<td width='5%'>mode</td>"
             + "<td width='5%'>pulverisationheure</td>"
             + "<td width='5%'>taux_hygrometrie_min</td>"
             + "<td width='5%'>duree_hygrometrie</td>"
@@ -267,8 +266,6 @@
             tableStr = tableStr + "<tr>"
                 + "<td>" + data[i].moisDebut + "</td>"
                 + "<td>" + data[i].moisFin + "</td>"
-                + "<td>" + data[i].mode + "</td>"
-
                 + "<td id='pulverisationheure'>" + pulverisationheure(data[i].pulverisationheure) + "</td>"
                 + "<td>" + data[i].taux_hygrometrie_min + "</td>"
                 + "<td>" + data[i].duree_hygrometrie + "</td>"
