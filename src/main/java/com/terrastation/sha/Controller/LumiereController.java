@@ -164,9 +164,6 @@ public class LumiereController {
     public ResultVO<Interrupteur> changeControleInterrupteurLumiere(@RequestParam("isProg") boolean isProg) {
 
         Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("lumiere", isProg);
-        if(!newInterrupteur.isEtat()&&!newInterrupteur.isProg()){
-            interrupteurService.InitInterrupterManuelleLumiere();
-        }
 
         return ResultUtil.success(newInterrupteur);
 

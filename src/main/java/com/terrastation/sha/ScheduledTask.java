@@ -4,6 +4,7 @@ import com.terrastation.sha.Controller.TerrariumController;
 import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Pulverisation;
 import com.terrastation.sha.Entity.Terrarium;
+import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
 import com.terrastation.sha.Service.DynamicTaskService;
@@ -31,7 +32,8 @@ public class ScheduledTask {
     private PulverisationService pulverisationService;
     @Autowired
     private DynamicTaskService dynamicTaskService;
-
+    @Autowired
+    private InterrupteurRepository interrupteurRepository;
     static Boolean isFirstChauffage = true;
     static Boolean isFirstLumiere = true;
 
@@ -43,24 +45,27 @@ public class ScheduledTask {
         if (chauffageInterrupeur.isProg()) {
             interrupteurService.InterrupterProgrammableChauffage("chauffage");
         } else {
-            interrupteurService.InterrupterManuelleChauffage("chauffage");
 
             if (isFirstChauffage) {
+                chauffageInterrupeur.setEtat(false);
+                interrupteurRepository.save(chauffageInterrupeur);
                 interrupteurService.InitInterrupterManuelleChauffage();
             }
+            interrupteurService.InterrupterManuelleChauffage("chauffage");
+
         }
         Interrupteur lumiereInterrupeur = interrupteurService.getControleInterrupteur("lumiere");
         if (lumiereInterrupeur.isProg()) {
             interrupteurService.InterrupterProgrammableLumiere("lumiere");
             isFirstLumiere = false;
         } else {
-            interrupteurService.InterrupterManuelleLumiere("lumiere");
-
             if (isFirstLumiere) {
+                lumiereInterrupeur.setEtat(false);
+                interrupteurRepository.save(lumiereInterrupeur);
                 interrupteurService.InitInterrupterManuelleLumiere();
 
-
             }
+            interrupteurService.InterrupterManuelleLumiere("lumiere");
         }
 
         if (pulverisationRepository.findAll().isEmpty()) {

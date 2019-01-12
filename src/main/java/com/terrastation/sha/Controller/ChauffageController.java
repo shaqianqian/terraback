@@ -257,9 +257,6 @@ public class ChauffageController {
     public ResultVO<Interrupteur> changeControleInterrupteurChauffage(@RequestParam("isProg") boolean isProg) {
 
         Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("chauffage", isProg);
-        if(!newInterrupteur.isEtat()&&!newInterrupteur.isProg()){
-            {interrupteurService.InitInterrupterManuelleChauffage();}
-        }
         return ResultUtil.success(newInterrupteur);
 
     }

@@ -435,7 +435,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                         }
                         in.close();
                         pr.waitFor();
-                        log.info("END : on a reussi à allumer le chauffage");
+                        log.info("END : on a reussi à allumer le lumiere");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
