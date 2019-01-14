@@ -3,8 +3,10 @@ package com.terrastation.sha;
 import com.terrastation.sha.Controller.TerrariumController;
 import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Pulverisation;
+import com.terrastation.sha.Entity.PulverisationInterrupteur;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Repositary.InterrupteurRepository;
+import com.terrastation.sha.Repositary.PulverisationInterrupeurRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
 import com.terrastation.sha.Service.DynamicTaskService;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 import java.util.Calendar;
+import java.util.List;
 
 @Component
 public class ScheduledTask {
@@ -34,6 +37,9 @@ public class ScheduledTask {
     private DynamicTaskService dynamicTaskService;
     @Autowired
     private InterrupteurRepository interrupteurRepository;
+    @Autowired
+    private PulverisationInterrupeurRepository pulverisationInterrupeurRepository;
+
     static Boolean isFirstChauffage = true;
     static Boolean isFirstLumiere = true;
 
@@ -57,7 +63,6 @@ public class ScheduledTask {
         Interrupteur lumiereInterrupeur = interrupteurService.getControleInterrupteur("lumiere");
         if (lumiereInterrupeur.isProg()) {
             interrupteurService.InterrupterProgrammableLumiere("lumiere");
-            isFirstLumiere = false;
         } else {
             if (isFirstLumiere) {
                 lumiereInterrupeur.setEtat(false);
@@ -72,12 +77,7 @@ public class ScheduledTask {
             log.info("vous avez pas encore configurez la pulverisation");
 
         }
-//        else if(pulverisationRepository.findAll().get(0).getPulverisationheure().size()==0){
-//
-//          log.info("vous avez pas encore configurez la pulverisation");
-//        }
         else {
-
             pulverisationService.pulverisationModeHygrometrie();
 
         }
@@ -88,22 +88,33 @@ public class ScheduledTask {
 
     @Scheduled(cron = "0 0 0 1 * ?")  //cron接受cron表达式，根据cron表达式确定定时规则
     public void chaqueMoisTaskServiceCron() {
-        Pulverisation pulverisationCourant = pulverisationRepository.findAll().get(0);
-        Calendar c = Calendar.getInstance();
-        int mois = c.get(Calendar.MONTH) + 1;
-        for (Pulverisation p : pulverisationRepository.findAll()) {
-            if (p.getMoisDebut() <= mois && mois <= p.getMoisFin()) {
-                pulverisationCourant = p;
-                break;
+        if (pulverisationRepository.findByMode("hygrometrie").isPresent()) {
+            List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("hygrometrie").get();
+            Pulverisation pulverisationCourant = pulverisationList.get(0);
+            Calendar c = Calendar.getInstance();
+            int mois = c.get(Calendar.MONTH) + 1;
+            for (Pulverisation p : pulverisationList) {
+                if (p.getMoisDebut() <= mois && mois <= p.getMoisFin()) {
+                    pulverisationCourant = p;
+                    break;
+                }
             }
-
+            activeCron(pulverisationCourant);
         }
-        activeCron(pulverisationCourant);
 
     }
 
     public void activeCron(Pulverisation pulverisation) {
-        if (pulverisationRepository.findAll().get(0).getMode().equals("horaire")) {
+        if (pulverisationInterrupeurRepository.findAll().size() == 0) {
+            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();
+            pulverisationInterrupteur.setMode("");
+            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
+
+        }
+
+        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+
+        if (pulverisationInterrupeur.getMode().equals("horaire")) {
             String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
             String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
             Calendar c = Calendar.getInstance();

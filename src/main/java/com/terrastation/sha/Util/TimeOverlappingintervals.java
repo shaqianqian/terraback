@@ -8,7 +8,7 @@ import java.util.List;
 
 @Slf4j
 public class TimeOverlappingintervals {
-    //Todo ici
+
     public static boolean analyeMoisChauffage(List<Chauffage> chauffages) {
 
         for (int i = 0; i < chauffages.size() - 1; i++) {
