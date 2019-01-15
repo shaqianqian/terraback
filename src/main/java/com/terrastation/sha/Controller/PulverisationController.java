@@ -46,16 +46,44 @@ public class PulverisationController {
     @Autowired
     private PulverisationInterrupeurRepository pulverisationInterrupeurRepository;
 
+    @RequestMapping(value = "getMode", method = RequestMethod.GET)
 
-    @RequestMapping(value = "getConfiguration", method = RequestMethod.GET)
+    public ResultVO<PulverisationInterrupteur> getMode() {
 
-    public ResultVO<List<Pulverisation>> getConfiguration() {
-        if (!pulverisationRepository.findAll().isEmpty()) {
-            List<Pulverisation> pulverisation = pulverisationRepository.findAll();
-            return ResultUtil.success(pulverisation);
+        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+        if(pulverisationInterrupeur==null){
+            PulverisationInterrupteur pulverisationInterrupteur=new PulverisationInterrupteur();
+            pulverisationInterrupteur.setMode("");
+            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
+            pulverisationInterrupeur=pulverisationInterrupeurRepository.findAll().get(0);
+        }
+        return ResultUtil.success(pulverisationInterrupeur);
+    }
+
+
+    @RequestMapping(value = "getConfigurationHoraire", method = RequestMethod.GET)
+
+    public ResultVO<List<Pulverisation>> getConfigurationHoraire() {
+        if (!pulverisationRepository.findByMode("horaire").isPresent()) {
+            log.info("Vous configurez pas encore pulverisation en mode horaire ");
+            return ResultUtil.success(null);
         } else {
-            log.info("Vous configurez pas encore pulverisation");
-            return null;
+
+            return ResultUtil.success(pulverisationRepository.findByMode("horaire").get());
+        }
+
+
+    }
+
+    @RequestMapping(value = "getConfigurationHygrometrie", method = RequestMethod.GET)
+
+    public ResultVO<List<Pulverisation>> getConfigurationHygrometrie() {
+        if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
+            log.info("Vous configurez pas encore pulverisation en mode hygrometrie");
+            return ResultUtil.success(null);
+        } else {
+
+            return ResultUtil.success(pulverisationRepository.findByMode("hygrometrie").get());
         }
 
 
@@ -184,33 +212,26 @@ public class PulverisationController {
 
     @RequestMapping(value = "configureModeHoraireTouteAnnee", method = RequestMethod.POST)
 
-    public ResultVO<List<Pulverisation>> configureModeHoraireTouteAnnee(@RequestBody List<Pulverisation> pulverisations) {
+    public ResultVO<List<Pulverisation>> configureModeHoraireTouteAnnee(@RequestBody Pulverisation pulverisation) {
         if (!pulverisationRepository.findByMode("horaire").isPresent()) {
-            for (Pulverisation pulverisation : pulverisations) {
-                if (pulverisation.getMoisFin() <= pulverisation.getMoisDebut()) {
-
-                    throw new ParameterErrorException(ResultEnum.Time_Ordre);
-
-                }
                 pulverisation.setMode("horaire");
                 pulverisation.setMoisDebut(1);
                 pulverisation.setMoisFin(12);
                 pulverisationRepository.save(pulverisation);
             }
 
-        } else {
+        else {
             List<Pulverisation> old_configuration_pulverisation = pulverisationRepository.findByMode("horaire").get();
-            for (Pulverisation pulverisation : old_configuration_pulverisation) {
-                pulverisationRepository.delete(pulverisation);
+            for (Pulverisation old_pulverisation : old_configuration_pulverisation) {
+                pulverisationRepository.delete(old_pulverisation);
 
             }
-            for (Pulverisation pulverisation : pulverisations) {
                 pulverisation.setMode("horaire");
                 pulverisation.setMoisDebut(1);
                 pulverisation.setMoisFin(12);
                 pulverisationRepository.save(pulverisation);
 
-            }
+
         }
         ////////////////////////////////////////////
         List<Pulverisation> pulverisationsNew= pulverisationRepository.findByMode("horaire").get();
@@ -276,33 +297,24 @@ public class PulverisationController {
     }
     @RequestMapping(value = "configureModeHygrometrieTouteAnnee", method = RequestMethod.POST)
 
-    public ResultVO<List<Pulverisation>> configureModeHygrometrieTouteAnnee(@RequestBody List<Pulverisation> pulverisations) {
+    public ResultVO<List<Pulverisation>> configureModeHygrometrieTouteAnnee(@RequestBody Pulverisation pulverisation) {
         if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
-            for (Pulverisation pulverisation : pulverisations) {
-                if (pulverisation.getMoisFin() <= pulverisation.getMoisDebut()) {
-
-                    throw new ParameterErrorException(ResultEnum.Time_Ordre);
-
-                }
                 pulverisation.setMoisFin(12);
                 pulverisation.setMoisDebut(1);
                 pulverisation.setMode("hygrometrie");
                 pulverisationRepository.save(pulverisation);
-            }
+
 
         } else {
             List<Pulverisation> old_configuration_pulverisation = pulverisationRepository.findByMode("hygrometrie").get();
-            for (Pulverisation pulverisation : old_configuration_pulverisation) {
-                pulverisationRepository.delete(pulverisation);
+            for (Pulverisation oldPulverisation : old_configuration_pulverisation) {
+                pulverisationRepository.delete(oldPulverisation);
 
             }
-            for (Pulverisation pulverisation : pulverisations) {
-                pulverisation.setMoisFin(12);
-                pulverisation.setMoisDebut(1);
-                pulverisation.setMode("hygrometrie");
-                pulverisationRepository.save(pulverisation);
-
-            }
+            pulverisation.setMoisFin(12);
+            pulverisation.setMoisDebut(1);
+            pulverisation.setMode("hygrometrie");
+            pulverisationRepository.save(pulverisation);
         }
         List<Pulverisation> pulverisationsNew= pulverisationRepository.findByMode("hygrometrie").get();
         return ResultUtil.success(pulverisationsNew);

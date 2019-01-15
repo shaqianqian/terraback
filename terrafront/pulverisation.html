@@ -5,33 +5,78 @@
     <title>Title</title>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
     </script>
+    <style>
+        #premier_month {
+            float: left;
+            width: 300px;
+            height: 300px;
+            border: 1px solid;
+            border-color: black;
+        }
+
+        #second_month {
+            margin-left: 310px;
+            width: 300px;
+            height: 300px;
+            border: 1px solid;
+            border-color: black;
+        }
+
+        #horaireConfig {
+
+            width: 1000px;
+
+
+        }
+    </style>
 </head>
 <body>
 <h1>Pulverisation</h1>
 <div>
     <div>mode :
         <div/>
-        <div id="mode"> horaire</div>
+        <div id="mode"> </div>
         <button onclick="changeMode()">Changer la mode de controler la pulverisation</button>
     </div>
 
     <div>
         <h3>Configurer le pulverisation en mode horaire</h3>
         <input type="checkbox" name="touteAnnee" id="touteAnnee" value="touteAnnee"> toute l'annee<br>
-        <p>mois debut: <input type="text" name="mois_debut" id="mois_debut"/></p>
-        <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
-        <p>duree: <input type="text" name="duree" id="duree"/></p>
-        <p>heure: <input type="text" name="heure" id="heure"/></p>
+        <div id="horaireConfig">
+            <div id="premier_month">
+                <p>mois debut: <input type="text" name="mois_debut" id="mois_debut"/></p>
+                <p>mois fin: <input type="text" name="mois_fin" id="mois_fin"/></p>
+                <p>duree: <input type="text" name="duree11" id="duree11"/></p>
+                <p>heure: <input type="text" name="heure11" id="heure11"/></p>
+                <p>duree: <input type="text" name="duree12" id="duree12"/></p>
+                <p>heure: <input type="text" name="heure12" id="heure12"/></p>
+            </div>
+
+            <div id="second_month">
+                <p>mois debut: <input type="text" name="mois_debut2" id="mois_debut2"/></p>
+                <p>mois fin: <input type="text" name="mois_fin2" id="mois_fin2"/></p>
+                <p>duree: <input type="text" name="duree21" id="duree21"/></p>
+                <p>heure: <input type="text" name="heure21" id="heure21"/></p>
+                <p>duree: <input type="text" name="duree22" id="duree22"/></p>
+                <p>heure: <input type="text" name="heure22" id="heure22"/></p>
+            </div>
+        </div>
         <button onclick="configure_horaire()">Configure le pulverisation en mode horaire</button>
     </div>
     <div>
         <h3>Configurer le pulverisation en mode hygrometrie</h3>
         <p>min: <input type="text" name="min" id="min"/></p>
         <p>duree_hygrometrie: <input type="text" name="duree_hygrometrie" id="duree_hygrometrie"/></p>
+        <p>mois debut: <input type="text" name="mois_debut3" id="mois_debut3"/></p>
+        <p>mois fin: <input type="text" name="mois_fin3" id="mois_fin3"/></p>
+        <p>heure debut: <input type="text" name="heure_debut3" id="heure_debut3"/></p>
+        <p>heure fin: <input type="text" name="heure_fin3" id="heure_fin3"/></p>
+
         <button onclick="configure_hygrometrie()">Configure le pulverisation en mode hygrometrie</button>
     </div>
 </div>
 <div id="tableAjax"></div>
+<div id="tableAjax2"></div>
 </div>
 </div>
 </body>
@@ -44,10 +89,12 @@
         if (this.checked) {
             document.getElementById("mois_debut").setAttribute("disabled", "disabled");
             document.getElementById("mois_fin").setAttribute("disabled", "disabled");
+            document.getElementById("second_month").style.visibility = "hidden";
 
         } else {
             document.getElementById("mois_debut").removeAttribute("disabled");
             document.getElementById("mois_fin").removeAttribute("disabled");
+            document.getElementById("second_month").style.visibility = "visible";
         }
     });
 
@@ -58,7 +105,7 @@
     function startRequest() {
         $.ajax({
 
-            url: url + "/terrarium/pulverisation/getConfiguration",
+            url: url + "/terrarium/pulverisation/getConfigurationHoraire",
             async: false,
             type: 'get',
             dataType: "json",
@@ -76,7 +123,8 @@
                 }
                 result = data;
                 if (data != null) {
-                    createShowingTable(data.data);
+                    createShowingTableHoraire(data.data);
+
 
                 }
 
@@ -84,9 +132,37 @@
             }
         });
     }
+    $.ajax({
+
+        url: url + "/terrarium/pulverisation/getConfigurationHygrometrie",
+        async: false,
+        type: 'get',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        error: function (jqXHR, textStatus, errorThrown) {
+            // alert('加载数据失败！');
+            alert(jqXHR.responseText);
+
+        },
+        success: function (data) {
+            var item = data;
+            //console.log(item);
+            for (var i = 0; i < item.length; i++) {
+                console.log(item[i]);
+            }
+            result = data;
+            if (data != null) {
+                createShowingTableHygrometrie(data.data);
+
+
+            }
+
+
+        }
+    });
 
     $.ajax({
-        url: url + "/terrarium/pulverisation/getConfiguration",
+        url: url + "/terrarium/pulverisation/getMode",
         async: false,
         type: 'get',      //请求方式
         dataType: "json",  //返回数据的格式
@@ -104,7 +180,7 @@
             }
             result = data; // 接收返回值
             if (data != null) {
-                document.getElementById("mode").innerHTML = result.data[0].mode;
+                document.getElementById("mode").innerHTML = result.data.mode;
             } else {
                 document.getElementById("mode").innerHTML = "pas encore configurer";
             }
@@ -117,10 +193,16 @@
 
         $.ajax({
             url: url + "/terrarium/pulverisation/configureModeHygrometrie",
-            data: JSON.stringify({
+            data: JSON.stringify([{
                 "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
                 "taux_hygrometrie_min": document.getElementById('min').value,
-            }),
+                "moisDebut": document.getElementById("mois_debut3").value,
+                "moisFin":  document.getElementById("mois_fin3").value,
+                "heureDebut": document.getElementById("heure_debut3").value,
+                "heureFin": document.getElementById("heure_fin3").value,
+            }
+
+            ]),
             async: false,
             type: 'post',      //请求方式
             dataType: "json",  //返回数据的格式
@@ -150,8 +232,11 @@
             $.ajax({
                 url: url + "/terrarium/pulverisation/UpdateTouteLanneeModeHoraire",
                 data: JSON.stringify([{
-                    duree: document.getElementById('duree').value,
-                    heure: document.getElementById('heure').value
+                    duree: document.getElementById('duree11').value,
+                    heure: document.getElementById('heure11').value
+                }, {
+                    duree: document.getElementById('duree12').value,
+                    heure: document.getElementById('heure12').value
                 }]),
                 async: false,
                 type: 'post',      //请求方式
@@ -176,14 +261,31 @@
         } else {
             $.ajax({
                 url: url + "/terrarium/pulverisation/configureModeHoraire",
-                data: JSON.stringify({
+                data: JSON.stringify([{
                     "moisDebut": document.getElementById('mois_debut').value,
                     "moisFin": document.getElementById('mois_fin').value,
                     "pulverisationheure": [{
-                        duree: document.getElementById('duree').value,
-                        heure: document.getElementById('heure').value
+                        duree: document.getElementById('duree11').value,
+                        heure: document.getElementById('heure11').value
+                    }, {
+                        duree: document.getElementById('duree12').value,
+                        heure: document.getElementById('heure12').value
                     }]
-                }),
+                },
+                    {
+                        "moisDebut": document.getElementById('mois_debut2').value,
+                        "moisFin": document.getElementById('mois_fin2').value,
+                        "pulverisationheure": [{
+                            duree: document.getElementById('duree21').value,
+                            heure: document.getElementById('heure21').value
+                        }, {
+                            duree: document.getElementById('duree22').value,
+                            heure: document.getElementById('heure22').value
+                        }]
+                    }
+
+
+                ]),
                 async: false,
                 type: 'post',      //请求方式
                 dataType: "json",  //返回数据的格式
@@ -251,15 +353,13 @@
 
     }
 
-    function createShowingTable(data) {
+    function createShowingTableHoraire(data) {
         var tableStr = "<table class='tab-list' width='40%' border='1px'>";
         tableStr = tableStr
             + "<tr class='list-header'>"
             + "<td width='5%'>mois debut</td>"
             + "<td width='5%'>mois fin</td>"
             + "<td width='5%'>pulverisationheure</td>"
-            + "<td width='5%'>taux_hygrometrie_min</td>"
-            + "<td width='5%'>duree_hygrometrie</td>"
             + "</tr>";
         var len = data.length;
         for (var i = 0; i < len; i++) {
@@ -267,12 +367,42 @@
                 + "<td>" + data[i].moisDebut + "</td>"
                 + "<td>" + data[i].moisFin + "</td>"
                 + "<td id='pulverisationheure'>" + pulverisationheure(data[i].pulverisationheure) + "</td>"
-                + "<td>" + data[i].taux_hygrometrie_min + "</td>"
-                + "<td>" + data[i].duree_hygrometrie + "</td>"
                 + "</tr>";
         }
         tableStr = tableStr + "</table>";
         $("#tableAjax").html(tableStr);
+    }
+    // "duree_hygrometrie": document.getElementById('duree_hygrometrie').value,
+    //     "taux_hygrometrie_min": document.getElementById('min').value,
+    //     "moisDebut": document.getElementById("mois_debut3").value,
+    //     "moisFin":  document.getElementById("mois_fin3").value,
+    //     "heureDebut": document.getElementById("heure_debut3").value,
+    //     "heureFin": document.getElementById("heure_fin3").value,
+    function createShowingTableHygrometrie(data) {
+        var tableStr = "<table class='tab-list' width='40%' border='1px'>";
+        tableStr = tableStr
+            + "<tr class='list-header'>"
+            + "<td width='5%'>mois debut</td>"
+            + "<td width='5%'>mois fin</td>"
+            + "<td width='5%'>heure debut</td>"
+            + "<td width='5%'>heure fin</td>"
+            + "<td width='5%'>duree_hygrometrie</td>"
+            + "<td width='5%'>taux_hygrometrie_min</td>"
+
+            + "</tr>";
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            tableStr = tableStr + "<tr>"
+                + "<td>" + data[i].moisDebut + "</td>"
+                + "<td>" + data[i].moisFin + "</td>"
+                + "<td>" + data[i].heureDebut + "</td>"
+                + "<td>" + data[i].heureFin + "</td>"
+                + "<td>" + data[i].duree_hygrometrie+ "</td>"
+                + "<td>" + data[i].taux_hygrometrie_min+ "</td>"
+                + "</tr>";
+        }
+        tableStr = tableStr + "</table>";
+        $("#tableAjax2").html(tableStr);
     }
 
 
@@ -283,13 +413,14 @@
         }
         return "<table border='1px'><tr><td width='5%'>heure</td><td width='5%'>duree</td><td>Delete</td></tr>" + pulverisation + " </table>";
     }
+
     function deleteUnConfiguration(id) {
 
         $.ajax({
             url: url + "/terrarium/pulverisation/deleteHeureById",
             async: false,
-            data:{
-             id:id
+            data: {
+                id: id
             },
             type: 'get',      //请求方式
             dataType: "json",  //返回数据的格式

@@ -159,65 +159,65 @@
 
     }
     function AjouterConfigurerLumiere(){
-            if (document.getElementById('touteAnnee').checked) {
-                $.ajax({
-                    url: url + "/terrarium/lumiere/UpdateTouteLannee",
-                    data: JSON.stringify([{
-                        heureDebut: document.getElementById('heure_debut').value,
-                        heureFin: document.getElementById('heure_fin').value,
+        if (document.getElementById('touteAnnee').checked) {
+            $.ajax({
+                url: url + "/terrarium/lumiere/UpdateTouteLannee",
+                data: JSON.stringify([{
+                    heureDebut: document.getElementById('heure_debut').value,
+                    heureFin: document.getElementById('heure_fin').value,
 
-                    }]),
-                    async: false,
-                    type: 'post',      //请求方式
-                    dataType: "json",  //返回数据的格式
-                    contentType: "application/json; charset=utf-8",
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        // alert('加载数据失败！');
-                        alert(jqXHR.responseText);
+                }]),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // alert('加载数据失败！');
+                    alert(jqXHR.responseText);
 
-                    },
-                    success: function (data) {
-                        var item = data;
-                        //console.log(item);
-                        for (var i = 0; i < item.length; i++) {
-                            console.log(item[i]);
-                        }
-                        result = data; // 接收返回值
-                        alert(JSON.stringify(result.data))
+                },
+                success: function (data) {
+                    var item = data;
+                    //console.log(item);
+                    for (var i = 0; i < item.length; i++) {
+                        console.log(item[i]);
                     }
-                });
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
 
-            } else {
+        } else {
 
-                $.ajax({
-                    url: url + "/terrarium/lumiere/add",
-                    data: JSON.stringify({
-                        moisDebut: document.getElementById('mois_debut').value,
-                        moisFin: document.getElementById('mois_fin').value,
-                        heureDebut: document.getElementById('heure_debut').value,
-                        heureFin: document.getElementById('heure_fin').value,
+            $.ajax({
+                url: url + "/terrarium/lumiere/add",
+                data: JSON.stringify({
+                    moisDebut: document.getElementById('mois_debut').value,
+                    moisFin: document.getElementById('mois_fin').value,
+                    heureDebut: document.getElementById('heure_debut').value,
+                    heureFin: document.getElementById('heure_fin').value,
 
-                    }),
-                    async: false,
-                    type: 'post',      //请求方式
-                    dataType: "json",  //返回数据的格式
-                    contentType: "application/json; charset=utf-8",
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        // alert('加载数据失败！');
-                        alert(jqXHR.responseText);
+                }),
+                async: false,
+                type: 'post',      //请求方式
+                dataType: "json",  //返回数据的格式
+                contentType: "application/json; charset=utf-8",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // alert('加载数据失败！');
+                    alert(jqXHR.responseText);
 
-                    },
-                    success: function (data) {
-                        // var item = data;
-                        //console.log(item);
-                        // for (var i = 0; i < item.length; i++) {
-                        //     console.log(item[i]);
-                        // }
-                        result = data; // 接收返回值
-                        alert(JSON.stringify(result.data))
-                    }
-                });
-            }
+                },
+                success: function (data) {
+                    // var item = data;
+                    //console.log(item);
+                    // for (var i = 0; i < item.length; i++) {
+                    //     console.log(item[i]);
+                    // }
+                    result = data; // 接收返回值
+                    alert(JSON.stringify(result.data))
+                }
+            });
+        }
     }
     function createShowingTable(data) {
         var tableStr = "<table class='tab-list' width='40%' border='1px'>";
