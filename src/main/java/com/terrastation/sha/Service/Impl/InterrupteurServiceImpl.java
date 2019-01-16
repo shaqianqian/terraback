@@ -41,18 +41,18 @@ public class InterrupteurServiceImpl implements InterrupteurService {
     ///////////////////////////////////////General////////////////////////////////////////////////////////////////
 
     public Interrupteur getControleInterrupteur(String type) {
-        Interrupteur chauffageInterrupteur = new Interrupteur();
+        Interrupteur interrupteur = new Interrupteur();
         Optional<Interrupteur> interrupteurOptional = interrupteurRepository.findByType(type);
         if (!interrupteurOptional.isPresent()) {
             Interrupteur newInterrupteur = new Interrupteur();
             newInterrupteur.setEtat(false);
             newInterrupteur.setProg(false);
             newInterrupteur.setType(type);
-            chauffageInterrupteur = interrupteurRepository.save(newInterrupteur);
+            interrupteur = interrupteurRepository.save(newInterrupteur);
         } else {
-            chauffageInterrupteur = interrupteurOptional.get();
+            interrupteur = interrupteurOptional.get();
         }
-        return chauffageInterrupteur;
+        return interrupteur;
 
     }
 
@@ -328,7 +328,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                 }
                 in.close();
                 pr.waitFor();
-                log.info("END : on a reussi à allumer le chauffage");
+                log.info("END : on a reussi à allumer la lumiere");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -353,7 +353,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                         }
                         in.close();
                         pr.waitFor();
-                        log.info("END : on a reussi à allumer le chauffage");
+                        log.info("END : on a reussi à allumer le lumiere");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -377,6 +377,10 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                     }
 
                 }
+
+
+            }else{
+                log.info("vous changez pas l'etat de lumiere");
 
 
             }

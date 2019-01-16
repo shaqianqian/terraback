@@ -76,8 +76,7 @@ public class ScheduledTask {
         if (pulverisationRepository.findAll().isEmpty()) {
             log.info("vous avez pas encore configurez la pulverisation");
 
-        }
-        else {
+        } else {
             pulverisationService.pulverisationModeHygrometrie();
 
         }

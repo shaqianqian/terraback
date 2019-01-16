@@ -171,8 +171,10 @@ public class LumiereController {
 
     //change l'etat de la lumiere quand il est controle manuellement
     @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement(@RequestParam("etat") boolean etat) {
-        Interrupteur newInterrupteur = interrupteurService.ChangeInterrupterManuelleLumiere(etat);
+    public ResultVO<Interrupteur> changeEtatInterrupteurManuellement() {
+        Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
+        boolean etat=interrupteur.isEtat();
+        Interrupteur newInterrupteur = interrupteurService.ChangeInterrupterManuelleLumiere(!etat);
         return ResultUtil.success(newInterrupteur);
 
     }
