@@ -32,67 +32,55 @@ public class PulverisationServiceImpl implements PulverisationService {
     public void pulverisationModeHygrometrie() {
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
 
-        if (pulverisationInterrupeurRepository.findAll().size() == 0) {
-            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();
-            pulverisationInterrupteur.setMode("");
-            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
+        if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
+            log.info("vous avez pas encore configurez le pulverisation en mode hygrometrie ");
 
-        }
-
-        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
-
-        if (pulverisationInterrupeur.getMode() == null || pulverisationInterrupeur.getMode().isEmpty()) {
-
-            log.info("vous avez pas encore configurez la mode de pulverisation");
-
-        } else if (pulverisationInterrupeur.getMode().equals("hygrometrie")) {
-
-            if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
-                log.info("vous avez pas encore configurez les details de pulverisation en mode hygrometrie ");
-
-            } else {
-                List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("hygrometrie").get();
+        } else {
+            List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("hygrometrie").get();
 
 
-                log.info("vous controlez le pulverisation en mode hygrometrie ,Humidite courant est " + terrarium_current.getHumidite());
+            log.info("vous controlez le pulverisation en mode hygrometrie ,Humidite courant est " + terrarium_current.getHumidite());
 
-                Date currentTime = terrarium_current.getCreateTime();
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(currentTime);
-                int month = cal.get(Calendar.MONTH) + 1;
-                int heure = cal.get(Calendar.HOUR_OF_DAY);
-                Pulverisation pulverisation = new Pulverisation();
-                boolean isConfiguration = false;
-                for (Pulverisation p : pulverisationList) {
-                    if (p.getMoisDebut() <= month && p.getMoisFin() >= month && p.getHeureDebut() <= heure && heure <= p.getHeureFin()) {
-                        pulverisation = p;
-                        isConfiguration = true;
-                        break;
-                    }
+            Date currentTime = terrarium_current.getCreateTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentTime);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int heure = cal.get(Calendar.HOUR_OF_DAY);
+            Pulverisation pulverisation = new Pulverisation();
+            boolean isConfiguration = false;
+            for (Pulverisation p : pulverisationList) {
+                if (p.getMoisDebut() <= month && p.getMoisFin() >= month && p.getHeureDebut() <= heure && heure <= p.getHeureFin()) {
+                    pulverisation = p;
+                    isConfiguration = true;
+                    break;
                 }
-                if (isConfiguration) {
-                    if ((terrarium_current.getHumidite() < pulverisation.getTaux_hygrometrie_min()) && isConfiguration) {
-                        try {
-                            log.info("Votre terrarium n'est pas assez humide, lancer la pulverisation, la duree est " + pulverisation.getDuree_hygrometrie());
-                            log.info("START : Lancer le script du pulverisation");
-                            Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py " + pulverisation.getDuree_hygrometrie());
+            }
+            if (isConfiguration) {
+                if ((terrarium_current.getHumidite() < pulverisation.getTaux_hygrometrie_min()) && isConfiguration) {
+                    try {
+                        log.info("Le min taux de hygrometrie est "+ pulverisation.getTaux_hygrometrie_min()+ ", Votre terrarium n'est pas assez humide, lancer la pulverisation, la duree est " + pulverisation.getDuree_hygrometrie());
+                        log.info("START : Lancer le script du pulverisation");
+                        Process pr = Runtime.getRuntime().exec("python ../python/pulverisation_test.py " + pulverisation.getDuree_hygrometrie());
 
-                            BufferedReader in = new BufferedReader(new
-                                    InputStreamReader(pr.getInputStream()));
-                            String line;
-                            while ((line = in.readLine()) != null) {
-                                System.out.println(line);
-                            }
-                            in.close();
-                            pr.waitFor();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
                         }
+                        in.close();
+                        pr.waitFor();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                } else {
+
+                    log.info("La humidite a l'air correcte maintenant, on ne lance pas la pulverisation");
                 }
+            } else {
+                log.info("Le temps ne correspond pas à la configuration. On ne lance pas la pulverisation");
 
             }
-
 
         }
 

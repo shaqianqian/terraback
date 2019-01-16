@@ -72,13 +72,9 @@ public class ScheduledTask {
             }
             interrupteurService.InterrupterManuelleLumiere("lumiere");
         }
-
-        if (pulverisationRepository.findAll().isEmpty()) {
-            log.info("vous avez pas encore configurez la pulverisation");
-
-        } else {
+        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+        if (pulverisationInterrupeur.getMode().equals("hygrometrie")) {
             pulverisationService.pulverisationModeHygrometrie();
-
         }
         isFirstChauffage = false;
         isFirstLumiere = false;
@@ -87,8 +83,8 @@ public class ScheduledTask {
 
     @Scheduled(cron = "0 0 0 1 * ?")  //cron接受cron表达式，根据cron表达式确定定时规则
     public void chaqueMoisTaskServiceCron() {
-        if (pulverisationRepository.findByMode("hygrometrie").isPresent()) {
-            List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("hygrometrie").get();
+        if (pulverisationRepository.findByMode("horaire").isPresent()) {
+            List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("horaire").get();
             Pulverisation pulverisationCourant = pulverisationList.get(0);
             Calendar c = Calendar.getInstance();
             int mois = c.get(Calendar.MONTH) + 1;
@@ -104,15 +100,7 @@ public class ScheduledTask {
     }
 
     public void activeCron(Pulverisation pulverisation) {
-        if (pulverisationInterrupeurRepository.findAll().size() == 0) {
-            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();
-            pulverisationInterrupteur.setMode("");
-            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
-
-        }
-
         PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
-
         if (pulverisationInterrupeur.getMode().equals("horaire")) {
             String moi = pulverisation.getMoisDebut() + "-" + pulverisation.getMoisFin();
             String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
@@ -130,7 +118,8 @@ public class ScheduledTask {
 
                 }
             }
-            String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
+            String cron = MessageFormat.format("0 0 {0} ? {1} ?", heures, moi);
+            //String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
             System.out.println(cron);
             dynamicTaskService.startCron(pulverisation, cron);
         }

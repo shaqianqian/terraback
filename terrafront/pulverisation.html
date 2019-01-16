@@ -313,22 +313,9 @@
     //changer la mode pour controler la pulverisation(horaire ou hygrometrie)
 
     function changeMode() {
-        var mode;
-        if (document.getElementById("mode").innerHTML == "horaire") {
-
-            mode = "hygrometrie";
-
-
-        } else if (document.getElementById("mode").innerHTML == "hygrometrie") {
-
-            mode = "horaire";
-        }
 
         $.ajax({
             url: url + "/terrarium/pulverisation/changeMode",
-            data: {
-                mode: mode
-            },
             async: false,
             type: 'get',      //请求方式
             dataType: "json",  //返回数据的格式

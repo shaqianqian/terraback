@@ -46,6 +46,7 @@ public class DynamicTaskService {
      * ThreadPoolTaskScheduler：线程池任务调度类，能够开启线程池进行任务调度。
      * ThreadPoolTaskScheduler.schedule()方法会创建一个定时计划ScheduledFuture，在这个方法需要添加两个参数，Runnable（线程接口类） 和CronTrigger（定时任务触发器）
      * ThreadPoolTaskScheduler peut creer un cron <ScheduledFuture>, il a besoin de deux parametres,runnable et crontrigger
+     *
      * @return
      */
     @Bean
@@ -57,7 +58,7 @@ public class DynamicTaskService {
      * 启动任务
      * lancer le cron
      **/
-    public String startCron(Pulverisation pulverisation ,String cron) {
+    public String startCron(Pulverisation pulverisation, String cron) {
         if (future != null) {
             future.cancel(true);
         }
@@ -66,7 +67,6 @@ public class DynamicTaskService {
             public void run() {
                 Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
                 log.info("vous controlez le pulverisation en mode horaire ,Humidite courant est " + terrarium_current.getHumidite());
-//                Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
                 String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
                 Calendar c = Calendar.getInstance();
                 int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
@@ -96,6 +96,7 @@ public class DynamicTaskService {
                     }
                     in.close();
                     pr.waitFor();
+                    log.info("END : Pulverisation eteint");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -109,7 +110,6 @@ public class DynamicTaskService {
 
     /**
      * s'arreter le cron
-     *
      **/
 
     public String stopCron() {

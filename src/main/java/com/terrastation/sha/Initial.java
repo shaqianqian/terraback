@@ -44,34 +44,23 @@ public class Initial implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        if (pulverisationInterrupeurRepository.findAll().size() == 0) {
+            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();
+            pulverisationInterrupteur.setMode("horaire");
+            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
 
-//////////////////////////////////////////////////////////////////////////////////////////
+        }
 
-        if (pulverisationRepository.findAll().isEmpty()) {
-            log.info("vous avez pas encore configurez la pulverisation");
-
-        } else {
-            if(pulverisationInterrupeurRepository.findAll().size()==0){
-                PulverisationInterrupteur pulverisationInterrupteur=new PulverisationInterrupteur();
-                pulverisationInterrupteur.setMode("");
-                pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
-
-            }
-            PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
 //            Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
 
-            if (pulverisationInterrupeur.getMode() == null || pulverisationInterrupeur.getMode().isEmpty()) {
+        if (pulverisationInterrupeur.getMode().equals("horaire")) {
 
-                log.info("vous avez pas encore configurez la mode de pulverisation");
+            if (!pulverisationRepository.findByMode("horaire").isPresent()) {
+                log.info("vous avez pas encore configurez les details de pulverisation en mode horaire ");
 
-            } else if (pulverisationInterrupeur.getMode().equals("horaire")) {
-
-                if (!pulverisationRepository.findByMode("horaire").isPresent()){
-                    log.info("vous avez pas encore configurez les details de pulverisation en mode horaire ");
-
-                }
-                else{
-                List<Pulverisation> pulverisationList=pulverisationRepository.findByMode("horaire").get();
+            } else {
+                List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("horaire").get();
                 Calendar auj = Calendar.getInstance();
                 int mois = auj.get(Calendar.MONTH) + 1;
                 Pulverisation pulverisationCourant = pulverisationList.get(0);
@@ -85,8 +74,8 @@ public class Initial implements CommandLineRunner {
 
                     log.info("vous avez pas encore configurez les details de pulverisation en mode horaire ");
                 } else {
-                    String moi = pulverisationCourant.getMoisDebut() + "-" +pulverisationCourant.getMoisFin();
-                    String heures =  pulverisationCourant.getPulverisationheure().get(0).getHeure() + "";
+                    String moi = pulverisationCourant.getMoisDebut() + "-" + pulverisationCourant.getMoisFin();
+                    String heures = pulverisationCourant.getPulverisationheure().get(0).getHeure() + "";
                     Calendar c = Calendar.getInstance();
                     int heureCurrent = c.get(Calendar.HOUR_OF_DAY);
 
@@ -97,12 +86,14 @@ public class Initial implements CommandLineRunner {
                             heures = heures + "," + pulverisationCourant.getPulverisationheure().get(i).getHeure();
                         }
                     }
-                    String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
+                    String cron = MessageFormat.format("0 0 {0} ? {1} ?", heures, moi);
+                    //String cron = MessageFormat.format("0 * {0} ? {1} ?", heures, moi);
                     System.out.println(cron);
                     dynamicTaskService.startCron(pulverisationCourant, cron);
                 }
-            }}
+            }
         }
+
     }
-//////////////////////////////////////////////////////////////////////////////////////////
+
 }
