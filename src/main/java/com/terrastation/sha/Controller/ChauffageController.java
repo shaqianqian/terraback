@@ -254,9 +254,10 @@ public class ChauffageController {
 
     //change le facon de controler le interrupteur
     @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeControleInterrupteurChauffage(@RequestParam("isProg") boolean isProg) {
-
-        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("chauffage", isProg);
+    public ResultVO<Interrupteur> changeControleInterrupteurChauffage() {
+        Interrupteur interrupteur = interrupteurService.getControleInterrupteur("chauffage");
+        boolean isProg=interrupteur.isProg();
+        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("chauffage", !isProg);
         return ResultUtil.success(newInterrupteur);
 
     }

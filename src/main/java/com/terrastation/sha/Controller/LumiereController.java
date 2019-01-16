@@ -161,9 +161,10 @@ public class LumiereController {
 
     //change le facon de controler le interrupteur
     @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.GET)
-    public ResultVO<Interrupteur> changeControleInterrupteurLumiere(@RequestParam("isProg") boolean isProg) {
-
-        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("lumiere", isProg);
+    public ResultVO<Interrupteur> changeControleInterrupteurLumiere() {
+        Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
+        boolean isProg=interrupteur.isProg();
+        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur("lumiere", !isProg);
 
         return ResultUtil.success(newInterrupteur);
 
