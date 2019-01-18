@@ -11,7 +11,6 @@ public class Interrupteur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-   @Column(name="type", unique=true)
     private String type;
     private boolean etat;
     private boolean isProg;
