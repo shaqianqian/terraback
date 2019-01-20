@@ -1,9 +1,11 @@
 package com.terrastation.sha.Service.Impl;
 
+import com.terrastation.sha.Entity.Alarme;
 import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.TerraiumException;
+import com.terrastation.sha.Repositary.AlarmeRepository;
 import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
 import com.terrastation.sha.Service.InterrupteurService;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -27,6 +30,9 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
     private InterrupteurRepository interrupteurRepository;
     @Autowired
     private InterrupteurService interrupteurService;
+    @Autowired
+    private AlarmeRepository alarmeRepository;
+
 
     public TerrariumsGenereVO GetCurrentHumiditesVO(int quantite) {
         if(quantite> terrariumRepositary.getRowQuantity()){
@@ -42,13 +48,13 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
 
         }
-         Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
+        // Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
 //        TerrariumGenereVO humiditeVO_max = new TerrariumGenereVO();
 //        humiditeVO_max.setT(hum_max.getCreateTime());
 //        humiditeVO_max.setY(hum_max.getHumidite());
 //
 //
-        Terrarium hum_min = terrariumRepositary.findMinHumidites(quantite);
+        // Terrarium hum_min = terrariumRepositary.findMinHumidites(quantite);
 //        TerrariumGenereVO humiditeVO_min = new TerrariumGenereVO();
 //        humiditeVO_min.setT(hum__min.getCreateTime());
 //        humiditeVO_min.setY(hum__min.getHumidite());
@@ -66,16 +72,21 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             humiditesVO.setIsProg("true");
         }
         else{ humiditesVO.setIsProg("false");}
+        Optional<Alarme> humiditeAlarmeOptional=alarmeRepository.findByType("hygrometrie");
+        if(humiditeAlarmeOptional.isPresent()){
+            Alarme alarme=humiditeAlarmeOptional.get();
+            humiditesVO.setMax(alarme.getMax());
+            humiditesVO.setMin(alarme.getMin());
+        }
+        else{
+            humiditesVO.setMax(-1);
+            humiditesVO.setMin(-1);
 
-
-//        humiditesVO.setMax(humiditeVO_max);
-//        humiditesVO.setMin(humiditeVO_min);
+        }
         humiditesVO.setSymbol("%");
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
         humiditesVO.setName("Humidite");
-        humiditesVO.setMax(hum_max.getHumidite());
-        humiditesVO.setMin(hum_min.getHumidite());
 
 
         return humiditesVO;
@@ -95,14 +106,14 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             terraiumListVO.add(temperatureVO);
 
         }
-        Terrarium temp_max = terrariumRepositary.findMaxTemperatures(quantite);
+     //   Terrarium temp_max = terrariumRepositary.findMaxTemperatures(quantite);
 //        TerrariumGenereVO tempVO_max = new TerrariumGenereVO();
 //        tempVO_max.setT(temp_max.getCreateTime());
 //        tempVO_max.setY(temp_max.getTemperature());
 //
 //
 //
-        Terrarium temp_min = terrariumRepositary.findMinTemperatures(quantite);
+  //      Terrarium temp_min = terrariumRepositary.findMinTemperatures(quantite);
 //        TerrariumGenereVO tempVO_min = new TerrariumGenereVO();
 //        tempVO_min.setT(temp_min.getCreateTime());
 //        tempVO_min.setY(temp_min.getTemperature());
@@ -113,8 +124,18 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
         temperaturesVO.setSymbol("°C");
         Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
-        temperaturesVO.setMax(temp_max.getTemperature());
-        temperaturesVO.setMin(temp_min.getTemperature());
+        Optional<Alarme> temperatureAlarmeOptional=alarmeRepository.findByType("temperature");
+        if(temperatureAlarmeOptional.isPresent()){
+           Alarme alarme=temperatureAlarmeOptional.get();
+           temperaturesVO.setMax(alarme.getMax());
+           temperaturesVO.setMin(alarme.getMin());
+        }
+        else{
+            temperaturesVO.setMax(-1);
+            temperaturesVO.setMin(-1);
+
+        }
+
         if(chauffage.isEtat()){
             temperaturesVO.setIsOn("true");
         }

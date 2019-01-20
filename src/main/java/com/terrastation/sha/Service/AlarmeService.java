@@ -8,7 +8,7 @@ import com.terrastation.sha.VO.ResultVO;
 import java.util.List;
 
 public interface AlarmeService {
-    public void send();
+
     public List<Terrarium> alarmeTemperature();
     public List<Terrarium> alarmeHygrometrie();
 

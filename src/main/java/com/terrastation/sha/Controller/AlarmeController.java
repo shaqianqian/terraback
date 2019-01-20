@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -41,6 +38,7 @@ public class AlarmeController {
 
     @Autowired
     private AlarmeRepository alarmeRepository;
+
 
     @Autowired
     private AlarmeService alarmeService;
@@ -80,7 +78,58 @@ public class AlarmeController {
         return ResultUtil.success(alarmeService.alarmeHygrometrie());
     }
 
+    @RequestMapping(value = "/configNotification", method = RequestMethod.POST)
 
+    public ResultVO<List<Alarme>> configNotification(@RequestBody List<Alarme> alarmes) {
+        Optional<Alarme> temperatureOptional = alarmeRepository.findByType("temperature");
+        if (!temperatureOptional.isPresent()) {
+            for (Alarme alarme : alarmes) {
+                if (alarme.getType().equals("temperature")) {
+                    alarmeRepository.save(alarme);
+                    break;
+                }
+
+            }
+
+        } else {
+           Alarme temperatureAlarme= temperatureOptional.get();
+            for (Alarme alarme : alarmes) {
+                if (alarme.getType().equals("temperature")) {
+                    temperatureAlarme.setDuree(alarme.getDuree());
+                    temperatureAlarme.setMax(alarme.getMax());
+                    temperatureAlarme.setMin(alarme.getMin());
+                    temperatureAlarme.setMessage(alarme.getMessage());
+                    temperatureAlarme.setVariation(alarme.getVariation());
+                    alarmeRepository.save(temperatureAlarme);
+                    break;
+                }
+            }
+        }
+
+        Optional<Alarme> humiditeOptional = alarmeRepository.findByType("hygrometrie");
+        if (!humiditeOptional.isPresent()) {
+            for (Alarme alarme : alarmes) {
+                if (alarme.getType().equals("hygrometrie")) {
+                    alarmeRepository.save(alarme);
+                    break;
+                }
+            }
+        } else {
+            Alarme  humiditeAlarme=  humiditeOptional.get();
+            for (Alarme alarme : alarmes) {
+                if (alarme.getType().equals("hygrometrie")) {
+                    humiditeAlarme.setDuree(alarme.getDuree());
+                    humiditeAlarme.setMax(alarme.getMax());
+                    humiditeAlarme.setMin(alarme.getMin());
+                    humiditeAlarme.setMessage(alarme.getMessage());
+                    humiditeAlarme.setVariation(alarme.getVariation());
+                    alarmeRepository.save(humiditeAlarme);
+                    break;
+                }
+            }
+        }
+        return ResultUtil.success(alarmeRepository.findAll());
+    }
 
 
 }

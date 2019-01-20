@@ -45,7 +45,7 @@ public class AlarmeServiceImpl implements AlarmeService {
     Logger log = LoggerFactory.getLogger(AlarmeController.class);
 
 
-    public void send(){
+    public void send(String Notification) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("terrastation111@gmail.com");
@@ -55,45 +55,48 @@ public class AlarmeServiceImpl implements AlarmeService {
         mailSender.send(message);
 
     }
-     public List<Terrarium> alarmeTemperature() {
 
-         Optional<Alarme> alarmeOptional=alarmeRepository.findByType("temperature");
-         if(alarmeOptional.isPresent()){
-             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-             Terrarium terrarium = terrariumService.getCurrentParameter();
-             Date current = terrarium.getCreateTime();
-             String currentString = df.format(current);
-             Alarme alarme = alarmeOptional.get();
+    public List<Terrarium> alarmeTemperature() {
 
-             Date debut = new Date();
+        Optional<Alarme> alarmeOptional = alarmeRepository.findByType("temperature");
+        if (alarmeOptional.isPresent()) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Terrarium terrarium = terrariumService.getCurrentParameter();
+            Date current = terrarium.getCreateTime();
+            String currentString = df.format(current);
+            Alarme alarme = alarmeOptional.get();
 
-             debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
+            Date debut = new Date();
 
+            debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
+            log.info("debut is " + debut.toString());
+            String debutString = df.format(debut);
+            List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
+            sortListByTemperature(terrariumList);
 
-             log.info("debut is " + debut.toString());
-             String debutString = df.format(debut);
+            double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();
+            log.info("max_temperature is " + max_Temperature);
+            double min_Temperature = terrariumList.get(0).getTemperature();
+            log.info("min_temperature is " + min_Temperature);
+            if (max_Temperature - min_Temperature > alarme.getVariation()) {
+                this.send("La temperature change trop vite," + alarme.getMessage());
+                log.info("send a email" + alarme.getMessage());
+            } else if (terrarium.getTemperature() > alarme.getMax()) {
+                this.send("La temperature est trop chaud," + alarme.getMessage());
+                log.info("send a email" + alarme.getMessage());
+            } else if (terrarium.getTemperature() < alarme.getMin()) {
+                this.send("La temperature est trop froid," + alarme.getMessage());
+                log.info("send a email" + alarme.getMessage());
 
+            }
+            return terrariumList;
 
-             List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
-             sortListByTemperature(terrariumList);
-
-             double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();
-             log.info("max_temperature is " + max_Temperature);
-             double min_Temperature = terrariumList.get(0).getTemperature();
-             log.info("min_temperature is " + min_Temperature);
-             if (max_Temperature - min_Temperature > alarme.getVariation() || terrarium.getTemperature() > alarme.getMax() || terrarium.getTemperature() < alarme.getMin()) {
-                 alarmeService.send();
-                 log.info("send a email" + alarme.getMessage());
-             }
-             return terrariumList;
-
-         }
-        else{
+        } else {
 
             return null;
-         }
+        }
 
-     }
+    }
 
     public List<Terrarium> alarmeHygrometrie() {
         Optional<Alarme> alarmeOptional = alarmeRepository.findByType("hygrometrie");
@@ -114,9 +117,16 @@ public class AlarmeServiceImpl implements AlarmeService {
             log.info("max_humidity is " + max_humidity);
             double min_humidity = terrariumList.get(0).getHumidite();
             log.info("min_humidity is " + min_humidity);
-            if (max_humidity - min_humidity > alarme.getVariation() || terrarium.getHumidite() > alarme.getMax() || terrarium.getHumidite() < alarme.getMin()) {
-                alarmeService.send();
+            if (max_humidity - min_humidity > alarme.getVariation()) {
+                this.send("L'humidite change trop vite," + alarme.getMessage());
                 log.info("send a email" + alarme.getMessage());
+            } else if (terrarium.getHumidite() > alarme.getMax()) {
+                this.send("Le taux de hygrometrie est trop eleve," + alarme.getMessage());
+                log.info("send a email" + alarme.getMessage());
+            } else if (terrarium.getHumidite() < alarme.getMin()) {
+                this.send("Le taux de hygrometrie est trop bas," + alarme.getMessage());
+                log.info("send a email" + alarme.getMessage());
+
             }
             return terrariumList;
         } else {
