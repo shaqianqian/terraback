@@ -56,27 +56,12 @@ public class AlarmeController {
 
     }
 
-    @RequestMapping(value = "/addAlarme", method = RequestMethod.POST)
+    @RequestMapping(value = "/getConfigNotification", method = RequestMethod.GET)
 
-    public ResultVO<Lumiere> addAlarme(@RequestBody Alarme alarme) {
-
-        return ResultUtil.success(alarmeRepository.save(alarme));
-
+    public ResultVO<List<Alarme>> getConfigNotification() {
+        return ResultUtil.success(alarmeRepository.findAll());
     }
 
-    @RequestMapping(value = "/sendEmailTemperature", method = RequestMethod.GET)
-
-    public ResultVO alarmeTemperature() {
-        return ResultUtil.success(alarmeService.alarmeTemperature());
-    }
-
-
-    @RequestMapping(value = "/sendEmailHygrometrie", method = RequestMethod.GET)
-
-    public ResultVO alarmeHygrometrie() {
-
-        return ResultUtil.success(alarmeService.alarmeHygrometrie());
-    }
 
     @RequestMapping(value = "/configNotification", method = RequestMethod.POST)
 

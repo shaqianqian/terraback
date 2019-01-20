@@ -80,11 +80,16 @@ public class ScheduledTask {
         if (pulverisationInterrupeur.getMode().equals("hygrometrie")) {
             pulverisationService.pulverisationModeHygrometrie();
         }
-        alarmeService.alarmeHygrometrie();
-        alarmeService.alarmeTemperature();
+
         isFirstChauffage = false;
         isFirstLumiere = false;
 
+    }
+    @Scheduled(fixedRate = 60000)
+    //30s une fois
+    public void notification() {
+        alarmeService.alarmeHygrometrie();
+        alarmeService.alarmeTemperature();
     }
 
     @Scheduled(cron = "0 0 0 1 * ?")  //cron接受cron表达式，根据cron表达式确定定时规则

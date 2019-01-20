@@ -11,7 +11,7 @@ mydb = mysql.connector.connect(
 print(mydb)
 def fun_timer():
     temperature=str(round(random.uniform(30,37),2))
-    humidity=str(round(random.uniform(50,100),2))
+    humidity=str(round(random.uniform(60,80),2))
     print("temperature: "+temperature+" humidite: "+humidity)
     global mycursor
     mycursor = mydb.cursor()
