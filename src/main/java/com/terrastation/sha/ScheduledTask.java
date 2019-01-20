@@ -9,6 +9,7 @@ import com.terrastation.sha.Repositary.InterrupteurRepository;
 import com.terrastation.sha.Repositary.PulverisationInterrupeurRepository;
 import com.terrastation.sha.Repositary.PulverisationRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
+import com.terrastation.sha.Service.AlarmeService;
 import com.terrastation.sha.Service.DynamicTaskService;
 import com.terrastation.sha.Service.InterrupteurService;
 import com.terrastation.sha.Service.PulverisationService;
@@ -39,6 +40,9 @@ public class ScheduledTask {
     private InterrupteurRepository interrupteurRepository;
     @Autowired
     private PulverisationInterrupeurRepository pulverisationInterrupeurRepository;
+
+    @Autowired
+    private AlarmeService alarmeService;
 
     static Boolean isFirstChauffage = true;
     static Boolean isFirstLumiere = true;
@@ -76,6 +80,8 @@ public class ScheduledTask {
         if (pulverisationInterrupeur.getMode().equals("hygrometrie")) {
             pulverisationService.pulverisationModeHygrometrie();
         }
+        alarmeService.alarmeHygrometrie();
+        alarmeService.alarmeTemperature();
         isFirstChauffage = false;
         isFirstLumiere = false;
 
