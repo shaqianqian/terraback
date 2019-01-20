@@ -42,13 +42,13 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
 
         }
-//        Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
+         Terrarium hum_max = terrariumRepositary.findMaxHumidites(quantite);
 //        TerrariumGenereVO humiditeVO_max = new TerrariumGenereVO();
 //        humiditeVO_max.setT(hum_max.getCreateTime());
 //        humiditeVO_max.setY(hum_max.getHumidite());
 //
 //
-//        Terrarium hum__min = terrariumRepositary.findMinHumidites(quantite);
+        Terrarium hum_min = terrariumRepositary.findMinHumidites(quantite);
 //        TerrariumGenereVO humiditeVO_min = new TerrariumGenereVO();
 //        humiditeVO_min.setT(hum__min.getCreateTime());
 //        humiditeVO_min.setY(hum__min.getHumidite());
@@ -74,6 +74,8 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
         humiditesVO.setName("Humidite");
+        humiditesVO.setMax(hum_max.getHumidite());
+        humiditesVO.setMin(hum_min.getHumidite());
 
 
         return humiditesVO;
@@ -93,14 +95,14 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             terraiumListVO.add(temperatureVO);
 
         }
-//        Terrarium temp_max = terrariumRepositary.findMaxTemperatures(quantite);
+        Terrarium temp_max = terrariumRepositary.findMaxTemperatures(quantite);
 //        TerrariumGenereVO tempVO_max = new TerrariumGenereVO();
 //        tempVO_max.setT(temp_max.getCreateTime());
 //        tempVO_max.setY(temp_max.getTemperature());
 //
 //
 //
-//        Terrarium temp_min = terrariumRepositary.findMinTemperatures(quantite);
+        Terrarium temp_min = terrariumRepositary.findMinTemperatures(quantite);
 //        TerrariumGenereVO tempVO_min = new TerrariumGenereVO();
 //        tempVO_min.setT(temp_min.getCreateTime());
 //        tempVO_min.setY(temp_min.getTemperature());
@@ -111,7 +113,8 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
         temperaturesVO.setSymbol("°C");
         Interrupteur chauffage=interrupteurService.getControleInterrupteur("chauffage");
-
+        temperaturesVO.setMax(temp_max.getTemperature());
+        temperaturesVO.setMin(temp_min.getTemperature());
         if(chauffage.isEtat()){
             temperaturesVO.setIsOn("true");
         }

@@ -13,6 +13,8 @@ public class TerrariumsGenereVO {
    private String isProg;
    private String isOn;
    private  List<TerrariumGenereVO> Values;
+   private double min;
+   private double max;
 
 
 
