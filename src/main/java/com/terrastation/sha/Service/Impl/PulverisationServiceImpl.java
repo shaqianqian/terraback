@@ -30,7 +30,7 @@ public class PulverisationServiceImpl implements PulverisationService {
 
 
     public void pulverisationModeHygrometrie() {
-        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
+        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter().get(0);
 
         if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
             log.info("vous avez pas encore configurez le pulverisation en mode hygrometrie ");

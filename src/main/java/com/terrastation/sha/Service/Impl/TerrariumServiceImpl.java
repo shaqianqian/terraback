@@ -22,7 +22,7 @@ public class TerrariumServiceImpl implements TerrariumService {
 
     public int getRowQuantity(){return terrariumRepositary.getRowQuantity();}
     public Terrarium getCurrentParameter(){
-        return terrariumRepositary.getCurrentParameter();
+        return terrariumRepositary.getCurrentParameter().get(0);
     }
     public Optional<Terrarium> findById(Integer Id) {
         return terrariumRepositary.findById(Id);

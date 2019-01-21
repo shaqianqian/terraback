@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TerrariumRepositary extends JpaRepository<Terrarium,Integer> {
     @Query(value = "select *  from runoob_db.terrarium where (select max(create_time) from runoob_db.terrarium )=create_time ", nativeQuery = true)
-    public Terrarium getCurrentParameter();
+    public List<Terrarium>  getCurrentParameter();
 
 
     @Query(value = "SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1 ; ", nativeQuery = true)

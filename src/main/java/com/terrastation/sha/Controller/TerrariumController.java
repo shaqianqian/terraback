@@ -12,6 +12,7 @@ import com.terrastation.sha.Service.TerrariumService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.*;
 import com.terrastation.sha.Enums.ResultEnum;
+import jnr.ffi.annotations.In;
 import org.aspectj.weaver.ast.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,6 +199,7 @@ public class TerrariumController {
         return ResultUtil.success(terrariumService.getCurrentParameters(quantite));
 
     }
+
     @RequestMapping(value = "/getCurrentParametresVO", method = RequestMethod.GET)
 
     public ResultVO<TerrariumsSensorVO> getCurrentParametresVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
@@ -238,6 +240,7 @@ public class TerrariumController {
         return ResultUtil.success(sensorVO);
 
     }
+
     @RequestMapping(value = "/getDonneeUneSemaine", method = RequestMethod.GET)
 
     public List<Terrarium> getDonneeUneSemaine() {
@@ -291,6 +294,7 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
+
     @RequestMapping(value = "/getDonneeUnMois", method = RequestMethod.GET)
 
     public List<Terrarium> getDonneeUnMois() {
@@ -344,6 +348,35 @@ public class TerrariumController {
         return ResultUtil.success(terraiumsGenereVO);
 
     }
+
+    @RequestMapping(value = "/getMode", method = RequestMethod.GET)
+
+    public ResultVO<List<Interrupteur>> getModes() {
+        Interrupteur chauffage = interrupteurService.getControleInterrupteur("chauffage");
+        Interrupteur lumiere = interrupteurService.getControleInterrupteur("lumiere");
+        List<Interrupteur> interrupteurs = new ArrayList<Interrupteur>();
+        interrupteurs.add(chauffage);
+        interrupteurs.add(lumiere);
+        return ResultUtil.success(interrupteurs);
+
+    }
+
+    @RequestMapping(value = "/getMode/{id}", method = RequestMethod.GET)
+
+    public ResultVO<Interrupteur> getModesById(@PathVariable(value = "id") int index) {
+        Interrupteur chauffage = interrupteurService.getControleInterrupteur("chauffage");
+        Interrupteur lumiere = interrupteurService.getControleInterrupteur("lumiere");
+        if (index == chauffage.getId()) {
+            return ResultUtil.success(chauffage);
+
+        } else if (index == lumiere.getId()) {
+            return ResultUtil.success(lumiere);
+        } else {
+            return ResultUtil.success(null);
+        }
+    }
+
+
 
     @ControllerAdvice
     public class ExceptionHandle {

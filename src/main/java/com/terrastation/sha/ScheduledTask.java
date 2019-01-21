@@ -50,7 +50,7 @@ public class ScheduledTask {
     @Scheduled(fixedRate = 30000)
     //30s une fois
     public void reportCurrentTime() {
-        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
+        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter().get(0);
         Interrupteur chauffageInterrupeur = interrupteurService.getControleInterrupteur("chauffage");
         if (chauffageInterrupeur.isProg()) {
             interrupteurService.InterrupterProgrammableChauffage("chauffage");

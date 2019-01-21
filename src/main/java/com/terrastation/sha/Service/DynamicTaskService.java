@@ -65,7 +65,7 @@ public class DynamicTaskService {
         future = threadPoolTaskScheduler.schedule(new Runnable() {
             @Override
             public void run() {
-                Terrarium terrarium_current = terrariumRepositary.getCurrentParameter();
+                Terrarium terrarium_current = terrariumRepositary.getCurrentParameter().get(0);
                 log.info("vous controlez le pulverisation en mode horaire ,Humidite courant est " + terrarium_current.getHumidite());
                 String heures = pulverisation.getPulverisationheure().get(0).getHeure() + "";
                 Calendar c = Calendar.getInstance();
