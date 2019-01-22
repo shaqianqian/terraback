@@ -192,6 +192,17 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             temperaturesVO.setIsProg("true");
         }
         else{ temperaturesVO.setIsProg("false");}
+        Optional<Alarme> temperatureAlarmeOptional=alarmeRepository.findByType("temperature");
+        if(temperatureAlarmeOptional.isPresent()){
+            Alarme alarme=temperatureAlarmeOptional.get();
+            temperaturesVO.setMax(alarme.getMax());
+            temperaturesVO.setMin(alarme.getMin());
+        }
+        else{
+            temperaturesVO.setMax(-1);
+            temperaturesVO.setMin(-1);
+
+        }
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");
@@ -223,6 +234,17 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             humiditesVO.setIsProg("true");
         }
         else{ humiditesVO.setIsProg("false");}
+        Optional<Alarme> humiditeAlarmeOptional=alarmeRepository.findByType("hygrometrie");
+        if(humiditeAlarmeOptional.isPresent()){
+            Alarme alarme=humiditeAlarmeOptional.get();
+            humiditesVO.setMax(alarme.getMax());
+            humiditesVO.setMin(alarme.getMin());
+        }
+        else{
+            humiditesVO.setMax(-1);
+            humiditesVO.setMin(-1);
+
+        }
         humiditesVO.setSymbol("%");
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
@@ -269,6 +291,17 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             temperaturesVO.setIsProg("true");
         }
         else{ temperaturesVO.setIsProg("false");}
+        Optional<Alarme> temperatureAlarmeOptional=alarmeRepository.findByType("temperature");
+        if(temperatureAlarmeOptional.isPresent()){
+            Alarme alarme=temperatureAlarmeOptional.get();
+            temperaturesVO.setMax(alarme.getMax());
+            temperaturesVO.setMin(alarme.getMin());
+        }
+        else{
+            temperaturesVO.setMax(-1);
+            temperaturesVO.setMin(-1);
+
+        }
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");
@@ -300,6 +333,17 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             humiditesVO.setIsProg("true");
         }
         else{ humiditesVO.setIsProg("false");}
+        Optional<Alarme> humiditeAlarmeOptional=alarmeRepository.findByType("hygrometrie");
+        if(humiditeAlarmeOptional.isPresent()){
+            Alarme alarme=humiditeAlarmeOptional.get();
+            humiditesVO.setMax(alarme.getMax());
+            humiditesVO.setMin(alarme.getMin());
+        }
+        else{
+            humiditesVO.setMax(-1);
+            humiditesVO.setMin(-1);
+
+        }
         humiditesVO.setSymbol("%");
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
