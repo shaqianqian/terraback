@@ -1,6 +1,8 @@
 package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.Entity.Interrupteur;
+import com.terrastation.sha.Entity.Lumiere;
+import com.terrastation.sha.Entity.Profil;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Exception.ParameterErrorException;
@@ -17,10 +19,21 @@ import org.aspectj.weaver.ast.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.terrastation.sha.Exception.TerraiumException;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +41,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/terrarium")
 public class TerrariumController {
+
     Logger log = LoggerFactory.getLogger(TerrariumController.class);
 
     @Autowired
@@ -49,6 +63,9 @@ public class TerrariumController {
     private ChauffageRepository chauffageRepositary;
     @Autowired
     private LumiereRepository lumiereRepositary;
+
+    @Autowired
+    private ProfilRepository profilRepository;
 
     /**
      * recuperer tous les parametres de terraium
@@ -376,6 +393,72 @@ public class TerrariumController {
         }
     }
 
+
+    /**
+     * 文件上传具体实现方法;
+     *
+     * @param file
+     * @return
+     */
+    @RequestMapping("/upload")
+    @ResponseBody
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                BufferedOutputStream out = new BufferedOutputStream(
+
+                new FileOutputStream(new File(
+                               "../static/profil.jpg")));
+                System.out.println(file.getName());
+                out.write(file.getBytes());
+                out.flush();
+                out.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return "echoueur de upload," + e.getMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "echoueur de upload," + e.getMessage();
+            }
+            log.info("upload successfully");
+            return "upload successfully";
+
+        } else {
+            log.info("echoueur de upload,le fichier est vide");
+            return "echoueur de upload,le fichier est vide.";
+
+        }
+    }
+
+    @RequestMapping(value = "/getImage", method = RequestMethod.GET,produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[]  chargeImage() throws IOException {
+        File file = new File("../static/profil.jpg");
+        if (file.exists()) {
+            log.info("vous avez  donne le photo");
+            FileInputStream inputStream = new FileInputStream(file);
+
+            byte[] bytes = new byte[inputStream.available()];
+
+            inputStream.read(bytes, 0, inputStream.available());
+
+            return bytes;
+
+           // return "http://127.0.0.1:8080/profil.jpg";
+        } else {
+            log.info("vous avez pas encore donner le photo");
+            return null;
+        }
+
+
+
+
+//        if (file.exists()) {
+//            return "http://127.0.0.1:8080/profil.jpg";
+//        } else {
+//            return "vous avez pas encore donner le photo";
+//        }
+          }
 
 
     @ControllerAdvice
