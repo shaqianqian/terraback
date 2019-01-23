@@ -200,6 +200,11 @@ public class TerrariumController {
 
     }
 
+    /**
+     * recuperer les donnees de tous les sensors pour les graphe
+     * @param quantite
+     * @return
+     */
     @RequestMapping(value = "/getParametres", method = RequestMethod.GET)
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();
@@ -215,6 +220,13 @@ public class TerrariumController {
 
     }
 
+    /**
+     * recuperer les donnees de tous les sensors pour les graphe by id
+     * @param index
+     * @param quantite
+     * @return
+     */
+
     @RequestMapping(value = "/getParametres/{id}", method = RequestMethod.GET)
     public ResultVO<SensorVO> getCurrentParametresGenereVOById(@PathVariable(value = "id") int index, @RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
         SensorVO sensorVO = new SensorVO();
@@ -226,7 +238,11 @@ public class TerrariumController {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //recuperer tous les lignes recentes des parametres
+    /**
+     * recuperer tous les lignes recentes des parametres
+     * @param quantite
+     * @return
+     */
     @RequestMapping(value = "/getCurrentParametres", method = RequestMethod.GET)
     public ResultVO<List<Terrarium>> getCurrentParametres(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
 
@@ -275,13 +291,17 @@ public class TerrariumController {
 
     }
 
+
     @RequestMapping(value = "/getDonneeUneSemaine", method = RequestMethod.GET)
 
     public List<Terrarium> getDonneeUneSemaine() {
         List<Terrarium> terrariums = terrariumGenereService.getDonneeUneSemaine();
         return terrariums;
     }
-
+    /**
+     * recuperer les donnes d'une semaine
+     * @return
+     */
     @RequestMapping(value = "/getParametresUneSemaine", method = RequestMethod.GET)
 
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUneSemaine() {
@@ -335,7 +355,10 @@ public class TerrariumController {
         List<Terrarium> terrariums = terrariumGenereService.getDonneeUnMois();
         return terrariums;
     }
-
+    /**
+     * recuperer les donnes d'un mois
+     * @return
+     */
     @RequestMapping(value = "/getParametresUnMois", method = RequestMethod.GET)
 
     public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUnMois() {

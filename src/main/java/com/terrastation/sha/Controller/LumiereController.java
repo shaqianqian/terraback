@@ -39,7 +39,10 @@ public class LumiereController {
     @Autowired
     private InterrupteurRepository interrupteurRepository;
 
-
+    /**
+     * recuperer la configuration en mode programmable de la lumiere
+     * @return
+     */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
 
     public ResultVO<List<Lumiere>> findall() {
@@ -87,7 +90,11 @@ public class LumiereController {
         return ResponseEntity.ok().build();
     }
 
-
+    /**
+     * modifier toute la configuration de la lumiere
+     * @param lumieres
+     * @return
+     */
     @PostMapping("/UpdateAll")
     public ResultVO<List<Lumiere>> updateAll(@RequestBody List<Lumiere> lumieres) {
         if (!TimeOverlappingintervals.analyeMoisLumiere(lumieres)) {
@@ -122,6 +129,12 @@ public class LumiereController {
         return ResultUtil.success("Vous avez supprime toute la configuration de lumiere");
     }
 
+
+    /**
+     * modifier toute la configuration de la lumiere pour toute l'annee
+     * @param lumieres
+     * @return
+     */
     @PostMapping("/UpdateTouteLannee")
     public ResultVO<List<Lumiere>> updateTouteLannee(@RequestBody List<Lumiere> lumieres) {
 
@@ -151,7 +164,11 @@ public class LumiereController {
         return ResultUtil.success(lumiereRepository.findAll());
     }
 
-    //get l'etat de chauffage
+
+    /**
+     * get l'etat de chauffage
+     * @return
+     */
     @RequestMapping(value = "/getEtatLumiere", method = RequestMethod.GET)
     public ResultVO<Interrupteur> getEtatInterrupterLumiere() {
         Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
@@ -159,7 +176,11 @@ public class LumiereController {
 
     }
 
-    //change le facon de controler le interrupteur
+
+    /**
+     * change le facon de controler le interrupteur
+     * @return
+     */
     @RequestMapping(value = "/changeControleInterrupteur", method = RequestMethod.GET)
     public ResultVO<Interrupteur> changeControleInterrupteurLumiere() {
         Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
@@ -170,7 +191,11 @@ public class LumiereController {
 
     }
 
-    //change l'etat de la lumiere quand il est controle manuellement
+
+    /**
+     * change l'etat de la lumiere quand il est controle manuellement
+     * @return
+     */
     @RequestMapping(value = "/changeEtatInterrupteurManuellement", method = RequestMethod.GET)
     public ResultVO<Interrupteur> changeEtatInterrupteurManuellement() {
         Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
