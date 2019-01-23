@@ -44,7 +44,9 @@ public class AlarmeServiceImpl implements AlarmeService {
 
     Logger log = LoggerFactory.getLogger(AlarmeController.class);
 
-
+    /**
+     * Send an information alert to the user
+     */
     public void send(String Notification) {
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -55,7 +57,10 @@ public class AlarmeServiceImpl implements AlarmeService {
         mailSender.send(message);
 
     }
-
+    /**
+     * Send an information alert to the user
+     * @return
+     */
     public List<Terrarium> alarmeTemperature() {
 
         Optional<Alarme> alarmeOptional = alarmeRepository.findByType("temperature");
@@ -79,13 +84,13 @@ public class AlarmeServiceImpl implements AlarmeService {
             double min_Temperature = terrariumList.get(0).getTemperature();
             log.info("min_temperature is " + min_Temperature);
             if (max_Temperature - min_Temperature > alarme.getVariation()) {
-                this.send("La temperature change trop vite," + alarme.getMessage());
+                this.send(alarme.getMessage()+"La temperature change trop vite," );
                 log.info("send a email" + alarme.getMessage());
             } else if (terrarium.getTemperature() > alarme.getMax()) {
-                this.send("La temperature est trop chaud," + alarme.getMessage());
+                this.send(alarme.getMessage()+"La temperature est trop chaud," );
                 log.info("send a email" + alarme.getMessage());
             } else if (terrarium.getTemperature() < alarme.getMin()) {
-                this.send("La temperature est trop froid," + alarme.getMessage());
+                this.send(alarme.getMessage()+"La temperature est trop froid," );
                 log.info("send a email" + alarme.getMessage());
 
             }
@@ -98,6 +103,10 @@ public class AlarmeServiceImpl implements AlarmeService {
 
     }
 
+    /**
+     * Send an information alert to the user
+     * @return
+     */
     public List<Terrarium> alarmeHygrometrie() {
         Optional<Alarme> alarmeOptional = alarmeRepository.findByType("hygrometrie");
         if (alarmeOptional.isPresent()) {
@@ -134,7 +143,10 @@ public class AlarmeServiceImpl implements AlarmeService {
         }
     }
 
-
+    /**
+     *Sort the temperature from small to large
+     * @param list
+     */
     private void sortListByTemperature(List<Terrarium> list) {
         Collections.sort(list, new Comparator<Terrarium>() {
             @Override
@@ -150,6 +162,10 @@ public class AlarmeServiceImpl implements AlarmeService {
         });
     }
 
+    /**
+     * Sort the air humidity from small to large
+     * @param list
+     */
     private void sortListByHumidity(List<Terrarium> list) {
         Collections.sort(list, new Comparator<Terrarium>() {
             @Override

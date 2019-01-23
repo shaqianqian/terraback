@@ -98,7 +98,15 @@ public class TerrariumController {
 
     }
 
-//modifier une ligne de parametre au terraium
+
+
+    /**
+     * modifier une ligne de parametre de terrarium
+     * @param terraiumId
+     * @param temperature
+     * @param humidite
+     * @return
+     */
 
     @PutMapping(value = "/update/{id}")
     public ResultVO<Terrarium> updateTerraium(@PathVariable(value = "id") int terraiumId,
@@ -126,7 +134,12 @@ public class TerrariumController {
         return ResultUtil.success(terrariumService.save(terraiumNew));
     }
 
-    //supprimer une ligne de parametre au terraium
+
+    /**
+     * supprimer une ligne de parametre au terraium
+     * @param noteId
+     * @return
+     */
     @DeleteMapping("/delete/{id}")
     public ResultVO<String> deleteTerraium(@PathVariable(value = "id") int noteId) {
         Optional<Terrarium> terraiumOriginal = terrariumService.findById(noteId);
@@ -141,7 +154,11 @@ public class TerrariumController {
 
     }
 
-    //recuperer tous le plus recente des parametres
+
+    /**
+     * recuperer tous le plus recente des parametres
+     * @return
+     */
     @RequestMapping(value = "/getCurrentParametre", method = RequestMethod.GET)
 
     public ResultVO<List<TerrariumCurrentVO>> getCurrentParametresGenereVO() {
@@ -366,36 +383,36 @@ public class TerrariumController {
 
     }
 
-    @RequestMapping(value = "/getMode", method = RequestMethod.GET)
-
-    public ResultVO<List<Interrupteur>> getModes() {
-        Interrupteur chauffage = interrupteurService.getControleInterrupteur("chauffage");
-        Interrupteur lumiere = interrupteurService.getControleInterrupteur("lumiere");
-        List<Interrupteur> interrupteurs = new ArrayList<Interrupteur>();
-        interrupteurs.add(chauffage);
-        interrupteurs.add(lumiere);
-        return ResultUtil.success(interrupteurs);
-
-    }
-
-    @RequestMapping(value = "/getMode/{id}", method = RequestMethod.GET)
-
-    public ResultVO<Interrupteur> getModesById(@PathVariable(value = "id") int index) {
-        Interrupteur chauffage = interrupteurService.getControleInterrupteur("chauffage");
-        Interrupteur lumiere = interrupteurService.getControleInterrupteur("lumiere");
-        if (index == chauffage.getId()) {
-            return ResultUtil.success(chauffage);
-
-        } else if (index == lumiere.getId()) {
-            return ResultUtil.success(lumiere);
-        } else {
-            return ResultUtil.success(null);
-        }
-    }
+//    @RequestMapping(value = "/getMode", method = RequestMethod.GET)
+//
+//    public ResultVO<List<Interrupteur>> getModes() {
+//        Interrupteur chauffage = interrupteurService.getControleInterrupteur("chauffage");
+//        Interrupteur lumiere = interrupteurService.getControleInterrupteur("lumiere");
+//        List<Interrupteur> interrupteurs = new ArrayList<Interrupteur>();
+//        interrupteurs.add(chauffage);
+//        interrupteurs.add(lumiere);
+//        return ResultUtil.success(interrupteurs);
+//
+//    }
+//
+//    @RequestMapping(value = "/getMode/{id}", method = RequestMethod.GET)
+//
+//    public ResultVO<Interrupteur> getModesById(@PathVariable(value = "id") int index) {
+//        Interrupteur chauffage = interrupteurService.getControleInterrupteur("chauffage");
+//        Interrupteur lumiere = interrupteurService.getControleInterrupteur("lumiere");
+//        if (index == chauffage.getId()) {
+//            return ResultUtil.success(chauffage);
+//
+//        } else if (index == lumiere.getId()) {
+//            return ResultUtil.success(lumiere);
+//        } else {
+//            return ResultUtil.success(null);
+//        }
+//    }
 
 
     /**
-     * 文件上传具体实现方法;
+     * the method to upload a file;
      *
      * @param file
      * @return
@@ -430,6 +447,11 @@ public class TerrariumController {
         }
     }
 
+    /**
+     * the method to get a image
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/getImage", method = RequestMethod.GET,produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[]  chargeImage() throws IOException {
