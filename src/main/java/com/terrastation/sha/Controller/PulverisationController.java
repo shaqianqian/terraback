@@ -13,6 +13,7 @@ import com.terrastation.sha.Service.DynamicTaskService;
 import com.terrastation.sha.Service.TerrariumService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.Util.TimeOverlappingintervals;
+import com.terrastation.sha.VO.PulverisationVO;
 import com.terrastation.sha.VO.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +90,40 @@ public class PulverisationController {
 
             return ResultUtil.success(pulverisationRepository.findByMode("hygrometrie").get());
         }
+
+
+    }
+
+
+    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+
+    public ResultVO<List<PulverisationVO>> getAll() {
+        List<PulverisationVO> pulverisationVOS=new ArrayList<PulverisationVO>();
+        PulverisationVO pulverisationHygrometrieVO=new PulverisationVO();
+        if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
+            log.info("Vous configurez pas encore pulverisation en mode hygrometrie");
+            pulverisationHygrometrieVO.setMode("hygrometrie");
+            pulverisationHygrometrieVO.setPulverisationList(null);
+        }
+        else {
+            pulverisationHygrometrieVO.setMode("hygrometrie");
+            pulverisationHygrometrieVO.setPulverisationList(pulverisationRepository.findByMode("hygrometrie").get());
+
+        }
+        PulverisationVO pulverisationHoraireVO=new PulverisationVO();
+        if (!pulverisationRepository.findByMode("horaire").isPresent()) {
+            log.info("Vous configurez pas encore pulverisation en mode horaire");
+            pulverisationHoraireVO.setMode("horaire");
+            pulverisationHoraireVO.setPulverisationList(null);
+        }
+        else {
+            pulverisationHoraireVO.setMode("horaire");
+            pulverisationHoraireVO.setPulverisationList(pulverisationRepository.findByMode("horaire").get());
+        }
+
+       pulverisationVOS.add(pulverisationHoraireVO);
+        pulverisationVOS.add(pulverisationHygrometrieVO);
+        return ResultUtil.success(pulverisationVOS);
 
 
     }
