@@ -90,7 +90,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
     }
 
-    public void InitInterrupterManuelleChauffage() {
+    public void InitInterrupterChauffage() {
         Interrupteur interrupteur = getControleInterrupteur("chauffage");
 
         if (interrupteur.isEtat()) {
@@ -313,7 +313,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             log.info("Votre lumiere est eteint, il est controlé manuellement.");
         }
     }
-    public void InitInterrupterManuelleLumiere() {
+    public void InitInterrupterLumiere() {
         Interrupteur interrupteur = getControleInterrupteur("lumiere");
         if (interrupteur.isEtat()) {
             try {

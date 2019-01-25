@@ -12,6 +12,6 @@ public interface InterrupteurService {
     public Interrupteur InterrupterProgrammableLumiere(String type);
     public Interrupteur ChangeInterrupterManuelleLumiere(boolean etat);
     public Interrupteur ChangeInterrupterManuelleChauffage(boolean etat);
-    public void InitInterrupterManuelleChauffage();
-    public void InitInterrupterManuelleLumiere();
+    public void InitInterrupterChauffage();
+    public void InitInterrupterLumiere();
 }

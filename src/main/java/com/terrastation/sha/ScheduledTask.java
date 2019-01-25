@@ -53,25 +53,31 @@ public class ScheduledTask {
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter().get(0);
         Interrupteur chauffageInterrupeur = interrupteurService.getControleInterrupteur("chauffage");
         if (chauffageInterrupeur.isProg()) {
+            if (isFirstChauffage) {
+                interrupteurService.InitInterrupterChauffage();
+            }
             interrupteurService.InterrupterProgrammableChauffage("chauffage");
         } else {
 
             if (isFirstChauffage) {
                 chauffageInterrupeur.setEtat(false);
                 interrupteurRepository.save(chauffageInterrupeur);
-                interrupteurService.InitInterrupterManuelleChauffage();
+                interrupteurService.InitInterrupterChauffage();
             }
             interrupteurService.InterrupterManuelleChauffage("chauffage");
 
         }
         Interrupteur lumiereInterrupeur = interrupteurService.getControleInterrupteur("lumiere");
         if (lumiereInterrupeur.isProg()) {
+            if (isFirstLumiere) {
+                interrupteurService.InitInterrupterLumiere();
+            }
             interrupteurService.InterrupterProgrammableLumiere("lumiere");
         } else {
             if (isFirstLumiere) {
                 lumiereInterrupeur.setEtat(false);
                 interrupteurRepository.save(lumiereInterrupeur);
-                interrupteurService.InitInterrupterManuelleLumiere();
+                interrupteurService.InitInterrupterLumiere();
 
             }
             interrupteurService.InterrupterManuelleLumiere("lumiere");
