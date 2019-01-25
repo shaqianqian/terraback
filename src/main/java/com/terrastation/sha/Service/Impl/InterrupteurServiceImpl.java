@@ -266,7 +266,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                     }
                 } else if (currentTemperature <= chauffageConfigurationCourant.getMax() && currentTemperature >= chauffageConfigurationCourant.getMin()) {
 
-                    log.info("La temperature a l'air correcte manintenant, On l'eteindre du chauffage ");
+                    log.info("La temperature a l'air correcte manintenant, On eteindre du chauffage ");
                     try {
                         log.info("START : Lancer le script du chauffage pour l'eteindre");
                         Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
@@ -288,7 +288,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
 
             } else {
                 if (chauffageInterrupteur.isEtat()) {
-                    log.info("Le temps ne correspond pas à la configuration. On l'eteindre du chauffage ");
+                    log.info("Le temps ne correspond pas à la configuration. On eteindre du chauffage ");
                     try {
                         log.info("START : Lancer le script du chauffage pour l'eteindre");
                         Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
@@ -350,6 +350,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             log.info("Votre lumiere est eteint, il est controlé manuellement.");
         }
     }
+
     public void InitInterrupterLumiere() {
         Interrupteur interrupteur = getControleInterrupteur("lumiere");
         if (interrupteur.isEtat()) {
@@ -371,6 +372,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
             }
         }
     }
+
     public Interrupteur ChangeInterrupterManuelleLumiere(boolean etat) {
 
         Interrupteur interrupteur = getControleInterrupteur("lumiere");
@@ -416,7 +418,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                 }
 
 
-            }else{
+            } else {
                 log.info("vous changez pas l'etat de lumiere");
 
 
