@@ -260,14 +260,46 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                         log.info("Le chauffage est deja allume, on ne change pas l'etat du chauffage");
                     }
                 } else if (currentTemperature <= chauffageConfigurationCourant.getMax() && currentTemperature >= chauffageConfigurationCourant.getMin()) {
-                    log.info("La temperature a l'air correcte manintenant, on ne change pas l'etat du chauffage");
 
+                    log.info("La temperature a l'air correcte manintenant, oOn l'eteindre du chauffage ");
+                    try {
+                        log.info("START : Lancer le script du chauffage pour l'eteindre");
+                        Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
+
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                        log.info("END : On a reussi à l'eteindre");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
 
             } else {
                 if (chauffageInterrupteur.isEtat()) {
-                    log.info("Le temps ne correspond pas à la configuration. On change pas l'etat du  chauffage , le chauffage reste allume");
+                    log.info("Le temps ne correspond pas à la configuration. On l'eteindre du chauffage ");
+                    try {
+                        log.info("START : Lancer le script du chauffage pour l'eteindre");
+                        Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
+
+                        BufferedReader in = new BufferedReader(new
+                                InputStreamReader(pr.getInputStream()));
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        in.close();
+                        pr.waitFor();
+                        log.info("END : On a reussi à l'eteindre");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     log.info("Le temps ne correspond pas à la configuration. On ne change pas l'etat du  chauffage, le chauffage reste eteint");
 
