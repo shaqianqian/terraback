@@ -115,7 +115,12 @@ public class InterrupteurServiceImpl implements InterrupteurService {
         }
     }
 
-
+    /**
+     * changer l'etat du chauffage en mode manuel
+     *
+     * @param etat
+     * @return
+     */
     public Interrupteur ChangeInterrupterManuelleChauffage(boolean etat) {
         Interrupteur interrupteur = getControleInterrupteur("chauffage");
         if (!interrupteur.isProg()) {
