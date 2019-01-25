@@ -20,8 +20,5 @@ else:
     print "LED off"
     GPIO.output(17,GPIO.LOW)
 
-    print "LED off"
-    GPIO.output(17,GPIO.LOW)
-
 
 
