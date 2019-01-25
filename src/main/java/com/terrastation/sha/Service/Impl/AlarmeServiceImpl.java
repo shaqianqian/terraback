@@ -80,9 +80,9 @@ public class AlarmeServiceImpl implements AlarmeService {
             sortListByTemperature(terrariumList);
 
             double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();
-            log.info("max_temperature is " + max_Temperature);
+          //  log.info("max_temperature is " + max_Temperature);
             double min_Temperature = terrariumList.get(0).getTemperature();
-            log.info("min_temperature is " + min_Temperature);
+           // log.info("min_temperature is " + min_Temperature);
             if (max_Temperature - min_Temperature > alarme.getVariation()) {
                 this.send(alarme.getMessage()+"La temperature change trop vite," );
                 log.info("send a email" + alarme.getMessage());
@@ -123,9 +123,9 @@ public class AlarmeServiceImpl implements AlarmeService {
             sortListByHumidity(terrariumList);
 
             double max_humidity = terrariumList.get(terrariumList.size() - 1).getHumidite();
-            log.info("max_humidity is " + max_humidity);
+          //  log.info("max_humidity is " + max_humidity);
             double min_humidity = terrariumList.get(0).getHumidite();
-            log.info("min_humidity is " + min_humidity);
+           // log.info("min_humidity is " + min_humidity);
             if (max_humidity - min_humidity > alarme.getVariation()) {
                 this.send("L'humidite change trop vite," + alarme.getMessage());
                 log.info("send a email" + alarme.getMessage());
