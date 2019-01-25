@@ -208,7 +208,6 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                     break;
                 }
             }
-
             if (isChauffageConfiguration) {
                 log.info("Le MAXIMUM de temperautre est " + chauffageConfigurationCourant.getMax());
                 log.info("Le MINIMUM de temperautre est " + chauffageConfigurationCourant.getMin());
@@ -232,7 +231,6 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
 
                     } else {
                         log.info("Le chauffage est deja eteint, on ne change pas l'état du chauffage");
