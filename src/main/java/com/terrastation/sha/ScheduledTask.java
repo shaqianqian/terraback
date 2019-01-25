@@ -43,10 +43,8 @@ public class ScheduledTask {
 
     @Autowired
     private AlarmeService alarmeService;
-
     static Boolean isFirstChauffage = true;
     static Boolean isFirstLumiere = true;
-
     @Scheduled(fixedRate = 30000)
     //30s une fois
     public void reportCurrentTime() {
@@ -98,7 +96,10 @@ public class ScheduledTask {
         alarmeService.alarmeTemperature();
     }
 
-    @Scheduled(cron = "0 0 0 1 * ?")  //cron接受cron表达式，根据cron表达式确定定时规则
+    /**
+     * cron接受cron表达式，根据cron表达式确定定时规则
+     */
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void chaqueMoisTaskServiceCron() {
         if (pulverisationRepository.findByMode("horaire").isPresent()) {
             List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("horaire").get();
@@ -116,6 +117,10 @@ public class ScheduledTask {
 
     }
 
+    /**
+     * Activite le cron
+     * @param pulverisation
+     */
     public void activeCron(Pulverisation pulverisation) {
         PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
         if (pulverisationInterrupeur.getMode().equals("horaire")) {
