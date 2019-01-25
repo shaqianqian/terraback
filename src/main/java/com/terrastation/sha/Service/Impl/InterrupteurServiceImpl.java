@@ -261,7 +261,7 @@ public class InterrupteurServiceImpl implements InterrupteurService {
                     }
                 } else if (currentTemperature <= chauffageConfigurationCourant.getMax() && currentTemperature >= chauffageConfigurationCourant.getMin()) {
 
-                    log.info("La temperature a l'air correcte manintenant, oOn l'eteindre du chauffage ");
+                    log.info("La temperature a l'air correcte manintenant, On l'eteindre du chauffage ");
                     try {
                         log.info("START : Lancer le script du chauffage pour l'eteindre");
                         Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
