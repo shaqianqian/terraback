@@ -266,6 +266,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
 
                     log.info("La temperature a l'air correcte manintenant, On eteindre du chauffage ");
                     try {
+                        chauffageInterrupteur.setEtat(false);
+                        interrupteurRepository.save(chauffageInterrupteur);
                         log.info("START : Lancer le script du chauffage pour l'eteindre");
                         Process pr = Runtime.getRuntime().exec("python ../python/chauffage_test.py 0");
 
@@ -286,6 +288,8 @@ public class InterrupteurServiceImpl implements InterrupteurService {
 
             } else {
                 if (chauffageInterrupteur.isEtat()) {
+                    chauffageInterrupteur.setEtat(false);
+                    interrupteurRepository.save(chauffageInterrupteur);
                     log.info("Le temps ne correspond pas à la configuration. On eteindre du chauffage ");
                     try {
                         log.info("START : Lancer le script du chauffage pour l'eteindre");
