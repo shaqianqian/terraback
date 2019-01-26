@@ -125,7 +125,7 @@ public class ChauffageController {
         }
 
         for (int i = 0; i < chauffages.size(); i++) {
-        if (chauffages.get(i).getHeureDebut() >= chauffages.get(i).getHeureFin() || chauffages.get(i).getMoisDebut() >= chauffages.get(i).getMoisFin() || chauffages.get(i).getMin() >= chauffages.get(i).getMax()) {
+        if (chauffages.get(i).getHeureDebut() >chauffages.get(i).getHeureFin() || chauffages.get(i).getMoisDebut() >chauffages.get(i).getMoisFin() || chauffages.get(i).getMin() >= chauffages.get(i).getMax()) {
             throw new ParameterErrorException(ResultEnum.Time_Ordre);
         }
 //            chauffages.get(i).setId(i+1);
@@ -153,7 +153,7 @@ public class ChauffageController {
         }
         for (Chauffage c : chauffages) {
             Chauffage chauffage = new Chauffage();
-            if (c.getHeureDebut() >= c.getHeureFin() || c.getMin() >= c.getMax()) {
+            if (c.getHeureDebut() > c.getHeureFin() || c.getMin() >= c.getMax()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
 

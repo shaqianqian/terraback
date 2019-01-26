@@ -107,7 +107,7 @@ public class LumiereController {
             lumiereRepository.delete(oldLumiere);
         }
         for (int i = 0; i < lumieres.size(); i++) {
-            if (lumieres.get(0).getHeureDebut() >=lumieres.get(0).getHeureFin() ||lumieres.get(0).getMoisDebut() >= lumieres.get(0).getMoisFin()) {
+            if (lumieres.get(0).getHeureDebut() >lumieres.get(0).getHeureFin() ||lumieres.get(0).getMoisDebut() >lumieres.get(0).getMoisFin()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
              lumieres.get(i).setId(0);
@@ -152,7 +152,7 @@ public class LumiereController {
         }
         for (Lumiere l : lumieres) {
             Lumiere lumiere = new Lumiere();
-            if (l.getHeureDebut() >= l.getHeureFin()) {
+            if (l.getHeureDebut() > l.getHeureFin()) {
                 throw new ParameterErrorException(ResultEnum.Time_Ordre);
             }
 

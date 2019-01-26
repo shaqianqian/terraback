@@ -145,7 +145,7 @@ public class PulverisationController {
         }
         if (!pulverisationRepository.findByMode("horaire").isPresent()) {
             for (Pulverisation pulverisation : pulverisations) {
-                if (pulverisation.getMoisFin() <= pulverisation.getMoisDebut()) {
+                if (pulverisation.getMoisFin() < pulverisation.getMoisDebut()) {
 
                     throw new ParameterErrorException(ResultEnum.Time_Ordre);
 
@@ -196,7 +196,7 @@ public class PulverisationController {
         }
         if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
             for (Pulverisation pulverisation : pulverisations) {
-                if (pulverisation.getMoisFin() <= pulverisation.getMoisDebut()) {
+                if (pulverisation.getMoisFin() < pulverisation.getMoisDebut()) {
 
                     throw new ParameterErrorException(ResultEnum.Time_Ordre);
 
