@@ -126,7 +126,17 @@ public class LumiereControllerTest {
                 .andReturn();
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
 
+    }
 
+    @Test
+    public void changeControleInterrupteurLumiere() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(get("/terrarium/lumiere/changeControleInterrupteur")
+        )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
 
     }
     }
