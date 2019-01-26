@@ -2,6 +2,10 @@ package com.terrastation.sha.Controller;
 
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.terrastation.sha.Entity.Lumiere;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,19 +47,72 @@ public class LumiereControllerTest {
         @Test
         @Transactional
         @Rollback
-        public void add() throws Exception {
+        public void addCorrectLumiere() throws Exception {
+
+            Lumiere lumiere = new Lumiere(4,5,6,7);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+            ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+            String requestJson=ow.writeValueAsString(lumiere);
+
             MvcResult mvcResult = null;
             mvcResult = mockMvc.perform(post("/terrarium/lumiere/add")
-                    .param("moisDebut","5")
-                    .param("moisFin","10")
-                    .param("heureDebut","21")
-                    .param("heureFin","23"))
-                    .andExpect(status().is4xxClientError())
+                    .contentType(APPLICATION_JSON)
+                    .content(requestJson)
+                    .accept(APPLICATION_JSON))
+                    .andExpect(status().is2xxSuccessful())
                     .andDo(MockMvcResultHandlers.print())
                     .andReturn();
 
             System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
 
         }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void addLumieremoisMoisDebutError() throws Exception {
+        Lumiere lumiere = new Lumiere(6,5,6,7);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(lumiere);
+
+        MvcResult mvcResult = null;
+        mvcResult = mockMvc.perform(post("/terrarium/lumiere/add")
+                .contentType(APPLICATION_JSON)
+                .content(requestJson)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().is5xxServerError())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void addLumieremoisheureDebutError() throws Exception {
+        Lumiere lumiere = new Lumiere(4,5,9,7);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(lumiere);
+
+        MvcResult mvcResult = null;
+        mvcResult = mockMvc.perform(post("/terrarium/lumiere/add")
+                .contentType(APPLICATION_JSON)
+                .content(requestJson)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().is5xxServerError())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+    }
     }
 

@@ -23,6 +23,17 @@ public class Lumiere {
 
     private int heureFin ;
 
+    public Lumiere(int moisDebut, int moisFin, int heureDebut, int heureFin) {
+        this.moisDebut = moisDebut;
+        this.moisFin = moisFin;
+        this.heureDebut = heureDebut;
+        this.heureFin = heureFin;
+    }
+
+    public Lumiere() {
+
+    }
+
     public void setMoisDebut(int moisDebut) {
         if (moisDebut > 12 || moisDebut < 1) {
             throw new ParameterErrorException(ResultEnum.Mois_range);
