@@ -83,7 +83,7 @@ public class ChauffageControllerTest {
                 .param("heureFin","20")
                 .param("min","20")
                 .param("max","30"))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
