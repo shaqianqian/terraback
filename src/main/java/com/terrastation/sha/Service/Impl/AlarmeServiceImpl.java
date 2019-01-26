@@ -42,7 +42,7 @@ public class AlarmeServiceImpl implements AlarmeService {
     @Autowired
     private TerrariumService terrariumService;
 
-    Logger log = LoggerFactory.getLogger(AlarmeController.class);
+    Logger log = LoggerFactory.getLogger(AlarmeService.class);
 
     /**
      * Send an information alert to the user
@@ -74,7 +74,6 @@ public class AlarmeServiceImpl implements AlarmeService {
             Date debut = new Date();
 
             debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
-            log.info("debut is " + debut.toString());
             String debutString = df.format(debut);
             List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
             sortListByTemperature(terrariumList);
@@ -117,7 +116,6 @@ public class AlarmeServiceImpl implements AlarmeService {
             Alarme alarme = alarmeRepository.findByType("hygrometrie").get();
             Date debut = new Date();
             debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());
-            log.info("debut is " + debut.toString());
             String debutString = df.format(debut);
             List<Terrarium> terrariumList = terrariumRepositary.variation(debutString, currentString);
             sortListByHumidity(terrariumList);
