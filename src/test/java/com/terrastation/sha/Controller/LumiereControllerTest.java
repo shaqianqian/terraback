@@ -24,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.transaction.Transactional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -112,6 +113,20 @@ public class LumiereControllerTest {
                 .andReturn();
 
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    public void getEtatInterrupterLumiere() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(get("/terrarium/lumiere/getEtatLumiere")
+        )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+
 
     }
     }
