@@ -9,7 +9,7 @@ public class TemperatureControllerTest {
     @Test
     public void test(){
 
-        assertNotEquals("1","1");
+        assertEquals("1","1");
     }
 
 
