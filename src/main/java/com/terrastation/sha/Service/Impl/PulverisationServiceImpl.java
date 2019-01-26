@@ -74,7 +74,7 @@ public class PulverisationServiceImpl implements PulverisationService {
                         e.printStackTrace();
                     }
                 } else {
-
+                    log.info("Le min taux de hygrometrie est "+ pulverisation.getTaux_hygrometrie_min());
                     log.info("La humidite a l'air correcte maintenant, on ne lance pas la pulverisation");
                 }
             } else {
