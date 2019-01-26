@@ -81,6 +81,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
     }
 
     public TerrariumsGenereVO GetCurrentTemperaturesVO(int quantite) {
+        int quantiteBd = terrariumRepositary.getRowQuantity();
         if(quantite> terrariumRepositary.getRowQuantity()){
             throw new TerraiumException(ResultEnum.QUANTITE_ERROR);}
         List<Terrarium> terraiumList = terrariumRepositary.findCurrentParameters(quantite);

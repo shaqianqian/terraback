@@ -13,6 +13,7 @@ import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.Util.TimeOverlappingintervals;
 import com.terrastation.sha.VO.ResultVO;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @RestController
 @Slf4j
@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 @RequestMapping(value = "/terrarium/lumiere")
 public class LumiereController {
 
+    Logger log = LoggerFactory.getLogger(com.terrastation.sha.Controller.LumiereController.class);
 
     @Autowired
     private LumiereRepository lumiereRepository;

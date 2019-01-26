@@ -52,10 +52,27 @@ public class Lumiere {
     }
 
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public int getMoisDebut() {
+        return moisDebut;
+    }
 
+    public int getMoisFin() {
+        return moisFin;
+    }
 
+    public int getHeureDebut() {
+        return heureDebut;
+    }
 
-
+    public int getHeureFin() {
+        return heureFin;
+    }
 }
