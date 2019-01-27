@@ -69,4 +69,16 @@ public class AlarmeControllerTest {
 
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
     }
+
+    @Test
+    public void alarmeTemperature() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(get("/terrarium/alarme/sendEmailTemperature")
+        )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+    }
 }
