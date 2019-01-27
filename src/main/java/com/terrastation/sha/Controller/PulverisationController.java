@@ -133,7 +133,103 @@ public class PulverisationController {
         else {return null;}
 
     }
+    @RequestMapping(value = "UpdateAll", method = RequestMethod.POST)
 
+    public ResultVO<List<Pulverisation>> UpdateAll(@RequestBody List<Pulverisation> pulverisations) {
+        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+        if (pulverisationInterrupeur == null) {
+            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();
+            pulverisationInterrupteur.setMode("horaire");
+            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
+            pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+        }
+
+        String mode=pulverisationInterrupeur.getMode();
+        if(mode.equals("horaire")){
+
+            if (!analyeMoisPulverisationHoraire(pulverisations)) {
+                log.info("il existe les chevauchements d'heure ou mois");
+                throw new ParameterErrorException(ResultEnum.Existe_chevauchement);
+
+            }
+            if (!pulverisationRepository.findByMode("horaire").isPresent()) {
+                for (Pulverisation pulverisation : pulverisations) {
+                    if (pulverisation.getMoisFin() < pulverisation.getMoisDebut()) {
+
+                        throw new ParameterErrorException(ResultEnum.Time_Ordre);
+
+                    }
+                    pulverisation.setMode("horaire");
+                    pulverisationRepository.save(pulverisation);
+                }
+
+            } else {
+                List<Pulverisation> old_configuration_pulverisation = pulverisationRepository.findByMode("horaire").get();
+                for (Pulverisation pulverisation : old_configuration_pulverisation) {
+                    pulverisationRepository.delete(pulverisation);
+
+                }
+                for (Pulverisation pulverisation : pulverisations) {
+                    pulverisation.setMode("horaire");
+                    pulverisationRepository.save(pulverisation);
+
+                }
+            }
+            ////////////////////////////////////////////
+            List<Pulverisation> pulverisationsNew = pulverisationRepository.findByMode("horaire").get();
+            Pulverisation pulverisationCourant = pulverisationsNew.get(0);
+            Calendar c = Calendar.getInstance();
+            int mois = c.get(Calendar.MONTH) + 1;
+            for (Pulverisation p : pulverisationsNew) {
+                if (p.getMoisDebut() <= mois && mois <= p.getMoisFin()) {
+                    pulverisationCourant = p;
+                    break;
+                }
+
+            }
+            this.activeCron(pulverisationCourant);
+            return ResultUtil.success(pulverisationsNew);
+        }
+        else if(mode.equals("hygrometrie")){
+
+            if (!analyeMoisPulverisationHygrometrie(pulverisations)) {
+                log.info("il existe les chevauchements d'heure ou mois");
+                throw new ParameterErrorException(ResultEnum.Existe_chevauchement);
+
+            }
+            if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
+                for (Pulverisation pulverisation : pulverisations) {
+                    if (pulverisation.getMoisFin() < pulverisation.getMoisDebut()) {
+
+                        throw new ParameterErrorException(ResultEnum.Time_Ordre);
+
+                    }
+                    pulverisation.setMode("hygrometrie");
+                    pulverisationRepository.save(pulverisation);
+                }
+
+            } else {
+
+
+                List<Pulverisation> old_configuration_pulverisation = pulverisationRepository.findByMode("hygrometrie").get();
+                for (Pulverisation pulverisation : old_configuration_pulverisation) {
+                    pulverisationRepository.delete(pulverisation);
+
+                }
+                for (Pulverisation pulverisation : pulverisations) {
+                    pulverisation.setMode("hygrometrie");
+                    pulverisationRepository.save(pulverisation);
+
+                }
+            }
+            List<Pulverisation> pulverisationsNew = pulverisationRepository.findByMode("hygrometrie").get();
+            return ResultUtil.success(pulverisationsNew);
+
+        }
+        return  null;
+
+
+    }
     @RequestMapping(value = "configureModeHoraire", method = RequestMethod.POST)
 
     public ResultVO<List<Pulverisation>> configureModeHoraire(@RequestBody List<Pulverisation> pulverisations) {
