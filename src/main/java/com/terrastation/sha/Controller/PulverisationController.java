@@ -138,6 +138,7 @@ public class PulverisationController {
     public ResultVO<List<Pulverisation>> UpdateAll(@RequestBody List<Pulverisation> pulverisations) {
     List<Pulverisation> configurationHeure=new ArrayList<Pulverisation>();
     List<Pulverisation> configurationHygro=new ArrayList<Pulverisation>();
+    List<Pulverisation> configurationResultat=new ArrayList<Pulverisation>();
 
         for(Pulverisation p:pulverisations){
         if(p.getMode().equals("horaire")){
@@ -196,7 +197,8 @@ public class PulverisationController {
 
             }
             this.activeCron(pulverisationCourant);
-            return ResultUtil.success(pulverisationsNew);
+            configurationResultat.addAll(pulverisationsNew);
+          //  return ResultUtil.success(pulverisationsNew);
         }
         else if(!configurationHygro.isEmpty()){
 
@@ -231,10 +233,11 @@ public class PulverisationController {
                 }
             }
             List<Pulverisation> pulverisationsNew = pulverisationRepository.findByMode("hygrometrie").get();
-            return ResultUtil.success(pulverisationsNew);
+           // return ResultUtil.success(pulverisationsNew);
+            configurationResultat.addAll(pulverisationsNew);
 
         }
-        return  null;
+        return  ResultUtil.success(configurationResultat);
 
 
     }
