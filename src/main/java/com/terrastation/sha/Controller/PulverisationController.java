@@ -136,16 +136,24 @@ public class PulverisationController {
     @RequestMapping(value = "UpdateAll", method = RequestMethod.POST)
 
     public ResultVO<List<Pulverisation>> UpdateAll(@RequestBody List<Pulverisation> pulverisations) {
-        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
-        if (pulverisationInterrupeur == null) {
-            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();
-            pulverisationInterrupteur.setMode("horaire");
-            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);
-            pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);
+    List<Pulverisation> configurationHeure=new ArrayList<Pulverisation>();
+    List<Pulverisation> configurationHygro=new ArrayList<Pulverisation>();
+
+        for(Pulverisation p:pulverisations){
+        if(p.getMode().equals("horaire")){
+            configurationHeure.add(p);
+
+        }else if(p.getMode().equals("hygrometrie")){
+            configurationHygro.add(p);
+
+        } else if(!p.getMode().equals("horaire")&&!p.getMode().equals("hygrometire")){
+
+           throw new ParameterErrorException(ResultEnum.Mode_pulverisation);
+
         }
 
-        String mode=pulverisationInterrupeur.getMode();
-        if(mode.equals("horaire")){
+    }
+        if(!configurationHeure.isEmpty()){
 
             if (!analyeMoisPulverisationHoraire(pulverisations)) {
                 log.info("il existe les chevauchements d'heure ou mois");
@@ -153,7 +161,7 @@ public class PulverisationController {
 
             }
             if (!pulverisationRepository.findByMode("horaire").isPresent()) {
-                for (Pulverisation pulverisation : pulverisations) {
+                for (Pulverisation pulverisation : configurationHeure) {
                     if (pulverisation.getMoisFin() < pulverisation.getMoisDebut()) {
 
                         throw new ParameterErrorException(ResultEnum.Time_Ordre);
@@ -169,7 +177,7 @@ public class PulverisationController {
                     pulverisationRepository.delete(pulverisation);
 
                 }
-                for (Pulverisation pulverisation : pulverisations) {
+                for (Pulverisation pulverisation : configurationHeure) {
                     pulverisation.setMode("horaire");
                     pulverisationRepository.save(pulverisation);
 
@@ -190,7 +198,7 @@ public class PulverisationController {
             this.activeCron(pulverisationCourant);
             return ResultUtil.success(pulverisationsNew);
         }
-        else if(mode.equals("hygrometrie")){
+        else if(!configurationHygro.isEmpty()){
 
             if (!analyeMoisPulverisationHygrometrie(pulverisations)) {
                 log.info("il existe les chevauchements d'heure ou mois");
@@ -198,7 +206,7 @@ public class PulverisationController {
 
             }
             if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
-                for (Pulverisation pulverisation : pulverisations) {
+                for (Pulverisation pulverisation : configurationHygro) {
                     if (pulverisation.getMoisFin() < pulverisation.getMoisDebut()) {
 
                         throw new ParameterErrorException(ResultEnum.Time_Ordre);
@@ -216,7 +224,7 @@ public class PulverisationController {
                     pulverisationRepository.delete(pulverisation);
 
                 }
-                for (Pulverisation pulverisation : pulverisations) {
+                for (Pulverisation pulverisation : configurationHygro) {
                     pulverisation.setMode("hygrometrie");
                     pulverisationRepository.save(pulverisation);
 
