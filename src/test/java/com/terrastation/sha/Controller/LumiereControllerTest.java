@@ -146,9 +146,23 @@ public class LumiereControllerTest {
         MvcResult mvcResult = mockMvc.perform(get("/terrarium/lumiere/changeEtatInterrupteurManuellement")
         )
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is2xxSuccessful())
                 .andReturn();
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    public void findall() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(get("/terrarium/lumiere/getAll")
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
+
+
 
     }
     }

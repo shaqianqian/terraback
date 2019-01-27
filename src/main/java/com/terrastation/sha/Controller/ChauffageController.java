@@ -15,6 +15,8 @@ import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.Util.TimeOverlappingintervals;
 import com.terrastation.sha.VO.ResultVO;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -112,6 +114,7 @@ public class ChauffageController {
 
     @PostMapping("/UpdateAll")
     public ResultVO<List<Chauffage>> updateAll(@RequestBody List<Chauffage> chauffages) {
+        Logger log = LoggerFactory.getLogger(AlarmeController.class);
         if (!TimeOverlappingintervals.analyeMoisChauffage(chauffages)) {
 
                 log.info("il existe les chevauchements d'heure ou mois");
