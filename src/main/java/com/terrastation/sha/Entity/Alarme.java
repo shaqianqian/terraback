@@ -20,6 +20,12 @@ public class Alarme {
     private double duree;
     private String message;
 
-
-
+    public Alarme(String type, double min, double max, double variation, double duree, String message) {
+        this.type = type;
+        this.min = min;
+        this.max = max;
+        this.variation = variation;
+        this.duree = duree;
+        this.message = message;
+    }
 }
