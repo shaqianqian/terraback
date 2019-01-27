@@ -49,6 +49,7 @@ public class AlarmeController {
 
     Logger log = LoggerFactory.getLogger(AlarmeController.class);
 
+
     @RequestMapping(value = "/addProfil", method = RequestMethod.POST)
 
     public ResultVO<Lumiere> addProgil(@RequestParam String email) {
