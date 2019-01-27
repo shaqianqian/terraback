@@ -1,8 +1,6 @@
 package com.terrastation.sha.Controller;
 
 import com.terrastation.sha.Entity.Interrupteur;
-import com.terrastation.sha.Entity.Lumiere;
-import com.terrastation.sha.Entity.Profil;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Exception.IdNotExistException;
 import com.terrastation.sha.Exception.ParameterErrorException;
@@ -14,26 +12,16 @@ import com.terrastation.sha.Service.TerrariumService;
 import com.terrastation.sha.Util.ResultUtil;
 import com.terrastation.sha.VO.*;
 import com.terrastation.sha.Enums.ResultEnum;
-import jnr.ffi.annotations.In;
-import org.aspectj.weaver.ast.Test;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.terrastation.sha.Exception.TerraiumException;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
