@@ -243,7 +243,7 @@ public class ChauffageController {
     }
 
     //get l'etat de chauffage
-    @RequestMapping(value = "/getEtatChauffage", method = RequestMethod.GET)
+    @RequestMapping(value = "/getEtat", method = RequestMethod.GET)
 
 
     public ResultVO<Interrupteur> getEtatChauffage() {

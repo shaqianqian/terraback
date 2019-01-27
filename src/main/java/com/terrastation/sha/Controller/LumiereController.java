@@ -169,7 +169,7 @@ public class LumiereController {
      * get l'etat de chauffage
      * @return
      */
-    @RequestMapping(value = "/getEtatLumiere", method = RequestMethod.GET)
+    @RequestMapping(value = "/getEtat", method = RequestMethod.GET)
     public ResultVO<Interrupteur> getEtatInterrupterLumiere() {
         Interrupteur interrupteur = interrupteurService.getControleInterrupteur("lumiere");
         return ResultUtil.success(interrupteur);
