@@ -39,7 +39,7 @@ public class HumiditeControllerTest {
     public void getCurrentHumiditeVOTest() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/terrarium/humidite/getCurrentHumiditesVO")
         )
-                .andExpect(status().isOk())
+                .andExpect(status().is5xxServerError())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
