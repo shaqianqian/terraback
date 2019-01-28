@@ -19,6 +19,9 @@ public class TemperatureController {
     private TerrariumSensorService terrariumSensorService;
 
 
+    @Autowired
+    private TemperatureController temperatureservice;
+
 //recuperer les temperatures recentes, maximal et minimal
     @RequestMapping(value = "/terrarium/temperature/getCurrentTemperaturesVO", method = RequestMethod.GET)
     public ResultVO<TerrariumsVO> getCurrentTemperaturesVO(@RequestParam(value = "quantite", required = false, defaultValue = "6" )int quantite) {
