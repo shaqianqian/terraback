@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import static com.terrastation.sha.Util.TimeOverlappingintervals.*;
 
-//todo update all
+
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/terrarium/pulverisation")
@@ -377,7 +377,7 @@ public class PulverisationController {
     }
 
 
-    @GetMapping("/changeMode")
+    @PostMapping("/changeMode")
     public ResultVO<PulverisationInterrupteur> changeMode(@RequestParam(value = "mode") String mode) {
 
 
