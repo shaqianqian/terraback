@@ -15,6 +15,8 @@ public class TerrariumsGenereVO {
    private  List<TerrariumGenereVO> Values;
    private double min;
    private double max;
+   private String progName;
+
 
 
 

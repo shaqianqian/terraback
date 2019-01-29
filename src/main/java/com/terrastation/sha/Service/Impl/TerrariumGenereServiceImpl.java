@@ -87,6 +87,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
         humiditesVO.setName("Humidite");
+        humiditesVO.setProgName("pulverisation");
 
 
         return humiditesVO;
@@ -149,7 +150,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");
-
+        temperaturesVO.setProgName("chauffage");
         return temperaturesVO;
 
     }
@@ -206,7 +207,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");
-
+        temperaturesVO.setProgName("chauffage");
         return temperaturesVO;
 
     }
@@ -249,7 +250,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
         humiditesVO.setName("Humidite");
-
+        humiditesVO.setProgName("pulverisation");
 
         return humiditesVO;
 
@@ -302,6 +303,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             temperaturesVO.setMin(-1);
 
         }
+        temperaturesVO.setProgName("chauffage");
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");
@@ -348,7 +350,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
         humiditesVO.setName("Humidite");
-
+        humiditesVO.setProgName("pulverisation");
 
         return humiditesVO;
 
