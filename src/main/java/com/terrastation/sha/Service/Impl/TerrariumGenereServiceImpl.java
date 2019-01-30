@@ -79,6 +79,49 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
         return maxminVO;
     }
 
+    public MaxminVO getMaxMinMoisChauffage(){
+        MaxminVO maxminVO=new MaxminVO();
+        Terrarium terrarium_current = terrariumService.getCurrentParameter();
+        Date currentTime = terrarium_current.getCreateTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentTime);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int heure = cal.get(Calendar.HOUR_OF_DAY);
+        double currentTemperature = terrarium_current.getTemperature();
+        List<Chauffage> chauffages = chauffageRepositary.findAll();
+        if (chauffages.size() == 0) {
+
+            maxminVO=new MaxminVO(-1,-1);
+
+        } else {
+            Chauffage chauffageConfigurationCourant = new Chauffage();
+            boolean isChauffageConfiguration = false;
+            for (Chauffage c : chauffages) {
+                if (c.getMoisDebut() <= month && c.getMoisFin() >= month) {
+                    chauffageConfigurationCourant = c;
+                    isChauffageConfiguration = true;
+                    break;
+                }
+            }
+            if (isChauffageConfiguration) {
+                maxminVO=new MaxminVO(chauffageConfigurationCourant.getMax(),chauffageConfigurationCourant.getMin());
+
+            }
+            else{
+                maxminVO=new MaxminVO(-1,-1);
+
+            }
+
+
+        }
+
+
+
+        return maxminVO;
+
+
+    }
+
     public MaxminVO getMaxMinPulverisation(){
         MaxminVO maxminVO=new MaxminVO();
         Terrarium terrarium_current = terrariumRepositary.getCurrentParameter().get(0);
@@ -97,6 +140,43 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             boolean isConfiguration = false;
             for (Pulverisation p : pulverisationList) {
                 if (p.getMoisDebut() <= month && p.getMoisFin() >= month && p.getHeureDebut() <= heure && heure <= p.getHeureFin()) {
+                    pulverisation = p;
+                    isConfiguration = true;
+                    break;
+                }
+            }
+            if (isConfiguration) {
+                maxminVO=new MaxminVO(pulverisation.getTaux_hygrometrie_max(),pulverisation.getTaux_hygrometrie_min());
+
+            }
+            else {
+                maxminVO=new MaxminVO(-1,-1);
+
+            }
+
+        }
+
+        return maxminVO;
+    }
+
+    public MaxminVO getMaxMinMoisPulverisation(){
+        MaxminVO maxminVO=new MaxminVO();
+        Terrarium terrarium_current = terrariumRepositary.getCurrentParameter().get(0);
+
+        if (!pulverisationRepository.findByMode("hygrometrie").isPresent()) {
+            maxminVO=new MaxminVO(-1,-1);
+
+        } else {
+            List<Pulverisation> pulverisationList = pulverisationRepository.findByMode("hygrometrie").get();
+            Date currentTime = terrarium_current.getCreateTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentTime);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int heure = cal.get(Calendar.HOUR_OF_DAY);
+            Pulverisation pulverisation = new Pulverisation();
+            boolean isConfiguration = false;
+            for (Pulverisation p : pulverisationList) {
+                if (p.getMoisDebut() <= month && p.getMoisFin() >= month ) {
                     pulverisation = p;
                     isConfiguration = true;
                     break;
@@ -289,8 +369,8 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 //            temperaturesVO.setMin(-1);
 //
 //        }
-        temperaturesVO.setMax(this.getMaxMinChauffage().getMax());
-        temperaturesVO.setMin(this.getMaxMinChauffage().getMin());
+        temperaturesVO.setMax(this.getMaxMinMoisChauffage().getMax());
+        temperaturesVO.setMin(this.getMaxMinMoisChauffage().getMin());
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
         temperaturesVO.setName("Temperature");
@@ -333,8 +413,8 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 //            humiditesVO.setMin(-1);
 //
 //        }
-        humiditesVO.setMax(this.getMaxMinPulverisation().getMax());
-        humiditesVO.setMin(this.getMaxMinPulverisation().getMin());
+        humiditesVO.setMax(this.getMaxMinMoisPulverisation().getMax());
+        humiditesVO.setMin(this.getMaxMinMoisPulverisation().getMin());
         humiditesVO.setSymbol("%");
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
@@ -381,7 +461,7 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
             temperaturesVO.setIsProg("true");
         }
         else{ temperaturesVO.setIsProg("false");}
-        Optional<Alarme> temperatureAlarmeOptional=alarmeRepository.findByType("temperature");
+ //       Optional<Alarme> temperatureAlarmeOptional=alarmeRepository.findByType("temperature");
 //        if(temperatureAlarmeOptional.isPresent()){
 //            Alarme alarme=temperatureAlarmeOptional.get();
 //            temperaturesVO.setMax(alarme.getMax());
@@ -392,8 +472,8 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 //            temperaturesVO.setMin(-1);
 //
 //        }
-        temperaturesVO.setMax(this.getMaxMinChauffage().getMax());
-        temperaturesVO.setMin(this.getMaxMinChauffage().getMin());
+        temperaturesVO.setMax(this.getMaxMinMoisChauffage().getMax());
+        temperaturesVO.setMin(this.getMaxMinMoisChauffage().getMin());
         temperaturesVO.setProgName("chauffage");
         temperaturesVO.setValues(terraiumListVO);
         temperaturesVO.setId(1);
@@ -437,8 +517,8 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 ////            humiditesVO.setMin(-1);
 ////
 ////        }
-        humiditesVO.setMax(this.getMaxMinPulverisation().getMax());
-        humiditesVO.setMin(this.getMaxMinPulverisation().getMin());
+        humiditesVO.setMax(this.getMaxMinMoisPulverisation().getMax());
+        humiditesVO.setMin(this.getMaxMinMoisPulverisation().getMin());
         humiditesVO.setSymbol("%");
         humiditesVO.setValues(humiditeVOList);
         humiditesVO.setId(2);
