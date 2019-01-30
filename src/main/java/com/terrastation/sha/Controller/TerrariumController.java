@@ -194,7 +194,7 @@ public class TerrariumController {
      * @return
      */
     @RequestMapping(value = "/getParametres", method = RequestMethod.GET)
-    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
+    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresGenereVO(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();
         List<TerrariumsGenereVO> terraiumsVOList = new ArrayList<TerrariumsGenereVO>();
 
@@ -216,7 +216,7 @@ public class TerrariumController {
      */
 
     @RequestMapping(value = "/getParametres/{id}", method = RequestMethod.GET)
-    public ResultVO<SensorVO> getCurrentParametresGenereVOById(@PathVariable(value = "id") int index, @RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
+    public ResultVO<SensorVO> getCurrentParametresGenereVOById(@PathVariable(value = "id") int index, @RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         SensorVO sensorVO = new SensorVO();
         sensorVO = terraiumServiceSensor.getSensorByIdVO(index, quantite);
         return ResultUtil.success(sensorVO);
@@ -232,7 +232,7 @@ public class TerrariumController {
      * @return
      */
     @RequestMapping(value = "/getCurrentParametres", method = RequestMethod.GET)
-    public ResultVO<List<Terrarium>> getCurrentParametres(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
+    public ResultVO<List<Terrarium>> getCurrentParametres(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
 
         return ResultUtil.success(terrariumService.getCurrentParameters(quantite));
 
@@ -240,7 +240,7 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getCurrentParametresVO", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsSensorVO> getCurrentParametresVO(@RequestParam(value = "quantite", required = false, defaultValue = "6") int quantite) {
+    public ResultVO<TerrariumsSensorVO> getCurrentParametresVO(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         TerrariumsSensorVO terraiumsGenereVO = new TerrariumsSensorVO();
         List<TerrariumsVO> terrariumsVOList = new ArrayList<TerrariumsVO>();
 
@@ -282,8 +282,8 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getDonneeUneSemaine", method = RequestMethod.GET)
 
-    public List<Terrarium> getDonneeUneSemaine() {
-        List<Terrarium> terrariums = terrariumGenereService.getDonneeUneSemaine();
+    public List<Terrarium> getDonneeUneSemaine(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
+        List<Terrarium> terrariums = terrariumGenereService.getDonneeUneSemaine(quantite);
         return terrariums;
     }
     /**
@@ -292,12 +292,12 @@ public class TerrariumController {
      */
     @RequestMapping(value = "/getParametresUneSemaine", method = RequestMethod.GET)
 
-    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUneSemaine() {
+    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUneSemaine(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();
         List<TerrariumsGenereVO> terraiumsVOList = new ArrayList<TerrariumsGenereVO>();
 
-        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetUneSemaineTemperaturesVO();
-        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetUneSemaineHumiditesVO();
+        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetUneSemaineTemperaturesVO(quantite);
+        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetUneSemaineHumiditesVO(quantite);
         terraiumsVOList.add(temperaturesVO);
         terraiumsVOList.add(humiditesVO);
         terraiumsGenereVO.setSensors(terraiumsVOList);
@@ -308,12 +308,12 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getParametresUneSemaine/{id}", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsGenereVO> getParametresUneSemaineById(@PathVariable(value = "id") int index) {
+    public ResultVO<TerrariumsGenereVO> getParametresUneSemaineById(@PathVariable(value = "id") int index,@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         TerrariumsGenereVO terraiumsGenereVO = new TerrariumsGenereVO();
         if (index == 1) {
-            terraiumsGenereVO = terrariumGenereService.GetUneSemaineTemperaturesVO();
+            terraiumsGenereVO = terrariumGenereService.GetUneSemaineTemperaturesVO(quantite);
         } else if (index == 2) {
-            terraiumsGenereVO = terrariumGenereService.GetUneSemaineHumiditesVO();
+            terraiumsGenereVO = terrariumGenereService.GetUneSemaineHumiditesVO(quantite);
         }
         return ResultUtil.success(terraiumsGenereVO);
 
@@ -321,8 +321,8 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getTemperaturesUneSemaine", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsGenereVO> getCurrentTemperatureUneSemaine() {
-        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUneSemaineTemperaturesVO();
+    public ResultVO<TerrariumsGenereVO> getCurrentTemperatureUneSemaine(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
+        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUneSemaineTemperaturesVO(quantite);
 
         return ResultUtil.success(terraiumsGenereVO);
 
@@ -330,8 +330,8 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getHumiditeUneSemaine", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsGenereVO> getCurrentHumiditeUneSemaine() {
-        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUneSemaineHumiditesVO();
+    public ResultVO<TerrariumsGenereVO> getCurrentHumiditeUneSemaine(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
+        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUneSemaineHumiditesVO(quantite);
 
         return ResultUtil.success(terraiumsGenereVO);
 
@@ -339,8 +339,8 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getDonneeUnMois", method = RequestMethod.GET)
 
-    public List<Terrarium> getDonneeUnMois() {
-        List<Terrarium> terrariums = terrariumGenereService.getDonneeUnMois();
+    public List<Terrarium> getDonneeUnMois(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
+        List<Terrarium> terrariums = terrariumGenereService.getDonneeUnMois(quantite);
         return terrariums;
     }
     /**
@@ -349,12 +349,12 @@ public class TerrariumController {
      */
     @RequestMapping(value = "/getParametresUnMois", method = RequestMethod.GET)
 
-    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUnMois() {
+    public ResultVO<TerraiumsSensorGenereVO> getCurrentParametresUnMois(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();
         List<TerrariumsGenereVO> terraiumsVOList = new ArrayList<TerrariumsGenereVO>();
 
-        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetUnMoisTemperaturesVO();
-        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetUnMoisHumiditesVO();
+        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetUnMoisTemperaturesVO(quantite);
+        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetUnMoisHumiditesVO(quantite);
         terraiumsVOList.add(temperaturesVO);
         terraiumsVOList.add(humiditesVO);
         terraiumsGenereVO.setSensors(terraiumsVOList);
@@ -365,8 +365,8 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getTemperaturesUnMois", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsGenereVO> getCurrentTemperatureUnMois() {
-        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUnMoisTemperaturesVO();
+    public ResultVO<TerrariumsGenereVO> getCurrentTemperatureUnMois(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
+        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUnMoisTemperaturesVO(quantite);
 
         return ResultUtil.success(terraiumsGenereVO);
 
@@ -374,8 +374,8 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getHumiditeUnMois", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsGenereVO> getCurrentHumiditeUnMois() {
-        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUnMoisHumiditesVO();
+    public ResultVO<TerrariumsGenereVO> getCurrentHumiditeUnMois(@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
+        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUnMoisHumiditesVO(quantite);
 
         return ResultUtil.success(terraiumsGenereVO);
 
@@ -383,12 +383,12 @@ public class TerrariumController {
 
     @RequestMapping(value = "/getParametresUnMois/{id}", method = RequestMethod.GET)
 
-    public ResultVO<TerrariumsGenereVO> getParametresUnMoisById(@PathVariable(value = "id") int index) {
+    public ResultVO<TerrariumsGenereVO> getParametresUnMoisById(@PathVariable(value = "id") int index,@RequestParam(value = "quantite", required = false, defaultValue = "15") int quantite) {
         TerrariumsGenereVO terraiumsGenereVO = new TerrariumsGenereVO();
         if (index == 1) {
-            terraiumsGenereVO = terrariumGenereService.GetUnMoisTemperaturesVO();
+            terraiumsGenereVO = terrariumGenereService.GetUnMoisTemperaturesVO(quantite);
         } else if (index == 2) {
-            terraiumsGenereVO = terrariumGenereService.GetUnMoisHumiditesVO();
+            terraiumsGenereVO = terrariumGenereService.GetUnMoisHumiditesVO(quantite);
         }
         return ResultUtil.success(terraiumsGenereVO);
 

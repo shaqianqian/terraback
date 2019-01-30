@@ -8,12 +8,12 @@ import java.util.List;
 public interface TerrariumGenereService {
     public TerrariumsGenereVO GetCurrentHumiditesVO(int quantite);
     public TerrariumsGenereVO GetCurrentTemperaturesVO(int quantite);
-    public List<Terrarium> getDonneeUneSemaine();
-    public TerrariumsGenereVO GetUneSemaineTemperaturesVO();
-    public TerrariumsGenereVO GetUneSemaineHumiditesVO();
+    public List<Terrarium> getDonneeUneSemaine(int quantite);
+    public TerrariumsGenereVO GetUneSemaineTemperaturesVO(int quantite);
+    public TerrariumsGenereVO GetUneSemaineHumiditesVO(int quantite);
 
-    public List<Terrarium> getDonneeUnMois();
-    public TerrariumsGenereVO GetUnMoisTemperaturesVO();
-    public TerrariumsGenereVO GetUnMoisHumiditesVO();
+    public List<Terrarium> getDonneeUnMois(int quantite);
+    public TerrariumsGenereVO GetUnMoisTemperaturesVO(int quantite);
+    public TerrariumsGenereVO GetUnMoisHumiditesVO(int quantite);
 
 }

@@ -157,20 +157,21 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
 
 
-    public List<Terrarium> getDonneeUneSemaine() {
+    public List<Terrarium> getDonneeUneSemaine(int quantite) {
         List<Terrarium> terrariums=terrariumRepositary.donneUneSemaine();
+
         List<Terrarium> newTerrariums=new ArrayList<Terrarium>();
-        int quantite=10;
         int distance=terrariums.size()/quantite;
         for(int i=0;i<terrariums.size();i=i+distance){
             Terrarium t=terrariums.get(i);
             newTerrariums.add(t);
 
         }
-        return newTerrariums;}
+        int size=newTerrariums.size();
+        return newTerrariums.subList(size-quantite, size);}
 
-    public TerrariumsGenereVO GetUneSemaineTemperaturesVO() {
-        List<Terrarium> terraiumList = this.getDonneeUneSemaine();
+    public TerrariumsGenereVO GetUneSemaineTemperaturesVO(int quantite) {
+        List<Terrarium> terraiumList = this.getDonneeUneSemaine(quantite);
         List<TerrariumGenereVO> terraiumListVO = new ArrayList<TerrariumGenereVO>();
         for (Terrarium t : terraiumList) {
             TerrariumGenereVO temperatureVO = new TerrariumGenereVO();
@@ -212,9 +213,9 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
     }
 
-    public TerrariumsGenereVO GetUneSemaineHumiditesVO() {
+    public TerrariumsGenereVO GetUneSemaineHumiditesVO(int quantite) {
 
-        List<Terrarium> terraiumList = this.getDonneeUneSemaine();
+        List<Terrarium> terraiumList = this.getDonneeUneSemaine(quantite);
         List<TerrariumGenereVO> humiditeVOList = new ArrayList<TerrariumGenereVO>();
         for (Terrarium t : terraiumList) {
             TerrariumGenereVO humiditeVO = new TerrariumGenereVO();
@@ -256,20 +257,20 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
     }
 
-    public List<Terrarium> getDonneeUnMois() {
+    public List<Terrarium> getDonneeUnMois(int quantite) {
         List<Terrarium> terrariums=terrariumRepositary.donneUnMois();
         List<Terrarium> newTerrariums=new ArrayList<Terrarium>();
-        int quantite=10;
         int distance=terrariums.size()/quantite;
         for(int i=0;i<terrariums.size();i=i+distance){
             Terrarium t=terrariums.get(i);
             newTerrariums.add(t);
 
         }
-        return newTerrariums;}
+        int size=newTerrariums.size();
+        return newTerrariums.subList(size-quantite, size);}
 
-    public TerrariumsGenereVO GetUnMoisTemperaturesVO() {
-        List<Terrarium> terraiumList = this.getDonneeUnMois();
+    public TerrariumsGenereVO GetUnMoisTemperaturesVO(int quantite) {
+        List<Terrarium> terraiumList = this.getDonneeUnMois(quantite);
         List<TerrariumGenereVO> terraiumListVO = new ArrayList<TerrariumGenereVO>();
         for (Terrarium t : terraiumList) {
             TerrariumGenereVO temperatureVO = new TerrariumGenereVO();
@@ -312,9 +313,9 @@ public class TerrariumGenereServiceImpl implements TerrariumGenereService {
 
     }
 
-    public TerrariumsGenereVO GetUnMoisHumiditesVO() {
+    public TerrariumsGenereVO GetUnMoisHumiditesVO(int quantite) {
 
-        List<Terrarium> terraiumList = this.getDonneeUnMois();
+        List<Terrarium> terraiumList = this.getDonneeUnMois(quantite);
         List<TerrariumGenereVO> humiditeVOList = new ArrayList<TerrariumGenereVO>();
         for (Terrarium t : terraiumList) {
             TerrariumGenereVO humiditeVO = new TerrariumGenereVO();
