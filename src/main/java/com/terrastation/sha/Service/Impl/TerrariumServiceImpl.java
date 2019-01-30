@@ -1,24 +1,29 @@
 package com.terrastation.sha.Service.Impl;
+import com.terrastation.sha.Entity.Chauffage;
+import com.terrastation.sha.Entity.Interrupteur;
 import com.terrastation.sha.Entity.Terrarium;
 import com.terrastation.sha.Enums.ResultEnum;
 import com.terrastation.sha.Exception.TerraiumException;
+import com.terrastation.sha.Repositary.ChauffageRepository;
+import com.terrastation.sha.Repositary.InterrupteurRepository;
+import com.terrastation.sha.Repositary.LumiereRepository;
 import com.terrastation.sha.Repositary.TerrariumRepositary;
 import com.terrastation.sha.Service.TerrariumService;
+import com.terrastation.sha.VO.MaxminVO;
 import com.terrastation.sha.VO.TerrariumVO;
 import com.terrastation.sha.VO.TerrariumsVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 @Slf4j
 public class TerrariumServiceImpl implements TerrariumService {
     @Autowired
     private TerrariumRepositary terrariumRepositary;
+
 
     public int getRowQuantity(){return terrariumRepositary.getRowQuantity();}
     public Terrarium getCurrentParameter(){
@@ -39,6 +44,9 @@ public class TerrariumServiceImpl implements TerrariumService {
         return terrariumRepositary.save(t);
 
     }
+
+
+
 
    public List<Terrarium> getCurrentParameters(int quantity){
        if(quantity> terrariumRepositary.getRowQuantity()){
