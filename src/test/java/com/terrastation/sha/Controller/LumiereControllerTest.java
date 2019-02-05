@@ -146,7 +146,7 @@ public class LumiereControllerTest {
         MvcResult mvcResult = mockMvc.perform(get("/terrarium/lumiere/changeEtatInterrupteurManuellement")
         )
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().is5xxServerError())
                 .andReturn();
         System.out.println("resultat " + mvcResult.getResponse().getContentAsString());
 
