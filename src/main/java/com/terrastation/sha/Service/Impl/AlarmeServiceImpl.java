@@ -55,6 +55,7 @@ public class AlarmeServiceImpl implements AlarmeService {
         mailSender.send(message);
 
     }
+
      public List<Terrarium> alarmeTemperature() {
 
          Optional<Alarme> alarmeOptional=alarmeRepository.findByType("temperature");

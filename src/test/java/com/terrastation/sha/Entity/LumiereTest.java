@@ -5,43 +5,55 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ChauffageTest {
+public class LumiereTest {
 
     @Test(expected=ParameterErrorException.class)
     public void setMoisFinBiggerThan12Test() {
 
-        Chauffage c=new Chauffage();
+        Lumiere c=new Lumiere();
         c.setMoisFin(13);
 
 
     }
+    @Test(expected=ParameterErrorException.class)
+    public void setMoisFinSmallerThan0Test() {
 
+        Lumiere c=new Lumiere();
+        c.setMoisFin(0);
+
+    }
     @Test(expected=ParameterErrorException.class)
     public void setMoisDebutSmallerThan0Test() {
 
-        Chauffage c=new Chauffage();
+        Lumiere c=new Lumiere();
         c.setMoisDebut(0);
 
     }
-
     @Test(expected=ParameterErrorException.class)
     public void setHeureFinBiggerThan24Test() {
-        Chauffage c=new Chauffage();
+        Lumiere c=new Lumiere();
         c.setHeureFin(25);
     }
     @Test(expected=ParameterErrorException.class)
-    public void setHeureDebutBiggerThan24Test() {
-        Chauffage c=new Chauffage();
-        c.setHeureDebut(25);
-    }
-    @Test(expected=ParameterErrorException.class)
     public void setHeureFinSmallerThan0Test() {
-        Chauffage c=new Chauffage();
+        Lumiere c=new Lumiere();
         c.setHeureFin(-2);
     }
     @Test(expected=ParameterErrorException.class)
-    public void setHeureDebutSmallerThan0Test() {
-        Chauffage c=new Chauffage();
+    public void setHeureDebutmallerThan0Test() {
+        Lumiere c=new Lumiere();
         c.setHeureDebut(-2);
+    }
+    @Test
+    public void setHeureFinTest() {
+        Lumiere c=new Lumiere();
+        c.setHeureFin(10);
+        assertEquals(10,c.getHeureFin());
+    }
+    @Test
+    public void setHeureDebutTest() {
+        Lumiere c=new Lumiere();
+        c.setHeureDebut(10);
+        assertEquals(10,c.getHeureDebut());
     }
 }
