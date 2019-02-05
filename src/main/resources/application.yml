@@ -1,0 +1,32 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+1
+  profiles:
+    active: prod
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/runoob_db?verifyServerCertificate=false&useSSL=true
+      #url: jdbc:mysql://192.168.1.73:3306/runoob_db?verifyServerCertificate=false&useSSL=true
+      #url: jdbc:mysql://mydbinstance.c11hj4xxyfi3.eu-west-3.rds.amazonaws.com/innodb?verifyServerCertificate=false&useSSL=true
+      username: root
+      #password: 123456
+      password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    show-sql: true
+    show-sql: false
+  mail:
+    host: smtp.gmail.com
+    username: terrastation111@gmail.com
+    password: 111terrastation.
+    protocol: smtp
+    port: 465
+    properties.mail.smtp.auth: true
+    properties.mail.display.sendmail: Javen
+    properties.mail.display.sendname: Spring Boot Guide Email
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+    properties.mail.smtp.ssl.enable: true
+    default-encoding: utf-8
