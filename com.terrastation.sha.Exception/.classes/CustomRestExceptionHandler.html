@@ -1,0 +1,235 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CustomRestExceptionHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Exception</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CustomRestExceptionHandler (com.terrastation.sha.Exception)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CustomRestExceptionHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    22,2%
+  </span>
+  <span class="absValue">
+    (2/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9,3%
+  </span>
+  <span class="absValue">
+    (5/ 54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Exception;
+<i>2</i>&nbsp;import org.springframework.http.HttpHeaders;
+<i>3</i>&nbsp;import org.springframework.http.HttpStatus;
+<i>4</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i>5</i>&nbsp;import org.springframework.validation.FieldError;
+<i>6</i>&nbsp;import org.springframework.validation.ObjectError;
+<i>7</i>&nbsp;import org.springframework.web.HttpMediaTypeNotSupportedException;
+<i>8</i>&nbsp;import org.springframework.web.HttpRequestMethodNotSupportedException;
+<i>9</i>&nbsp;import org.springframework.web.bind.MethodArgumentNotValidException;
+<i>10</i>&nbsp;import org.springframework.web.bind.MissingServletRequestParameterException;
+<i>11</i>&nbsp;import org.springframework.web.bind.annotation.ControllerAdvice;
+<i>12</i>&nbsp;import org.springframework.web.bind.annotation.ExceptionHandler;
+<i>13</i>&nbsp;import org.springframework.web.context.request.WebRequest;
+<i>14</i>&nbsp;import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+<i>15</i>&nbsp;import org.springframework.web.servlet.NoHandlerFoundException;
+<i>16</i>&nbsp;import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+<i>17</i>&nbsp;import javax.validation.ConstraintViolation;
+<i>18</i>&nbsp;import javax.validation.ConstraintViolationException;
+<i>19</i>&nbsp;import java.util.ArrayList;
+<i>20</i>&nbsp;import java.util.List;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;@ControllerAdvice
+<b class="fc"><i>23</i>&nbsp;public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    protected ResponseEntity&lt;Object&gt; handleMissingServletRequestParameter(final MissingServletRequestParameterException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
+<b class="nc"><i>26</i>&nbsp;        logger.info(ex.getClass().getName());</b>
+<i>27</i>&nbsp;        //
+<b class="nc"><i>28</i>&nbsp;        final String error = ex.getParameterName() + &quot; parameter is missing&quot;;</b>
+<b class="nc"><i>29</i>&nbsp;        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);</b>
+<b class="nc"><i>30</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;    /* Pour gérer l&#39;exception MissingServletRequestParameterException ,
+<i>33</i>&nbsp;       quand un paramètre est manquant
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    @Override
+<i>37</i>&nbsp;    protected ResponseEntity&lt;Object&gt; handleMethodArgumentNotValid(
+<i>38</i>&nbsp;            MethodArgumentNotValidException ex,
+<i>39</i>&nbsp;            HttpHeaders headers,
+<i>40</i>&nbsp;            HttpStatus status,
+<i>41</i>&nbsp;            WebRequest request) {
+<b class="nc"><i>42</i>&nbsp;        List&lt;String&gt; errors = new ArrayList&lt;String&gt;();</b>
+<b class="nc"><i>43</i>&nbsp;        for (FieldError error : ex.getBindingResult().getFieldErrors()) {</b>
+<b class="nc"><i>44</i>&nbsp;            errors.add(error.getField() + &quot;: &quot; + error.getDefaultMessage());</b>
+<b class="nc"><i>45</i>&nbsp;        }</b>
+<b class="nc"><i>46</i>&nbsp;        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {</b>
+<b class="nc"><i>47</i>&nbsp;            errors.add(error.getObjectName() + &quot;: &quot; + error.getDefaultMessage());</b>
+<b class="nc"><i>48</i>&nbsp;        }</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;        ApiError apiError =</b>
+<b class="nc"><i>51</i>&nbsp;                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);</b>
+<b class="nc"><i>52</i>&nbsp;        return handleExceptionInternal(</b>
+<b class="nc"><i>53</i>&nbsp;                ex, apiError, headers, apiError.getStatus(), request);</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;     /* Pour gérer l&#39;exception ConstrainViolationException: ,
+<i>57</i>&nbsp;        pour la violation de contraintes
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    @ExceptionHandler({ ConstraintViolationException.class })
+<i>62</i>&nbsp;    public ResponseEntity&lt;Object&gt; handleConstraintViolation(
+<i>63</i>&nbsp;            ConstraintViolationException ex, WebRequest request) {
+<b class="nc"><i>64</i>&nbsp;        List&lt;String&gt; errors = new ArrayList&lt;String&gt;();</b>
+<b class="nc"><i>65</i>&nbsp;        for (ConstraintViolation&lt;?&gt; violation : ex.getConstraintViolations()) {</b>
+<b class="nc"><i>66</i>&nbsp;            errors.add(violation.getRootBeanClass().getName() + &quot; &quot; +</b>
+<b class="nc"><i>67</i>&nbsp;                    violation.getPropertyPath() + &quot;: &quot; + violation.getMessage());</b>
+<b class="nc"><i>68</i>&nbsp;        }</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;        ApiError apiError =</b>
+<b class="nc"><i>71</i>&nbsp;                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);</b>
+<b class="nc"><i>72</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(</b>
+<b class="nc"><i>73</i>&nbsp;                apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /*
+<i>78</i>&nbsp;     * TypeMismatchException: This exception is thrown
+<i>79</i>&nbsp;     * when try to set bean property with wrong type.
+<i>80</i>&nbsp;     * */
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /*
+<i>85</i>&nbsp;     * MethodArgumentTypeMismatchException: This exception is thrown
+<i>86</i>&nbsp;     * when method argument is not the expected type
+<i>87</i>&nbsp;     * */
+<i>88</i>&nbsp;    @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
+<i>89</i>&nbsp;    public ResponseEntity&lt;Object&gt; handleMethodArgumentTypeMismatch(
+<i>90</i>&nbsp;            MethodArgumentTypeMismatchException ex, WebRequest request) {
+<b class="nc"><i>91</i>&nbsp;        String error =</b>
+<b class="nc"><i>92</i>&nbsp;                ex.getName() + &quot; should be of type &quot; + ex.getRequiredType().getName();</b>
+<i>93</i>&nbsp;
+<b class="nc"><i>94</i>&nbsp;        ApiError apiError =</b>
+<b class="nc"><i>95</i>&nbsp;                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);</b>
+<b class="nc"><i>96</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(</b>
+<b class="nc"><i>97</i>&nbsp;                apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    @Override
+<i>102</i>&nbsp;    protected ResponseEntity&lt;Object&gt; handleNoHandlerFoundException(
+<i>103</i>&nbsp;            NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+<b class="nc"><i>104</i>&nbsp;        String error = &quot;No handler found for &quot; + ex.getHttpMethod() + &quot; &quot; + ex.getRequestURL();</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);</b>
+<b class="nc"><i>107</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    @Override
+<i>111</i>&nbsp;    protected ResponseEntity&lt;Object&gt; handleHttpRequestMethodNotSupported(
+<i>112</i>&nbsp;            HttpRequestMethodNotSupportedException ex,
+<i>113</i>&nbsp;            HttpHeaders headers,
+<i>114</i>&nbsp;            HttpStatus status,
+<i>115</i>&nbsp;            WebRequest request) {
+<b class="nc"><i>116</i>&nbsp;        StringBuilder builder = new StringBuilder();</b>
+<b class="nc"><i>117</i>&nbsp;        builder.append(ex.getMethod());</b>
+<b class="nc"><i>118</i>&nbsp;        builder.append(</b>
+<i>119</i>&nbsp;                &quot; method is not supported for this request. Supported methods are &quot;);
+<b class="nc"><i>120</i>&nbsp;        ex.getSupportedHttpMethods().forEach(t -&gt; builder.append(t + &quot; &quot;));</b>
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;        ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED,</b>
+<b class="nc"><i>123</i>&nbsp;                ex.getLocalizedMessage(), builder.toString());</b>
+<b class="nc"><i>124</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(</b>
+<b class="nc"><i>125</i>&nbsp;                apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    @Override
+<i>129</i>&nbsp;    protected ResponseEntity&lt;Object&gt; handleHttpMediaTypeNotSupported(
+<i>130</i>&nbsp;            HttpMediaTypeNotSupportedException ex,
+<i>131</i>&nbsp;            HttpHeaders headers,
+<i>132</i>&nbsp;            HttpStatus status,
+<i>133</i>&nbsp;            WebRequest request) {
+<b class="nc"><i>134</i>&nbsp;        StringBuilder builder = new StringBuilder();</b>
+<b class="nc"><i>135</i>&nbsp;        builder.append(ex.getContentType());</b>
+<b class="nc"><i>136</i>&nbsp;        builder.append(&quot; media type is not supported. Supported media types are &quot;);</b>
+<b class="nc"><i>137</i>&nbsp;        ex.getSupportedMediaTypes().forEach(t -&gt; builder.append(t + &quot;, &quot;));</b>
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;        ApiError apiError = new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE,</b>
+<b class="nc"><i>140</i>&nbsp;                ex.getLocalizedMessage(), builder.substring(0, builder.length() - 2));</b>
+<b class="nc"><i>141</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(</b>
+<b class="nc"><i>142</i>&nbsp;                apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    @ExceptionHandler({ Exception.class })
+<i>146</i>&nbsp;    public ResponseEntity&lt;Object&gt; handleAll(Exception ex, WebRequest request) {
+<b class="fc"><i>147</i>&nbsp;        ApiError apiError = new ApiError(</b>
+<b class="fc"><i>148</i>&nbsp;                HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), &quot;error occurred&quot;);</b>
+<b class="fc"><i>149</i>&nbsp;        return new ResponseEntity&lt;Object&gt;(</b>
+<b class="fc"><i>150</i>&nbsp;                apiError, new HttpHeaders(), apiError.getStatus());</b>
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

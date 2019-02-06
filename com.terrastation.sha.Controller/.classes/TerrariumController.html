@@ -1,0 +1,477 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TerrariumController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TerrariumController (com.terrastation.sha.Controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TerrariumController</td>
+<td class="coverageStat">
+  <span class="percent">
+    18,2%
+  </span>
+  <span class="absValue">
+    (4/ 22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (14/ 126)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TerrariumController$ExceptionHandle</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/ 5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    20,8%
+  </span>
+  <span class="absValue">
+    (5/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,5%
+  </span>
+  <span class="absValue">
+    (15/ 131)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.terrastation.sha.Entity.Interrupteur;
+<i>4</i>&nbsp;import com.terrastation.sha.Entity.Terrarium;
+<i>5</i>&nbsp;import com.terrastation.sha.Exception.IdNotExistException;
+<i>6</i>&nbsp;import com.terrastation.sha.Exception.ParameterErrorException;
+<i>7</i>&nbsp;import com.terrastation.sha.Repositary.ChauffageRepository;
+<i>8</i>&nbsp;import com.terrastation.sha.Repositary.InterrupteurRepository;
+<i>9</i>&nbsp;import com.terrastation.sha.Repositary.LumiereRepository;
+<i>10</i>&nbsp;import com.terrastation.sha.Repositary.TerrariumRepositary;
+<i>11</i>&nbsp;import com.terrastation.sha.Service.InterrupteurService;
+<i>12</i>&nbsp;import com.terrastation.sha.Service.TerrariumGenereService;
+<i>13</i>&nbsp;import com.terrastation.sha.Service.TerrariumSensorService;
+<i>14</i>&nbsp;import com.terrastation.sha.Service.TerrariumService;
+<i>15</i>&nbsp;import com.terrastation.sha.Util.ResultUtil;
+<i>16</i>&nbsp;import com.terrastation.sha.VO.*;
+<i>17</i>&nbsp;import com.terrastation.sha.Enums.ResultEnum;
+<i>18</i>&nbsp;import org.aspectj.weaver.ast.Test;
+<i>19</i>&nbsp;import org.slf4j.Logger;
+<i>20</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>21</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>22</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>23</i>&nbsp;import com.terrastation.sha.Exception.TerraiumException;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import java.util.ArrayList;
+<i>26</i>&nbsp;import java.util.List;
+<i>27</i>&nbsp;import java.util.Optional;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;@CrossOrigin
+<i>30</i>&nbsp;@RestController
+<i>31</i>&nbsp;@RequestMapping(value = &quot;/terrarium&quot;)
+<b class="fc"><i>32</i>&nbsp;public class TerrariumController {</b>
+<b class="fc"><i>33</i>&nbsp;    Logger log = LoggerFactory.getLogger(TerrariumController.class);</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    @Autowired
+<i>36</i>&nbsp;    private TerrariumService terrariumService;
+<i>37</i>&nbsp;    @Autowired
+<i>38</i>&nbsp;    private TerrariumGenereService terrariumGenereService;
+<i>39</i>&nbsp;    @Autowired
+<i>40</i>&nbsp;    private TerrariumSensorService terraiumServiceSensor;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    @Autowired
+<i>43</i>&nbsp;    private TerrariumRepositary terrariumRepositary;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    @Autowired
+<i>46</i>&nbsp;    private InterrupteurRepository interrupteurRepository;
+<i>47</i>&nbsp;    @Autowired
+<i>48</i>&nbsp;    private InterrupteurService interrupteurService;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @Autowired
+<i>51</i>&nbsp;    private ChauffageRepository chauffageRepositary;
+<i>52</i>&nbsp;    @Autowired
+<i>53</i>&nbsp;    private LumiereRepository lumiereRepositary;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /**
+<i>56</i>&nbsp;     * recuperer tous les parametres de terraium
+<i>57</i>&nbsp;     *
+<i>58</i>&nbsp;     * @return
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    @RequestMapping(value = &quot;/getAll&quot;, method = RequestMethod.GET)
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public ResultVO&lt;List&lt;Terrarium&gt;&gt; findall() {
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;        return ResultUtil.success(terrariumService.findAll());</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * ajouter une ligne de parametre au terraium
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param terraium
+<i>72</i>&nbsp;     * @return
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    //json forme donnee
+<i>75</i>&nbsp;    @RequestMapping(value = &quot;/add&quot;, method = RequestMethod.POST)
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    public ResultVO&lt;Terrarium&gt; add(@RequestBody Terrarium terraium) {
+<b class="nc"><i>78</i>&nbsp;        Terrarium t = new Terrarium();</b>
+<b class="nc"><i>79</i>&nbsp;        t.setHumidite(terraium.getHumidite());</b>
+<b class="nc"><i>80</i>&nbsp;        t.setTemperature(terraium.getTemperature());</b>
+<b class="nc"><i>81</i>&nbsp;        Terrarium t_add = terrariumService.save(t);</b>
+<b class="nc"><i>82</i>&nbsp;        return ResultUtil.success(t_add);</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;//modifier une ligne de parametre au terraium
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    @PutMapping(value = &quot;/update/{id}&quot;)
+<i>89</i>&nbsp;    public ResultVO&lt;Terrarium&gt; updateTerraium(@PathVariable(value = &quot;id&quot;) int terraiumId,
+<i>90</i>&nbsp;                                              @RequestParam(value = &quot;temperature&quot;, required = false, defaultValue = &quot;0&quot;) double temperature,
+<i>91</i>&nbsp;                                              @RequestParam(value = &quot;humidite&quot;, required = false, defaultValue = &quot;0&quot;) double humidite) {
+<b class="nc"><i>92</i>&nbsp;        Optional&lt;Terrarium&gt; terraiumOriginal = terrariumService.findById(terraiumId);</b>
+<b class="nc"><i>93</i>&nbsp;        Terrarium terraiumNew = null;</b>
+<b class="nc"><i>94</i>&nbsp;        if (terraiumOriginal.isPresent()) {</b>
+<b class="nc"><i>95</i>&nbsp;            terraiumNew = terraiumOriginal.get();</b>
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;            if (temperature != 0 &amp;&amp; humidite == 0) {</b>
+<b class="nc"><i>98</i>&nbsp;                terraiumNew.setTemperature(temperature);</b>
+<b class="nc"><i>99</i>&nbsp;            } else if (temperature == 0 &amp;&amp; humidite != 0) {</b>
+<b class="nc"><i>100</i>&nbsp;                terraiumNew.setHumidite(humidite);</b>
+<b class="nc"><i>101</i>&nbsp;            } else if (temperature != 0 &amp;&amp; humidite != 0) {</b>
+<b class="nc"><i>102</i>&nbsp;                terraiumNew.setTemperature(temperature);</b>
+<b class="nc"><i>103</i>&nbsp;                terraiumNew.setHumidite(humidite);</b>
+<i>104</i>&nbsp;            } else {
+<b class="nc"><i>105</i>&nbsp;                throw new ParameterErrorException(ResultEnum.PARAM_ERROR);</b>
+<i>106</i>&nbsp;            }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;        }
+<b class="nc"><i>109</i>&nbsp;        terraiumOriginal.orElseThrow(() -&gt; new IdNotExistException(ResultEnum.ID_NOT_EXIST));</b>
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;        return ResultUtil.success(terrariumService.save(terraiumNew));</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    //supprimer une ligne de parametre au terraium
+<i>115</i>&nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
+<i>116</i>&nbsp;    public ResultVO&lt;String&gt; deleteTerraium(@PathVariable(value = &quot;id&quot;) int noteId) {
+<b class="nc"><i>117</i>&nbsp;        Optional&lt;Terrarium&gt; terraiumOriginal = terrariumService.findById(noteId);</b>
+<b class="nc"><i>118</i>&nbsp;        Terrarium terraium = null;</b>
+<b class="nc"><i>119</i>&nbsp;        if (terraiumOriginal.isPresent()) {</b>
+<b class="nc"><i>120</i>&nbsp;            terraium = terraiumOriginal.get();</b>
+<b class="nc"><i>121</i>&nbsp;            terrariumService.delete(terraium);</b>
+<i>122</i>&nbsp;        }
+<b class="nc"><i>123</i>&nbsp;        terraiumOriginal.orElseThrow(() -&gt; new IdNotExistException(ResultEnum.ID_NOT_EXIST));</b>
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;        return ResultUtil.success(&quot;vous avez reussi de supprimer : &quot; + noteId);</b>
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    //recuperer tous le plus recente des parametres
+<i>130</i>&nbsp;    @RequestMapping(value = &quot;/getCurrentParametre&quot;, method = RequestMethod.GET)
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    public ResultVO&lt;List&lt;TerrariumCurrentVO&gt;&gt; getCurrentParametresGenereVO() {
+<b class="nc"><i>133</i>&nbsp;        List&lt;TerrariumCurrentVO&gt; terraiumsVOList = new ArrayList&lt;TerrariumCurrentVO&gt;();</b>
+<b class="nc"><i>134</i>&nbsp;        Terrarium terrarium = terrariumService.getCurrentParameter();</b>
+<b class="nc"><i>135</i>&nbsp;        TerrariumCurrentVO temperaturesVO = new TerrariumCurrentVO();</b>
+<b class="nc"><i>136</i>&nbsp;        Interrupteur interrupteur = interrupteurService.getControleInterrupteur(&quot;chauffage&quot;);</b>
+<b class="nc"><i>137</i>&nbsp;        if (interrupteur.isEtat()) {</b>
+<b class="nc"><i>138</i>&nbsp;            temperaturesVO.setIsOn(&quot;true&quot;);</b>
+<i>139</i>&nbsp;        } else {
+<b class="nc"><i>140</i>&nbsp;            temperaturesVO.setIsOn(&quot;false&quot;);</b>
+<i>141</i>&nbsp;        }
+<b class="nc"><i>142</i>&nbsp;        if (interrupteur.isProg()) {</b>
+<b class="nc"><i>143</i>&nbsp;            temperaturesVO.setIsProg(&quot;true&quot;);</b>
+<i>144</i>&nbsp;        } else {
+<i>145</i>&nbsp;
+<b class="nc"><i>146</i>&nbsp;            temperaturesVO.setIsProg(&quot;false&quot;);</b>
+<i>147</i>&nbsp;        }
+<b class="nc"><i>148</i>&nbsp;        temperaturesVO.setName(&quot;temperature&quot;);</b>
+<b class="nc"><i>149</i>&nbsp;        temperaturesVO.setSymbol(&quot;°C&quot;);</b>
+<b class="nc"><i>150</i>&nbsp;        temperaturesVO.setT(terrarium.getCreateTime());</b>
+<b class="nc"><i>151</i>&nbsp;        temperaturesVO.setY(terrarium.getTemperature());</b>
+<b class="nc"><i>152</i>&nbsp;        temperaturesVO.setId(1);</b>
+<i>153</i>&nbsp;
+<b class="nc"><i>154</i>&nbsp;        TerrariumCurrentVO humiditesVO = new TerrariumCurrentVO();</b>
+<b class="nc"><i>155</i>&nbsp;        humiditesVO.setSymbol(&quot;%&quot;);</b>
+<b class="nc"><i>156</i>&nbsp;        humiditesVO.setY(terrarium.getHumidite());</b>
+<b class="nc"><i>157</i>&nbsp;        humiditesVO.setT(terrarium.getCreateTime());</b>
+<b class="nc"><i>158</i>&nbsp;        humiditesVO.setIsProg(&quot;true&quot;);</b>
+<b class="nc"><i>159</i>&nbsp;        humiditesVO.setIsOn(&quot;true&quot;);</b>
+<b class="nc"><i>160</i>&nbsp;        humiditesVO.setName(&quot;humidity&quot;);</b>
+<b class="nc"><i>161</i>&nbsp;        humiditesVO.setId(2);</b>
+<i>162</i>&nbsp;
+<b class="nc"><i>163</i>&nbsp;        terraiumsVOList.add(temperaturesVO);</b>
+<b class="nc"><i>164</i>&nbsp;        terraiumsVOList.add(humiditesVO);</b>
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;
+<b class="nc"><i>167</i>&nbsp;        return ResultUtil.success(terraiumsVOList);</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    @RequestMapping(value = &quot;/getParametres&quot;, method = RequestMethod.GET)
+<i>172</i>&nbsp;    public ResultVO&lt;TerraiumsSensorGenereVO&gt; getCurrentParametresGenereVO(@RequestParam(value = &quot;quantite&quot;, required = false, defaultValue = &quot;6&quot;) int quantite) {
+<b class="fc"><i>173</i>&nbsp;        TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();</b>
+<b class="fc"><i>174</i>&nbsp;        List&lt;TerrariumsGenereVO&gt; terraiumsVOList = new ArrayList&lt;TerrariumsGenereVO&gt;();</b>
+<i>175</i>&nbsp;
+<b class="fc"><i>176</i>&nbsp;        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetCurrentTemperaturesVO(quantite);</b>
+<b class="nc"><i>177</i>&nbsp;        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetCurrentHumiditesVO(quantite);</b>
+<b class="nc"><i>178</i>&nbsp;        terraiumsVOList.add(temperaturesVO);</b>
+<b class="nc"><i>179</i>&nbsp;        terraiumsVOList.add(humiditesVO);</b>
+<b class="nc"><i>180</i>&nbsp;        terraiumsGenereVO.setSensors(terraiumsVOList);</b>
+<i>181</i>&nbsp;
+<b class="nc"><i>182</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    @RequestMapping(value = &quot;/getParametres/{id}&quot;, method = RequestMethod.GET)
+<i>187</i>&nbsp;    public ResultVO&lt;SensorVO&gt; getCurrentParametresGenereVOById(@PathVariable(value = &quot;id&quot;) int index, @RequestParam(value = &quot;quantite&quot;, required = false, defaultValue = &quot;6&quot;) int quantite) {
+<b class="nc"><i>188</i>&nbsp;        SensorVO sensorVO = new SensorVO();</b>
+<b class="nc"><i>189</i>&nbsp;        sensorVO = terraiumServiceSensor.getSensorByIdVO(index, quantite);</b>
+<b class="nc"><i>190</i>&nbsp;        return ResultUtil.success(sensorVO);</b>
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    //recuperer tous les lignes recentes des parametres
+<i>198</i>&nbsp;    @RequestMapping(value = &quot;/getCurrentParametres&quot;, method = RequestMethod.GET)
+<i>199</i>&nbsp;    public ResultVO&lt;List&lt;Terrarium&gt;&gt; getCurrentParametres(@RequestParam(value = &quot;quantite&quot;, required = false, defaultValue = &quot;6&quot;) int quantite) {
+<i>200</i>&nbsp;
+<b class="nc"><i>201</i>&nbsp;        return ResultUtil.success(terrariumService.getCurrentParameters(quantite));</b>
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;    @RequestMapping(value = &quot;/getCurrentParametresVO&quot;, method = RequestMethod.GET)
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    public ResultVO&lt;TerrariumsSensorVO&gt; getCurrentParametresVO(@RequestParam(value = &quot;quantite&quot;, required = false, defaultValue = &quot;6&quot;) int quantite) {
+<b class="nc"><i>207</i>&nbsp;        TerrariumsSensorVO terraiumsGenereVO = new TerrariumsSensorVO();</b>
+<b class="nc"><i>208</i>&nbsp;        List&lt;TerrariumsVO&gt; terrariumsVOList = new ArrayList&lt;TerrariumsVO&gt;();</b>
+<i>209</i>&nbsp;
+<b class="nc"><i>210</i>&nbsp;        TerrariumsVO temperaturesVO = terrariumService.GetCurrentTemperaturesVO(quantite);</b>
+<b class="nc"><i>211</i>&nbsp;        TerrariumsVO humiditesVO = terrariumService.GetCurrentHumiditesVO(quantite);</b>
+<b class="nc"><i>212</i>&nbsp;        terrariumsVOList.add(temperaturesVO);</b>
+<b class="nc"><i>213</i>&nbsp;        terrariumsVOList.add(humiditesVO);</b>
+<b class="nc"><i>214</i>&nbsp;        terraiumsGenereVO.setSensors(terrariumsVOList);</b>
+<i>215</i>&nbsp;
+<b class="nc"><i>216</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    @RequestMapping(value = &quot;/listSensors&quot;, method = RequestMethod.GET)
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    public ResultVO&lt;SensorsVO&gt; getListSensors() {
+<i>224</i>&nbsp;
+<b class="fc"><i>225</i>&nbsp;        SensorsVO sensorsVO = new SensorsVO();</b>
+<b class="fc"><i>226</i>&nbsp;        List&lt;SensorAffichageVO&gt; sensorVOList = new ArrayList&lt;SensorAffichageVO&gt;();</b>
+<b class="fc"><i>227</i>&nbsp;        SensorAffichageVO temperatureSensor = new SensorAffichageVO(1, &quot;temperature&quot;, &quot;°C&quot;);</b>
+<b class="fc"><i>228</i>&nbsp;        SensorAffichageVO humiditeSensor = new SensorAffichageVO(2, &quot;humidity&quot;, &quot;%&quot;);</b>
+<b class="fc"><i>229</i>&nbsp;        sensorVOList.add(temperatureSensor);</b>
+<b class="fc"><i>230</i>&nbsp;        sensorVOList.add(humiditeSensor);</b>
+<b class="fc"><i>231</i>&nbsp;        sensorsVO.setSensors(sensorVOList);</b>
+<b class="fc"><i>232</i>&nbsp;        return ResultUtil.success(sensorsVO);</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    @RequestMapping(value = &quot;/listSensors/{id}&quot;, method = RequestMethod.GET)
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    public ResultVO&lt;SensorVO&gt; getListSensors(@PathVariable(value = &quot;id&quot;) int index, @RequestParam(value = &quot;quantite&quot;, required = false, defaultValue = &quot;6&quot;) int quantite) {
+<b class="nc"><i>239</i>&nbsp;        SensorVO sensorVO = new SensorVO();</b>
+<b class="nc"><i>240</i>&nbsp;        sensorVO = terraiumServiceSensor.getSensorByIdVO(index, quantite);</b>
+<b class="nc"><i>241</i>&nbsp;        return ResultUtil.success(sensorVO);</b>
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;    @RequestMapping(value = &quot;/getDonneeUneSemaine&quot;, method = RequestMethod.GET)
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    public List&lt;Terrarium&gt; getDonneeUneSemaine() {
+<b class="nc"><i>247</i>&nbsp;        List&lt;Terrarium&gt; terrariums = terrariumGenereService.getDonneeUneSemaine();</b>
+<b class="nc"><i>248</i>&nbsp;        return terrariums;</b>
+<i>249</i>&nbsp;    }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    @RequestMapping(value = &quot;/getParametresUneSemaine&quot;, method = RequestMethod.GET)
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    public ResultVO&lt;TerraiumsSensorGenereVO&gt; getCurrentParametresUneSemaine() {
+<b class="nc"><i>254</i>&nbsp;        TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();</b>
+<b class="nc"><i>255</i>&nbsp;        List&lt;TerrariumsGenereVO&gt; terraiumsVOList = new ArrayList&lt;TerrariumsGenereVO&gt;();</b>
+<i>256</i>&nbsp;
+<b class="nc"><i>257</i>&nbsp;        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetUneSemaineTemperaturesVO();</b>
+<b class="nc"><i>258</i>&nbsp;        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetUneSemaineHumiditesVO();</b>
+<b class="nc"><i>259</i>&nbsp;        terraiumsVOList.add(temperaturesVO);</b>
+<b class="nc"><i>260</i>&nbsp;        terraiumsVOList.add(humiditesVO);</b>
+<b class="nc"><i>261</i>&nbsp;        terraiumsGenereVO.setSensors(terraiumsVOList);</b>
+<i>262</i>&nbsp;
+<b class="nc"><i>263</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;    @RequestMapping(value = &quot;/getParametresUneSemaine/{id}&quot;, method = RequestMethod.GET)
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    public ResultVO&lt;TerrariumsGenereVO&gt; getParametresUneSemaineById(@PathVariable(value = &quot;id&quot;) int index) {
+<b class="nc"><i>270</i>&nbsp;        TerrariumsGenereVO terraiumsGenereVO = new TerrariumsGenereVO();</b>
+<b class="nc"><i>271</i>&nbsp;        if (index == 1) {</b>
+<b class="nc"><i>272</i>&nbsp;            terraiumsGenereVO = terrariumGenereService.GetUneSemaineTemperaturesVO();</b>
+<b class="nc"><i>273</i>&nbsp;        } else if (index == 2) {</b>
+<b class="nc"><i>274</i>&nbsp;            terraiumsGenereVO = terrariumGenereService.GetUneSemaineHumiditesVO();</b>
+<i>275</i>&nbsp;        }
+<b class="nc"><i>276</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    }
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;    @RequestMapping(value = &quot;/getTemperaturesUneSemaine&quot;, method = RequestMethod.GET)
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    public ResultVO&lt;TerrariumsGenereVO&gt; getCurrentTemperatureUneSemaine() {
+<b class="nc"><i>283</i>&nbsp;        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUneSemaineTemperaturesVO();</b>
+<i>284</i>&nbsp;
+<b class="nc"><i>285</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;    }
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    @RequestMapping(value = &quot;/getHumiditeUneSemaine&quot;, method = RequestMethod.GET)
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    public ResultVO&lt;TerrariumsGenereVO&gt; getCurrentHumiditeUneSemaine() {
+<b class="nc"><i>292</i>&nbsp;        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUneSemaineHumiditesVO();</b>
+<i>293</i>&nbsp;
+<b class="nc"><i>294</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;    }
+<i>297</i>&nbsp;    @RequestMapping(value = &quot;/getDonneeUnMois&quot;, method = RequestMethod.GET)
+<i>298</i>&nbsp;
+<i>299</i>&nbsp;    public List&lt;Terrarium&gt; getDonneeUnMois() {
+<b class="nc"><i>300</i>&nbsp;        List&lt;Terrarium&gt; terrariums = terrariumGenereService.getDonneeUnMois();</b>
+<b class="nc"><i>301</i>&nbsp;        return terrariums;</b>
+<i>302</i>&nbsp;    }
+<i>303</i>&nbsp;
+<i>304</i>&nbsp;    @RequestMapping(value = &quot;/getParametresUnMois&quot;, method = RequestMethod.GET)
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;    public ResultVO&lt;TerraiumsSensorGenereVO&gt; getCurrentParametresUnMois() {
+<b class="nc"><i>307</i>&nbsp;        TerraiumsSensorGenereVO terraiumsGenereVO = new TerraiumsSensorGenereVO();</b>
+<b class="nc"><i>308</i>&nbsp;        List&lt;TerrariumsGenereVO&gt; terraiumsVOList = new ArrayList&lt;TerrariumsGenereVO&gt;();</b>
+<i>309</i>&nbsp;
+<b class="nc"><i>310</i>&nbsp;        TerrariumsGenereVO temperaturesVO = terrariumGenereService.GetUnMoisTemperaturesVO();</b>
+<b class="nc"><i>311</i>&nbsp;        TerrariumsGenereVO humiditesVO = terrariumGenereService.GetUnMoisHumiditesVO();</b>
+<b class="nc"><i>312</i>&nbsp;        terraiumsVOList.add(temperaturesVO);</b>
+<b class="nc"><i>313</i>&nbsp;        terraiumsVOList.add(humiditesVO);</b>
+<b class="nc"><i>314</i>&nbsp;        terraiumsGenereVO.setSensors(terraiumsVOList);</b>
+<i>315</i>&nbsp;
+<b class="nc"><i>316</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;    }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    @RequestMapping(value = &quot;/getTemperaturesUnMois&quot;, method = RequestMethod.GET)
+<i>321</i>&nbsp;
+<i>322</i>&nbsp;    public ResultVO&lt;TerrariumsGenereVO&gt; getCurrentTemperatureUnMois() {
+<b class="nc"><i>323</i>&nbsp;        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUnMoisTemperaturesVO();</b>
+<i>324</i>&nbsp;
+<b class="nc"><i>325</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    }
+<i>328</i>&nbsp;
+<i>329</i>&nbsp;    @RequestMapping(value = &quot;/getHumiditeUnMois&quot;, method = RequestMethod.GET)
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    public ResultVO&lt;TerrariumsGenereVO&gt; getCurrentHumiditeUnMois() {
+<b class="nc"><i>332</i>&nbsp;        TerrariumsGenereVO terraiumsGenereVO = terrariumGenereService.GetUnMoisHumiditesVO();</b>
+<i>333</i>&nbsp;
+<b class="nc"><i>334</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    }
+<i>337</i>&nbsp;
+<i>338</i>&nbsp;    @RequestMapping(value = &quot;/getParametresUnMois/{id}&quot;, method = RequestMethod.GET)
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;    public ResultVO&lt;TerrariumsGenereVO&gt; getParametresUnMoisById(@PathVariable(value = &quot;id&quot;) int index) {
+<b class="nc"><i>341</i>&nbsp;        TerrariumsGenereVO terraiumsGenereVO = new TerrariumsGenereVO();</b>
+<b class="nc"><i>342</i>&nbsp;        if (index == 1) {</b>
+<b class="nc"><i>343</i>&nbsp;            terraiumsGenereVO = terrariumGenereService.GetUnMoisTemperaturesVO();</b>
+<b class="nc"><i>344</i>&nbsp;        } else if (index == 2) {</b>
+<b class="nc"><i>345</i>&nbsp;            terraiumsGenereVO = terrariumGenereService.GetUnMoisHumiditesVO();</b>
+<i>346</i>&nbsp;        }
+<b class="nc"><i>347</i>&nbsp;        return ResultUtil.success(terraiumsGenereVO);</b>
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    }
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;    @ControllerAdvice
+<b class="fc"><i>352</i>&nbsp;    public class ExceptionHandle {</b>
+<i>353</i>&nbsp;        @ResponseBody
+<i>354</i>&nbsp;        @ExceptionHandler(value = Exception.class)
+<i>355</i>&nbsp;        public Object handle(Exception e) {
+<b class="nc"><i>356</i>&nbsp;            if (e instanceof TerraiumException) {</b>
+<b class="nc"><i>357</i>&nbsp;                TerraiumException te = (TerraiumException) e;</b>
+<b class="nc"><i>358</i>&nbsp;                return ResultUtil.error(te.getCode(), te.getMessage());</b>
+<i>359</i>&nbsp;            } else {
+<b class="nc"><i>360</i>&nbsp;                return ResultUtil.error(-1, &quot;unknown error&quot;);</b>
+<i>361</i>&nbsp;            }
+<i>362</i>&nbsp;        }
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;    }
+<i>366</i>&nbsp;}
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

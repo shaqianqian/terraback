@@ -1,0 +1,364 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChauffageController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChauffageController (com.terrastation.sha.Controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChauffageController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33,3%
+  </span>
+  <span class="absValue">
+    (4/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5,7%
+  </span>
+  <span class="absValue">
+    (5/ 87)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import com.terrastation.sha.Entity.Chauffage;
+<i>5</i>&nbsp;import com.terrastation.sha.Entity.Interrupteur;
+<i>6</i>&nbsp;import com.terrastation.sha.Entity.Lumiere;
+<i>7</i>&nbsp;import com.terrastation.sha.Enums.ResultEnum;
+<i>8</i>&nbsp;import com.terrastation.sha.Exception.IdNotExistException;
+<i>9</i>&nbsp;import com.terrastation.sha.Exception.ParameterErrorException;
+<i>10</i>&nbsp;import com.terrastation.sha.Exception.TerraiumException;
+<i>11</i>&nbsp;import com.terrastation.sha.Repositary.ChauffageRepository;
+<i>12</i>&nbsp;import com.terrastation.sha.Repositary.InterrupteurRepository;
+<i>13</i>&nbsp;import com.terrastation.sha.Service.InterrupteurService;
+<i>14</i>&nbsp;import com.terrastation.sha.Util.ResultUtil;
+<i>15</i>&nbsp;import com.terrastation.sha.Util.TimeOverlappingintervals;
+<i>16</i>&nbsp;import com.terrastation.sha.VO.ResultVO;
+<i>17</i>&nbsp;import lombok.extern.slf4j.Slf4j;
+<i>18</i>&nbsp;import org.slf4j.Logger;
+<i>19</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>20</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>21</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import javax.xml.transform.Result;
+<i>24</i>&nbsp;import java.text.SimpleDateFormat;
+<i>25</i>&nbsp;import java.util.List;
+<i>26</i>&nbsp;import java.util.Optional;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;@CrossOrigin
+<b class="fc"><i>29</i>&nbsp;@Slf4j</b>
+<i>30</i>&nbsp;@RestController
+<i>31</i>&nbsp;@RequestMapping(value = &quot;/terrarium/chauffage&quot;)
+<b class="fc"><i>32</i>&nbsp;public class ChauffageController {</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Autowired
+<i>35</i>&nbsp;    private ChauffageRepository chauffageRepository;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    @Autowired
+<i>38</i>&nbsp;    private InterrupteurService interrupteurService;
+<i>39</i>&nbsp;    @Autowired
+<i>40</i>&nbsp;    private InterrupteurRepository interrupteurRepository;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    @RequestMapping(value = &quot;/getAll&quot;, method = RequestMethod.GET)
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public ResultVO findall() {
+<b class="fc"><i>46</i>&nbsp;        return ResultUtil.success(chauffageRepository.findAll());</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @RequestMapping(value = &quot;/add&quot;, method = RequestMethod.POST)
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public ResultVO add(@RequestBody Chauffage chauffage) {
+<b class="nc"><i>53</i>&nbsp;        Chauffage newChauffage = new Chauffage();</b>
+<i>54</i>&nbsp;//        SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);
+<i>55</i>&nbsp;//        Date timeDebut = null;
+<i>56</i>&nbsp;//        Date timeFin = null;
+<i>57</i>&nbsp;//        try {
+<i>58</i>&nbsp;//            timeDebut = format.parse(dateDebut);
+<i>59</i>&nbsp;//
+<i>60</i>&nbsp;//        } catch (ParseException e) {
+<i>61</i>&nbsp;//            e.printStackTrace();
+<i>62</i>&nbsp;//        }
+<i>63</i>&nbsp;//        try {
+<i>64</i>&nbsp;//            timeFin = format.parse(dateFin);
+<i>65</i>&nbsp;//
+<i>66</i>&nbsp;//        } catch (ParseException e) {
+<i>67</i>&nbsp;//            e.printStackTrace();
+<i>68</i>&nbsp;//        }
+<i>69</i>&nbsp;//        if (timeDebut.after(timeFin) || timeDebut.equals(timeFin)) {
+<i>70</i>&nbsp;//
+<i>71</i>&nbsp;//            throw new IdNotExistException(ResultEnum.Time_Ordre);
+<i>72</i>&nbsp;//        } else {
+<i>73</i>&nbsp;//            rep.setDateDebut(timeDebut);
+<i>74</i>&nbsp;//            rep.setDateFin(timeFin);
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;        if (chauffage.getMoisDebut() &gt;= chauffage.getMoisFin() || chauffage.getHeureDebut() &gt;= chauffage.getHeureFin() || chauffage.getMin() &gt;= chauffage.getMax()) {</b>
+<b class="nc"><i>77</i>&nbsp;            throw new ParameterErrorException(ResultEnum.Time_Ordre);</b>
+<i>78</i>&nbsp;        } else {
+<b class="nc"><i>79</i>&nbsp;            newChauffage = chauffageRepository.save(chauffage);</b>
+<i>80</i>&nbsp;        }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;        return ResultUtil.success(newChauffage);</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
+<i>89</i>&nbsp;    public ResultVO&lt;String&gt; deleteChauffage(@PathVariable(value = &quot;id&quot;) int chauffageId) {
+<b class="nc"><i>90</i>&nbsp;        Optional&lt;Chauffage&gt; chauffage = chauffageRepository.findById(chauffageId);</b>
+<b class="nc"><i>91</i>&nbsp;        Chauffage chauffageNew = null;</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;
+<b class="nc"><i>94</i>&nbsp;        if (chauffage.isPresent()) {</b>
+<b class="nc"><i>95</i>&nbsp;            chauffageNew = chauffage.get();</b>
+<b class="nc"><i>96</i>&nbsp;            chauffageRepository.delete(chauffageNew);</b>
+<i>97</i>&nbsp;        }
+<b class="nc"><i>98</i>&nbsp;        chauffage.orElseThrow(() -&gt; new IdNotExistException(ResultEnum.ID_NOT_EXIST));</b>
+<b class="nc"><i>99</i>&nbsp;        return ResultUtil.success(&quot;vous avez reussi de supprimer : &quot; + chauffageId);</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    @GetMapping(&quot;/DeleteAll&quot;)
+<i>104</i>&nbsp;    public ResultVO&lt;String&gt; deleteAll() {
+<b class="nc"><i>105</i>&nbsp;        List&lt;Chauffage&gt; oldChauffageList = chauffageRepository.findAll();</b>
+<b class="nc"><i>106</i>&nbsp;        for (Chauffage oldChauffage : oldChauffageList) {</b>
+<b class="nc"><i>107</i>&nbsp;            chauffageRepository.delete(oldChauffage);</b>
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;        }</b>
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;        return ResultUtil.success(&quot;vous avez supprime toute la configuration de chauffage&quot;);</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    @PostMapping(&quot;/UpdateAll&quot;)
+<i>116</i>&nbsp;    public ResultVO&lt;List&lt;Chauffage&gt;&gt; updateAll(@RequestBody List&lt;Chauffage&gt; chauffages) {
+<b class="nc"><i>117</i>&nbsp;        Logger log = LoggerFactory.getLogger(AlarmeController.class);</b>
+<b class="nc"><i>118</i>&nbsp;        if (!TimeOverlappingintervals.analyeMoisChauffage(chauffages)) {</b>
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;                log.info(&quot;il existe les chevauchements d&#39;heure ou mois&quot;);</b>
+<b class="nc"><i>121</i>&nbsp;                throw new ParameterErrorException(ResultEnum.Existe_chevauchement);</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;        }
+<b class="nc"><i>124</i>&nbsp;        List&lt;Chauffage&gt; oldChauffageList = chauffageRepository.findAll();</b>
+<b class="nc"><i>125</i>&nbsp;        for (Chauffage oldChauffage : oldChauffageList) {</b>
+<b class="nc"><i>126</i>&nbsp;            chauffageRepository.delete(oldChauffage);</b>
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;        }</b>
+<i>129</i>&nbsp;
+<b class="nc"><i>130</i>&nbsp;        for (int i = 0; i &lt; chauffages.size(); i++) {</b>
+<b class="nc"><i>131</i>&nbsp;        if (chauffages.get(i).getHeureDebut() &gt;= chauffages.get(i).getHeureFin() || chauffages.get(i).getMoisDebut() &gt;= chauffages.get(i).getMoisFin() || chauffages.get(i).getMin() &gt;= chauffages.get(i).getMax()) {</b>
+<b class="nc"><i>132</i>&nbsp;            throw new ParameterErrorException(ResultEnum.Time_Ordre);</b>
+<i>133</i>&nbsp;        }
+<i>134</i>&nbsp;//            chauffages.get(i).setId(i+1);
+<b class="nc"><i>135</i>&nbsp;            chauffages.get(i).setId(0);</b>
+<b class="nc"><i>136</i>&nbsp;        chauffageRepository.save(chauffages.get(i));</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;
+<b class="nc"><i>140</i>&nbsp;        return ResultUtil.success(chauffageRepository.findAll());</b>
+<i>141</i>&nbsp;}
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    @PostMapping(&quot;/UpdateTouteLannee&quot;)
+<i>144</i>&nbsp;    public ResultVO&lt;List&lt;Chauffage&gt;&gt; updateTouteLannee(@RequestBody List&lt;Chauffage&gt; chauffages) {
+<b class="nc"><i>145</i>&nbsp;        if (!TimeOverlappingintervals.analyeMoisTouteAnneeChauffage(chauffages)) {</b>
+<i>146</i>&nbsp;
+<b class="nc"><i>147</i>&nbsp;            log.info(&quot;il existe les chevauchements d&#39;heure&quot;);</b>
+<b class="nc"><i>148</i>&nbsp;            throw new ParameterErrorException(ResultEnum.Existe_chevauchement);</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;        }
+<b class="nc"><i>151</i>&nbsp;        List&lt;Chauffage&gt; oldChauffageList = chauffageRepository.findAll();</b>
+<b class="nc"><i>152</i>&nbsp;        for (Chauffage oldChauffage : oldChauffageList) {</b>
+<i>153</i>&nbsp;//            if (oldChauffage.getMoisDebut() != 1 || oldChauffage.getMoisFin() != 12) {
+<b class="nc"><i>154</i>&nbsp;                chauffageRepository.delete(oldChauffage);</b>
+<i>155</i>&nbsp;//            }
+<b class="nc"><i>156</i>&nbsp;        }</b>
+<b class="nc"><i>157</i>&nbsp;        for (Chauffage c : chauffages) {</b>
+<b class="nc"><i>158</i>&nbsp;            Chauffage chauffage = new Chauffage();</b>
+<b class="nc"><i>159</i>&nbsp;            if (c.getHeureDebut() &gt;= c.getHeureFin() || c.getMin() &gt;= c.getMax()) {</b>
+<b class="nc"><i>160</i>&nbsp;                throw new ParameterErrorException(ResultEnum.Time_Ordre);</b>
+<i>161</i>&nbsp;            }
+<i>162</i>&nbsp;
+<b class="nc"><i>163</i>&nbsp;            chauffage.setHeureDebut(c.getHeureDebut());</b>
+<b class="nc"><i>164</i>&nbsp;            chauffage.setHeureFin(c.getHeureFin());</b>
+<b class="nc"><i>165</i>&nbsp;            chauffage.setMoisDebut(1);</b>
+<b class="nc"><i>166</i>&nbsp;            chauffage.setMoisFin(12);</b>
+<b class="nc"><i>167</i>&nbsp;            chauffage.setMax(c.getMax());</b>
+<b class="nc"><i>168</i>&nbsp;            chauffage.setMin(c.getMin());</b>
+<b class="nc"><i>169</i>&nbsp;            chauffageRepository.save(chauffage);</b>
+<b class="nc"><i>170</i>&nbsp;        }</b>
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;        return ResultUtil.success(chauffageRepository.findAll());</b>
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    @PutMapping(&quot;/update/{id}&quot;)
+<i>178</i>&nbsp;    public ResultVO&lt;Chauffage&gt; update(@PathVariable(value = &quot;id&quot;) int chauffageId,
+<i>179</i>&nbsp;//                                          @RequestParam(value = &quot;dateDebut&quot;, required = true, defaultValue = &quot;1900-01-01 00:00:00&quot;) String dateDebut,
+<i>180</i>&nbsp;//                                          @RequestParam(value = &quot;dateFin&quot;, required = true, defaultValue = &quot;1900-01-01 00:00:00&quot;) String dateFin,
+<i>181</i>&nbsp;                                      @RequestParam(value = &quot;max&quot;, required = true, defaultValue = &quot;0&quot;) double max,
+<i>182</i>&nbsp;                                      @RequestParam(value = &quot;min&quot;, required = true, defaultValue = &quot;0&quot;) double min,
+<i>183</i>&nbsp;                                      @RequestParam(value = &quot;moisDebut&quot;, required = true, defaultValue = &quot;0&quot;) int moisDebut,
+<i>184</i>&nbsp;                                      @RequestParam(value = &quot;moisFin&quot;, required = true, defaultValue = &quot;12&quot;) int moisFin,
+<i>185</i>&nbsp;                                      @RequestParam(value = &quot;heureDebut&quot;, required = true, defaultValue = &quot;0&quot;) int heureDebut,
+<i>186</i>&nbsp;                                      @RequestParam(value = &quot;heureFin&quot;, required = true, defaultValue = &quot;24&quot;) int heureFin) {
+<i>187</i>&nbsp;
+<b class="nc"><i>188</i>&nbsp;        Optional&lt;Chauffage&gt; chauffageOptional = chauffageRepository.findById(chauffageId);</b>
+<b class="nc"><i>189</i>&nbsp;        SimpleDateFormat format = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</b>
+<i>190</i>&nbsp;
+<b class="nc"><i>191</i>&nbsp;        Chauffage chauffageNew = null;</b>
+<b class="nc"><i>192</i>&nbsp;        if (chauffageOptional.isPresent()) {</b>
+<b class="nc"><i>193</i>&nbsp;            chauffageNew = chauffageOptional.get();</b>
+<i>194</i>&nbsp;//            if (!dateDebut.equals(&quot;1900-01-01 00:00:00&quot;)) {
+<i>195</i>&nbsp;//                try {
+<i>196</i>&nbsp;//                    chauffageNew.setDateDebut(format.parse(dateDebut));
+<i>197</i>&nbsp;//                } catch (ParseException e) {
+<i>198</i>&nbsp;//                    e.printStackTrace();
+<i>199</i>&nbsp;//                }
+<i>200</i>&nbsp;//
+<i>201</i>&nbsp;//            }
+<i>202</i>&nbsp;//            if (!dateFin.equals(&quot;1900-01-01 00:00:00&quot;)) {
+<i>203</i>&nbsp;//
+<i>204</i>&nbsp;//                try {
+<i>205</i>&nbsp;//                    chauffageNew.setDateFin(format.parse(dateFin));
+<i>206</i>&nbsp;//                } catch (ParseException e) {
+<i>207</i>&nbsp;//                    e.printStackTrace();
+<i>208</i>&nbsp;//                }
+<i>209</i>&nbsp;//
+<i>210</i>&nbsp;//            }
+<i>211</i>&nbsp;
+<b class="nc"><i>212</i>&nbsp;            if (moisDebut != 0) {</b>
+<b class="nc"><i>213</i>&nbsp;                chauffageNew.setMoisDebut(moisDebut);</b>
+<i>214</i>&nbsp;            }
+<i>215</i>&nbsp;
+<b class="nc"><i>216</i>&nbsp;            if (moisFin != 0) {</b>
+<b class="nc"><i>217</i>&nbsp;                chauffageNew.setMoisFin(moisFin);</b>
+<i>218</i>&nbsp;            }
+<i>219</i>&nbsp;
+<b class="nc"><i>220</i>&nbsp;            if (heureDebut != 0) {</b>
+<b class="nc"><i>221</i>&nbsp;                chauffageNew.setHeureDebut(heureDebut);</b>
+<i>222</i>&nbsp;            }
+<b class="nc"><i>223</i>&nbsp;            if (heureFin != 0) {</b>
+<b class="nc"><i>224</i>&nbsp;                chauffageNew.setHeureFin(heureFin);</b>
+<i>225</i>&nbsp;            }
+<b class="nc"><i>226</i>&nbsp;            if (chauffageNew.getMoisDebut() &gt;= chauffageNew.getMoisFin()) {</b>
+<b class="nc"><i>227</i>&nbsp;                throw new ParameterErrorException(ResultEnum.Time_Ordre);</b>
+<i>228</i>&nbsp;            }
+<b class="nc"><i>229</i>&nbsp;            if (chauffageNew.getHeureDebut() &gt;= chauffageNew.getHeureFin()) {</b>
+<b class="nc"><i>230</i>&nbsp;                throw new ParameterErrorException(ResultEnum.Time_Ordre);</b>
+<i>231</i>&nbsp;            }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;            if (max != 0) {</b>
+<b class="nc"><i>235</i>&nbsp;                chauffageNew.setMax(max);</b>
+<i>236</i>&nbsp;            }
+<i>237</i>&nbsp;
+<b class="nc"><i>238</i>&nbsp;            if (min != 0) {</b>
+<b class="nc"><i>239</i>&nbsp;                chauffageNew.setMin(min);</b>
+<i>240</i>&nbsp;            }
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;        }
+<b class="nc"><i>244</i>&nbsp;        Chauffage chauffage1 = chauffageRepository.save(chauffageNew);</b>
+<b class="nc"><i>245</i>&nbsp;        return ResultUtil.success(chauffage1);</b>
+<i>246</i>&nbsp;    }
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    //get l&#39;etat de chauffage
+<i>249</i>&nbsp;    @RequestMapping(value = &quot;/getEtatChauffage&quot;, method = RequestMethod.GET)
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    public ResultVO&lt;Interrupteur&gt; getEtatChauffage() {
+<b class="fc"><i>253</i>&nbsp;        Interrupteur interrupteur = interrupteurService.getControleInterrupteur(&quot;chauffage&quot;);</b>
+<b class="fc"><i>254</i>&nbsp;        return ResultUtil.success(interrupteur);</b>
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    //change le facon de controler le interrupteur
+<i>259</i>&nbsp;    @RequestMapping(value = &quot;/changeControleInterrupteur&quot;, method = RequestMethod.GET)
+<i>260</i>&nbsp;    public ResultVO&lt;Interrupteur&gt; changeControleInterrupteurChauffage() {
+<b class="nc"><i>261</i>&nbsp;        Interrupteur interrupteur = interrupteurService.getControleInterrupteur(&quot;chauffage&quot;);</b>
+<b class="nc"><i>262</i>&nbsp;        boolean isProg=interrupteur.isProg();</b>
+<b class="nc"><i>263</i>&nbsp;        Interrupteur newInterrupteur = interrupteurService.changeControleInterrupteur(&quot;chauffage&quot;, !isProg);</b>
+<b class="nc"><i>264</i>&nbsp;        return ResultUtil.success(newInterrupteur);</b>
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    //change l&#39;etat de chauffage quand il est controle manuellement
+<i>270</i>&nbsp;    @RequestMapping(value = &quot;/changeEtatInterrupteurManuellement&quot;, method = RequestMethod.GET)
+<i>271</i>&nbsp;    public ResultVO&lt;Interrupteur&gt; changeEtatInterrupteurManuellement() {
+<b class="nc"><i>272</i>&nbsp;        Interrupteur interrupteur = interrupteurService.getControleInterrupteur(&quot;chauffage&quot;);</b>
+<b class="nc"><i>273</i>&nbsp;        boolean etat=interrupteur.isEtat();</b>
+<b class="nc"><i>274</i>&nbsp;        Interrupteur newInterrupteur = interrupteurService.ChangeInterrupterManuelleChauffage(!etat);</b>
+<i>275</i>&nbsp;
+<b class="nc"><i>276</i>&nbsp;        return ResultUtil.success(newInterrupteur);</b>
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    }
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Initial</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Initial (com.terrastation.sha)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Initial</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    24,2%
+  </span>
+  <span class="absValue">
+    (8/ 33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.terrastation.sha.Controller.TerrariumController;
+<i>4</i>&nbsp;import com.terrastation.sha.Entity.Interrupteur;
+<i>5</i>&nbsp;import com.terrastation.sha.Entity.Pulverisation;
+<i>6</i>&nbsp;import com.terrastation.sha.Entity.PulverisationInterrupteur;
+<i>7</i>&nbsp;import com.terrastation.sha.Repositary.PulverisationHeureRepository;
+<i>8</i>&nbsp;import com.terrastation.sha.Repositary.PulverisationInterrupeurRepository;
+<i>9</i>&nbsp;import com.terrastation.sha.Repositary.PulverisationRepository;
+<i>10</i>&nbsp;import com.terrastation.sha.Repositary.TerrariumRepositary;
+<i>11</i>&nbsp;import com.terrastation.sha.Service.DynamicTaskService;
+<i>12</i>&nbsp;import com.terrastation.sha.Service.InterrupteurService;
+<i>13</i>&nbsp;import org.slf4j.Logger;
+<i>14</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>15</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>16</i>&nbsp;import org.springframework.boot.CommandLineRunner;
+<i>17</i>&nbsp;import org.springframework.stereotype.Component;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.text.MessageFormat;
+<i>20</i>&nbsp;import java.util.Calendar;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * La methode fonctionne quand le projet lance
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;@Component
+<b class="fc"><i>27</i>&nbsp;public class Initial implements CommandLineRunner {</b>
+<i>28</i>&nbsp;
+<b class="fc"><i>29</i>&nbsp;    Logger log = LoggerFactory.getLogger(TerrariumController.class);</b>
+<i>30</i>&nbsp;    @Autowired
+<i>31</i>&nbsp;    private InterrupteurService interrupteurService;
+<i>32</i>&nbsp;    @Autowired
+<i>33</i>&nbsp;    private TerrariumRepositary terrariumRepositary;
+<i>34</i>&nbsp;    @Autowired
+<i>35</i>&nbsp;    private PulverisationHeureRepository pulverisationHeureRepository;
+<i>36</i>&nbsp;    @Autowired
+<i>37</i>&nbsp;    private PulverisationRepository pulverisationRepository;
+<i>38</i>&nbsp;    @Autowired
+<i>39</i>&nbsp;    private DynamicTaskService dynamicTaskService;
+<i>40</i>&nbsp;    @Autowired
+<i>41</i>&nbsp;    private PulverisationInterrupeurRepository pulverisationInterrupeurRepository;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @Override
+<i>45</i>&nbsp;    public void run(String... args) throws Exception {
+<i>46</i>&nbsp;
+<b class="fc"><i>47</i>&nbsp;        if (pulverisationInterrupeurRepository.findAll().size() == 0) {</b>
+<b class="nc"><i>48</i>&nbsp;            PulverisationInterrupteur pulverisationInterrupteur = new PulverisationInterrupteur();</b>
+<b class="nc"><i>49</i>&nbsp;            pulverisationInterrupteur.setMode(&quot;horaire&quot;);</b>
+<b class="nc"><i>50</i>&nbsp;            pulverisationInterrupeurRepository.save(pulverisationInterrupteur);</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;        }
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;        PulverisationInterrupteur pulverisationInterrupeur = pulverisationInterrupeurRepository.findAll().get(0);</b>
+<i>55</i>&nbsp;//            Pulverisation pulverisation = pulverisationRepository.findAll().get(0);
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;        if (pulverisationInterrupeur.getMode().equals(&quot;horaire&quot;)) {</b>
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;            if (!pulverisationRepository.findByMode(&quot;horaire&quot;).isPresent()) {</b>
+<b class="fc"><i>60</i>&nbsp;                log.info(&quot;vous avez pas encore configurez les details de pulverisation en mode horaire &quot;);</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;            } else {
+<b class="nc"><i>63</i>&nbsp;                List&lt;Pulverisation&gt; pulverisationList = pulverisationRepository.findByMode(&quot;horaire&quot;).get();</b>
+<b class="nc"><i>64</i>&nbsp;                Calendar auj = Calendar.getInstance();</b>
+<b class="nc"><i>65</i>&nbsp;                int mois = auj.get(Calendar.MONTH) + 1;</b>
+<b class="nc"><i>66</i>&nbsp;                Pulverisation pulverisationCourant = pulverisationList.get(0);</b>
+<b class="nc"><i>67</i>&nbsp;                for (Pulverisation p : pulverisationList) {</b>
+<b class="nc"><i>68</i>&nbsp;                    if (p.getMoisDebut() &lt;= mois &amp;&amp; mois &lt;= p.getMoisFin()) {</b>
+<b class="nc"><i>69</i>&nbsp;                        pulverisationCourant = p;</b>
+<b class="nc"><i>70</i>&nbsp;                        break;</b>
+<i>71</i>&nbsp;                    }
+<b class="nc"><i>72</i>&nbsp;                }</b>
+<b class="nc"><i>73</i>&nbsp;                if (pulverisationCourant.getPulverisationheure().size() == 0) {</b>
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;                    log.info(&quot;vous avez pas encore configurez les details de pulverisation en mode horaire &quot;);</b>
+<i>76</i>&nbsp;                } else {
+<b class="nc"><i>77</i>&nbsp;                    String moi = pulverisationCourant.getMoisDebut() + &quot;-&quot; + pulverisationCourant.getMoisFin();</b>
+<b class="nc"><i>78</i>&nbsp;                    String heures = pulverisationCourant.getPulverisationheure().get(0).getHeure() + &quot;&quot;;</b>
+<b class="nc"><i>79</i>&nbsp;                    Calendar c = Calendar.getInstance();</b>
+<b class="nc"><i>80</i>&nbsp;                    int heureCurrent = c.get(Calendar.HOUR_OF_DAY);</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;                    int dureeCorrespendant = pulverisationCourant.getPulverisationheure().get(0).getDuree();</b>
+<b class="nc"><i>83</i>&nbsp;                    if (pulverisationCourant.getPulverisationheure().size() &gt; 1) {</b>
+<b class="nc"><i>84</i>&nbsp;                        for (int i = 1; i &lt; pulverisationCourant.getPulverisationheure().size(); i++) {</b>
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;                            heures = heures + &quot;,&quot; + pulverisationCourant.getPulverisationheure().get(i).getHeure();</b>
+<i>87</i>&nbsp;                        }
+<i>88</i>&nbsp;                    }
+<b class="nc"><i>89</i>&nbsp;                    String cron = MessageFormat.format(&quot;0 0 {0} ? {1} ?&quot;, heures, moi);</b>
+<i>90</i>&nbsp;                    //String cron = MessageFormat.format(&quot;0 * {0} ? {1} ?&quot;, heures, moi);
+<b class="nc"><i>91</i>&nbsp;                    System.out.println(cron);</b>
+<b class="nc"><i>92</i>&nbsp;                    dynamicTaskService.startCron(pulverisationCourant, cron);</b>
+<i>93</i>&nbsp;                }
+<i>94</i>&nbsp;            }
+<i>95</i>&nbsp;        }
+<i>96</i>&nbsp;
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

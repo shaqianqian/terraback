@@ -20,6 +20,62 @@ public class Alarme {
     private double duree;
     private String message;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public double getMin() {
+        return min;
+    }
+
+    public void setMin(double min) {
+        this.min = min;
+    }
+
+    public double getMax() {
+        return max;
+    }
+
+    public void setMax(double max) {
+        this.max = max;
+    }
+
+    public double getVariation() {
+        return variation;
+    }
+
+    public void setVariation(double variation) {
+        this.variation = variation;
+    }
+
+    public double getDuree() {
+        return duree;
+    }
+
+    public void setDuree(double duree) {
+        this.duree = duree;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public Alarme(String type, double min, double max, double variation, double duree, String message) {
         this.type = type;
         this.min = min;

@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TemperatureController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TemperatureController (com.terrastation.sha.Controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TemperatureController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TemperatureController$ExceptionHandle</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/ 5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (5/ 10)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.terrastation.sha.Service.TerrariumSensorService;
+<i>4</i>&nbsp;import com.terrastation.sha.Util.ResultUtil;
+<i>5</i>&nbsp;import com.terrastation.sha.VO.*;
+<i>6</i>&nbsp;import com.terrastation.sha.Exception.TerraiumException;
+<i>7</i>&nbsp;import org.slf4j.Logger;
+<i>8</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>9</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>10</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;@CrossOrigin
+<i>13</i>&nbsp;@RestController
+<b class="fc"><i>14</i>&nbsp;public class TemperatureController {</b>
+<b class="fc"><i>15</i>&nbsp;    Logger log = LoggerFactory.getLogger(TemperatureController.class);</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    @Autowired
+<i>19</i>&nbsp;    private TerrariumSensorService terrariumSensorService;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    @Autowired
+<i>23</i>&nbsp;    private TemperatureController temperatureservice;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;//recuperer les temperatures recentes, maximal et minimal
+<i>26</i>&nbsp;    @RequestMapping(value = &quot;/terrarium/temperature/getCurrentTemperaturesVO&quot;, method = RequestMethod.GET)
+<i>27</i>&nbsp;    public ResultVO&lt;TerrariumsVO&gt; getCurrentTemperaturesVO(@RequestParam(value = &quot;quantite&quot;, required = false, defaultValue = &quot;6&quot; )int quantite) {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;
+<b class="fc"><i>31</i>&nbsp;        SensorVO temperature_sensor=new SensorVO();</b>
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        temperature_sensor= terrariumSensorService.getCurrentTemperaturesVO(quantite);</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        return ResultUtil.success(temperature_sensor);</b>
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    @ControllerAdvice
+<b class="fc"><i>42</i>&nbsp;    public class ExceptionHandle {</b>
+<i>43</i>&nbsp;        @ResponseBody
+<i>44</i>&nbsp;        @ExceptionHandler(value = Exception.class)
+<i>45</i>&nbsp;        public Object handle(Exception e) {
+<b class="nc"><i>46</i>&nbsp;            if (e instanceof TerraiumException) {</b>
+<b class="nc"><i>47</i>&nbsp;                TerraiumException te = (TerraiumException) e;</b>
+<b class="nc"><i>48</i>&nbsp;                return ResultUtil.error(te.getCode(), te.getMessage());</b>
+<i>49</i>&nbsp;            } else {
+<b class="nc"><i>50</i>&nbsp;                return ResultUtil.error(-1, &quot;unknown error&quot;);</b>
+<i>51</i>&nbsp;            }
+<i>52</i>&nbsp;        }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;}
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

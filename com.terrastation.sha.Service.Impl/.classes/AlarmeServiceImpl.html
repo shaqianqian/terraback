@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AlarmeServiceImpl</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Service.Impl</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AlarmeServiceImpl (com.terrastation.sha.Service.Impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AlarmeServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14%
+  </span>
+  <span class="absValue">
+    (8/ 57)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AlarmeServiceImpl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AlarmeServiceImpl$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    30%
+  </span>
+  <span class="absValue">
+    (3/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,6%
+  </span>
+  <span class="absValue">
+    (8/ 69)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Service.Impl;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import com.terrastation.sha.Controller.AlarmeController;
+<i>5</i>&nbsp;import com.terrastation.sha.Entity.Alarme;
+<i>6</i>&nbsp;import com.terrastation.sha.Entity.Terrarium;
+<i>7</i>&nbsp;import com.terrastation.sha.Repositary.AlarmeRepository;
+<i>8</i>&nbsp;import com.terrastation.sha.Repositary.ProfilRepository;
+<i>9</i>&nbsp;import com.terrastation.sha.Repositary.TerrariumRepositary;
+<i>10</i>&nbsp;import com.terrastation.sha.Service.AlarmeService;
+<i>11</i>&nbsp;import com.terrastation.sha.Service.TerrariumService;
+<i>12</i>&nbsp;import com.terrastation.sha.Util.ResultUtil;
+<i>13</i>&nbsp;import com.terrastation.sha.VO.ResultVO;
+<i>14</i>&nbsp;import lombok.extern.slf4j.Slf4j;
+<i>15</i>&nbsp;import org.slf4j.Logger;
+<i>16</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>17</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>18</i>&nbsp;import org.springframework.mail.SimpleMailMessage;
+<i>19</i>&nbsp;import org.springframework.mail.javamail.JavaMailSender;
+<i>20</i>&nbsp;import org.springframework.stereotype.Service;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import java.text.DateFormat;
+<i>23</i>&nbsp;import java.text.SimpleDateFormat;
+<i>24</i>&nbsp;import java.util.*;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;@Service
+<b class="fc"><i>27</i>&nbsp;public class AlarmeServiceImpl implements AlarmeService {</b>
+<i>28</i>&nbsp;    @Autowired
+<i>29</i>&nbsp;    private JavaMailSender mailSender;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    @Autowired
+<i>32</i>&nbsp;    private ProfilRepository profilRepository;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Autowired
+<i>35</i>&nbsp;    private TerrariumRepositary terrariumRepositary;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    @Autowired
+<i>38</i>&nbsp;    private AlarmeRepository alarmeRepository;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    @Autowired
+<i>41</i>&nbsp;    private AlarmeService alarmeService;
+<i>42</i>&nbsp;    @Autowired
+<i>43</i>&nbsp;    private TerrariumService terrariumService;
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;    Logger log = LoggerFactory.getLogger(AlarmeController.class);</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    public void send(){
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;        SimpleMailMessage message = new SimpleMailMessage();</b>
+<b class="nc"><i>51</i>&nbsp;        message.setFrom(&quot;terrastation111@gmail.com&quot;);</b>
+<b class="nc"><i>52</i>&nbsp;        message.setTo(profilRepository.findAll().get(0).getEmail());</b>
+<b class="nc"><i>53</i>&nbsp;        message.setSubject(&quot;Terrastation&quot;);</b>
+<b class="nc"><i>54</i>&nbsp;        message.setText(&quot;c&#39;est un Email de terrastation, hahaha je suis en train de tester la systeme de l&#39;alarme&quot;);</b>
+<b class="nc"><i>55</i>&nbsp;        mailSender.send(message);</b>
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;     public List&lt;Terrarium&gt; alarmeTemperature() {
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;         Optional&lt;Alarme&gt; alarmeOptional=alarmeRepository.findByType(&quot;temperature&quot;);</b>
+<b class="fc"><i>61</i>&nbsp;         if(alarmeOptional.isPresent()){</b>
+<b class="nc"><i>62</i>&nbsp;             DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</b>
+<b class="nc"><i>63</i>&nbsp;             Terrarium terrarium = terrariumService.getCurrentParameter();</b>
+<b class="nc"><i>64</i>&nbsp;             Date current = terrarium.getCreateTime();</b>
+<b class="nc"><i>65</i>&nbsp;             String currentString = df.format(current);</b>
+<b class="nc"><i>66</i>&nbsp;             Alarme alarme = alarmeOptional.get();</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;             Date debut = new Date();</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;             debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;             log.info(&quot;debut is &quot; + debut.toString());</b>
+<b class="nc"><i>74</i>&nbsp;             String debutString = df.format(debut);</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;             List&lt;Terrarium&gt; terrariumList = terrariumRepositary.variation(debutString, currentString);</b>
+<b class="nc"><i>78</i>&nbsp;             sortListByTemperature(terrariumList);</b>
+<i>79</i>&nbsp;
+<b class="nc"><i>80</i>&nbsp;             double max_Temperature = terrariumList.get(terrariumList.size() - 1).getTemperature();</b>
+<b class="nc"><i>81</i>&nbsp;             log.info(&quot;max_temperature is &quot; + max_Temperature);</b>
+<b class="nc"><i>82</i>&nbsp;             double min_Temperature = terrariumList.get(0).getTemperature();</b>
+<b class="nc"><i>83</i>&nbsp;             log.info(&quot;min_temperature is &quot; + min_Temperature);</b>
+<b class="nc"><i>84</i>&nbsp;             if (max_Temperature - min_Temperature &gt; alarme.getVariation() || terrarium.getTemperature() &gt; alarme.getMax() || terrarium.getTemperature() &lt; alarme.getMin()) {</b>
+<b class="nc"><i>85</i>&nbsp;                 alarmeService.send();</b>
+<b class="nc"><i>86</i>&nbsp;                 log.info(&quot;send a email&quot; + alarme.getMessage());</b>
+<i>87</i>&nbsp;             }
+<b class="nc"><i>88</i>&nbsp;             return terrariumList;</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;         }
+<i>91</i>&nbsp;        else{
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;            return null;</b>
+<i>94</i>&nbsp;         }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;     }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    public List&lt;Terrarium&gt; alarmeHygrometrie() {
+<b class="fc"><i>99</i>&nbsp;        Optional&lt;Alarme&gt; alarmeOptional = alarmeRepository.findByType(&quot;hygrometrie&quot;);</b>
+<b class="fc"><i>100</i>&nbsp;        if (alarmeOptional.isPresent()) {</b>
+<b class="nc"><i>101</i>&nbsp;            DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</b>
+<b class="nc"><i>102</i>&nbsp;            Terrarium terrarium = terrariumService.getCurrentParameter();</b>
+<b class="nc"><i>103</i>&nbsp;            Date current = terrarium.getCreateTime();</b>
+<b class="nc"><i>104</i>&nbsp;            String currentString = df.format(current);</b>
+<b class="nc"><i>105</i>&nbsp;            Alarme alarme = alarmeRepository.findByType(&quot;hygrometrie&quot;).get();</b>
+<b class="nc"><i>106</i>&nbsp;            Date debut = new Date();</b>
+<b class="nc"><i>107</i>&nbsp;            debut.setTime(new Double(current.getTime() - 60000 * alarme.getVariation()).longValue());</b>
+<b class="nc"><i>108</i>&nbsp;            log.info(&quot;debut is &quot; + debut.toString());</b>
+<b class="nc"><i>109</i>&nbsp;            String debutString = df.format(debut);</b>
+<b class="nc"><i>110</i>&nbsp;            List&lt;Terrarium&gt; terrariumList = terrariumRepositary.variation(debutString, currentString);</b>
+<b class="nc"><i>111</i>&nbsp;            sortListByHumidity(terrariumList);</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;            double max_humidity = terrariumList.get(terrariumList.size() - 1).getHumidite();</b>
+<b class="nc"><i>114</i>&nbsp;            log.info(&quot;max_humidity is &quot; + max_humidity);</b>
+<b class="nc"><i>115</i>&nbsp;            double min_humidity = terrariumList.get(0).getHumidite();</b>
+<b class="nc"><i>116</i>&nbsp;            log.info(&quot;min_humidity is &quot; + min_humidity);</b>
+<b class="nc"><i>117</i>&nbsp;            if (max_humidity - min_humidity &gt; alarme.getVariation() || terrarium.getHumidite() &gt; alarme.getMax() || terrarium.getHumidite() &lt; alarme.getMin()) {</b>
+<b class="nc"><i>118</i>&nbsp;                alarmeService.send();</b>
+<b class="nc"><i>119</i>&nbsp;                log.info(&quot;send a email&quot; + alarme.getMessage());</b>
+<i>120</i>&nbsp;            }
+<b class="nc"><i>121</i>&nbsp;            return terrariumList;</b>
+<i>122</i>&nbsp;        } else {
+<b class="fc"><i>123</i>&nbsp;            return null;</b>
+<i>124</i>&nbsp;        }
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    private void sortListByTemperature(List&lt;Terrarium&gt; list) {
+<b class="nc"><i>129</i>&nbsp;        Collections.sort(list, new Comparator&lt;Terrarium&gt;() {</b>
+<i>130</i>&nbsp;            @Override
+<i>131</i>&nbsp;            public int compare(Terrarium o1, Terrarium o2) {
+<b class="nc"><i>132</i>&nbsp;                if (o1.getTemperature() &gt; o2.getTemperature()) {</b>
+<b class="nc"><i>133</i>&nbsp;                    return 1;</b>
+<b class="nc"><i>134</i>&nbsp;                } else if (o1.getTemperature() &lt; o2.getTemperature()) {</b>
+<b class="nc"><i>135</i>&nbsp;                    return -1;</b>
+<i>136</i>&nbsp;                } else {
+<b class="nc"><i>137</i>&nbsp;                    return 0;</b>
+<i>138</i>&nbsp;                }
+<i>139</i>&nbsp;            }
+<i>140</i>&nbsp;        });
+<b class="nc"><i>141</i>&nbsp;    }</b>
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    private void sortListByHumidity(List&lt;Terrarium&gt; list) {
+<b class="nc"><i>144</i>&nbsp;        Collections.sort(list, new Comparator&lt;Terrarium&gt;() {</b>
+<i>145</i>&nbsp;            @Override
+<i>146</i>&nbsp;            public int compare(Terrarium o1, Terrarium o2) {
+<b class="nc"><i>147</i>&nbsp;                if (o1.getHumidite() &gt; o2.getHumidite()) {</b>
+<b class="nc"><i>148</i>&nbsp;                    return 1;</b>
+<b class="nc"><i>149</i>&nbsp;                } else if (o1.getHumidite() &lt; o2.getHumidite()) {</b>
+<b class="nc"><i>150</i>&nbsp;                    return -1;</b>
+<i>151</i>&nbsp;                } else {
+<b class="nc"><i>152</i>&nbsp;                    return 0;</b>
+<i>153</i>&nbsp;                }
+<i>154</i>&nbsp;            }
+<i>155</i>&nbsp;        });
+<b class="nc"><i>156</i>&nbsp;    }</b>
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

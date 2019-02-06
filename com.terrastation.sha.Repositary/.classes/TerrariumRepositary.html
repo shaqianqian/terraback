@@ -1,0 +1,86 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TerrariumRepositary</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Repositary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TerrariumRepositary (com.terrastation.sha.Repositary)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TerrariumRepositary</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Repositary;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.List;
+<i>6</i>&nbsp;import com.terrastation.sha.Entity.Terrarium;
+<i>7</i>&nbsp;import org.springframework.data.jpa.repository.Query;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public interface TerrariumRepositary extends JpaRepository&lt;Terrarium,Integer&gt; {
+<i>10</i>&nbsp;    @Query(value = &quot;select *  from runoob_db.terrarium where (select max(create_time) from runoob_db.terrarium )=create_time &quot;, nativeQuery = true)
+<i>11</i>&nbsp;    public Terrarium getCurrentParameter();
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Query(value = &quot;SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1 ; &quot;, nativeQuery = true)
+<i>15</i>&nbsp;     public List&lt;Terrarium&gt; findCurrentParameters(Integer quantity);
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    @Query(value=&quot;select * from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currenctTemp1 where (select max(temperature) from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currentTemp2)=temperature&quot;, nativeQuery = true)
+<i>18</i>&nbsp;     public Terrarium findMaxTemperatures(Integer quantity);
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @Query(value=&quot;select * from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currenctTemp1 where (select min(temperature) from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currentTemp2)=temperature&quot;, nativeQuery = true)
+<i>21</i>&nbsp;    public Terrarium findMinTemperatures(Integer quantity);
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @Query(value=&quot;select * from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currenctTemp1 where (select max(humidite) from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currentTemp2)=humidite&quot;, nativeQuery = true)
+<i>25</i>&nbsp;    public Terrarium findMaxHumidites(Integer quantity);
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    @Query(value=&quot;select * from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currenctTemp1 where (select min(humidite) from (SELECT * FROM runoob_db.terrarium order by create_time desc limit ?1) as currentTemp2)=humidite&quot;, nativeQuery = true)
+<i>28</i>&nbsp;    public Terrarium findMinHumidites(Integer quantity);
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    @Query(value = &quot;SELECT COUNT(*) FROM terrarium;&quot;, nativeQuery = true)
+<i>31</i>&nbsp;    public int getRowQuantity();
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    @Query(value=&quot;select * from runoob_db.terrarium where create_time between ?1 and ?2 ;&quot;, nativeQuery = true)
+<i>34</i>&nbsp;    public List&lt;Terrarium&gt; variation(String date1,String date2);
+<i>35</i>&nbsp;    @Query(value=&quot;SELECT * FROM terrarium where create_time&gt;DATE_SUB(CURDATE(), INTERVAL 1 WEEK);&quot;, nativeQuery = true)
+<i>36</i>&nbsp;    public List&lt;Terrarium&gt; donneUneSemaine();
+<i>37</i>&nbsp;    @Query(value=&quot;SELECT * FROM terrarium where create_time&gt;DATE_SUB(CURDATE(), INTERVAL 1 MONTH);&quot;, nativeQuery = true)
+<i>38</i>&nbsp;    public List&lt;Terrarium&gt; donneUnMois();
+<i>39</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

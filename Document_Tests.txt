@@ -1,0 +1,10 @@
+Les tests unitaires sont faits au niveau de la partie API REST en rapport avec la base de donnée plus présicement sur les controleurs .
+Les classes qui ont été testé sont les suivantes :
+		AlarmeController		=>	AlarmeControllerTest
+		ChauffageController		=>	ChauffageControllerTest
+		HumiditeController		=>	HumiditeControllerTest
+		LumiereController		=>	LumiereControllerTest
+		PulverisationController =>	PulverisationControllerTest
+		TemperatureController	=>	TemperatureControllerTest
+		TerrariumController		=>	TerrariumControllerTest
+La couverture de code (à partir d'IntelliJ est à 75%)

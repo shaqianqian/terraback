@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TimeOverlappingintervals</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TimeOverlappingintervals (com.terrastation.sha.Util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TimeOverlappingintervals</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 57)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Util;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.terrastation.sha.Entity.Chauffage;
+<i>4</i>&nbsp;import com.terrastation.sha.Entity.Lumiere;
+<i>5</i>&nbsp;import com.terrastation.sha.Entity.Pulverisation;
+<i>6</i>&nbsp;import com.terrastation.sha.Entity.Pulverisationheure;
+<i>7</i>&nbsp;import lombok.extern.slf4j.Slf4j;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.util.HashSet;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;
+<b class="nc"><i>12</i>&nbsp;@Slf4j</b>
+<b class="nc"><i>13</i>&nbsp;public class TimeOverlappingintervals {</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    public static boolean analyeMoisChauffage(List&lt;Chauffage&gt; chauffages) {
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;        for (int i = 0; i &lt; chauffages.size() - 1; i++) {</b>
+<b class="nc"><i>18</i>&nbsp;            for (int j = i + 1; j &lt; chauffages.size(); j++) {</b>
+<b class="nc"><i>19</i>&nbsp;                if (chauffages.get(i).getMoisDebut() == chauffages.get(j).getMoisDebut() &amp;&amp; chauffages.get(i).getMoisFin() == chauffages.get(j).getMoisFin()) {</b>
+<b class="nc"><i>20</i>&nbsp;                    if (Math.max(chauffages.get(i).getHeureDebut(), chauffages.get(j).getHeureDebut()) &lt;= Math.min(chauffages.get(i).getHeureFin(), chauffages.get(j).getHeureFin())) {</b>
+<b class="nc"><i>21</i>&nbsp;                        return false;</b>
+<i>22</i>&nbsp;                    }
+<b class="nc"><i>23</i>&nbsp;                } else if (Math.max(chauffages.get(i).getMoisDebut(), chauffages.get(j).getMoisDebut()) &lt;= Math.min(chauffages.get(i).getMoisFin(), chauffages.get(j).getMoisFin())) {</b>
+<b class="nc"><i>24</i>&nbsp;                    return false;</b>
+<i>25</i>&nbsp;                }
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;            }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;        }
+<b class="nc"><i>30</i>&nbsp;        return true;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public static boolean analyeMoisTouteAnneeChauffage(List&lt;Chauffage&gt; chauffages) {
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;        for (int i = 0; i &lt; chauffages.size() - 1; i++) {</b>
+<b class="nc"><i>36</i>&nbsp;            for (int j = i + 1; j &lt; chauffages.size(); j++) {</b>
+<b class="nc"><i>37</i>&nbsp;                if (Math.max(chauffages.get(i).getHeureDebut(), chauffages.get(j).getHeureDebut()) &lt;= Math.min(chauffages.get(i).getHeureFin(), chauffages.get(j).getHeureFin())) {</b>
+<b class="nc"><i>38</i>&nbsp;                    return false;</b>
+<i>39</i>&nbsp;                }
+<i>40</i>&nbsp;            }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;        }
+<b class="nc"><i>43</i>&nbsp;        return true;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public static boolean analyeMoisLumiere(List&lt;Lumiere&gt; Lumieres) {
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;        for (int i = 0; i &lt; Lumieres.size() - 1; i++) {</b>
+<b class="nc"><i>49</i>&nbsp;            for (int j = i + 1; j &lt; Lumieres.size(); j++) {</b>
+<b class="nc"><i>50</i>&nbsp;                if (Lumieres.get(i).getMoisDebut() == Lumieres.get(j).getMoisDebut() &amp;&amp; Lumieres.get(i).getMoisFin() == Lumieres.get(j).getMoisFin()) {</b>
+<b class="nc"><i>51</i>&nbsp;                    if (Math.max(Lumieres.get(i).getHeureDebut(), Lumieres.get(j).getHeureDebut()) &lt;= Math.min(Lumieres.get(i).getHeureFin(), Lumieres.get(j).getHeureFin())) {</b>
+<b class="nc"><i>52</i>&nbsp;                        return false;</b>
+<i>53</i>&nbsp;                    }
+<b class="nc"><i>54</i>&nbsp;                } else if (Math.max(Lumieres.get(i).getMoisDebut(), Lumieres.get(j).getMoisDebut()) &lt;= Math.min(Lumieres.get(i).getMoisFin(), Lumieres.get(j).getMoisFin())) {</b>
+<b class="nc"><i>55</i>&nbsp;                    return false;</b>
+<i>56</i>&nbsp;                }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;            }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;        }
+<b class="nc"><i>61</i>&nbsp;        return true;</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    public static boolean analyeMoisTouteAnneeLumiere(List&lt;Lumiere&gt; Lumieres) {
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;        for (int i = 0; i &lt; Lumieres.size() - 1; i++) {</b>
+<b class="nc"><i>67</i>&nbsp;            for (int j = i + 1; j &lt; Lumieres.size(); j++) {</b>
+<b class="nc"><i>68</i>&nbsp;                if (Math.max(Lumieres.get(i).getHeureDebut(), Lumieres.get(j).getHeureDebut()) &lt;= Math.min(Lumieres.get(i).getHeureFin(), Lumieres.get(j).getHeureFin())) {</b>
+<b class="nc"><i>69</i>&nbsp;                    return false;</b>
+<i>70</i>&nbsp;                }
+<i>71</i>&nbsp;            }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;        }
+<b class="nc"><i>74</i>&nbsp;        return true;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    public static boolean analyeMoisPulverisationHygrometrie(List&lt;Pulverisation&gt; pulverisations) {
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;        for (int i = 0; i &lt; pulverisations.size() - 1; i++) {</b>
+<b class="nc"><i>80</i>&nbsp;            for (int j = i + 1; j &lt; pulverisations.size(); j++) {</b>
+<b class="nc"><i>81</i>&nbsp;                if (pulverisations.get(i).getMoisDebut() == pulverisations.get(j).getMoisDebut() &amp;&amp; pulverisations.get(i).getMoisFin() == pulverisations.get(j).getMoisFin()) {</b>
+<b class="nc"><i>82</i>&nbsp;                    if (Math.max(pulverisations.get(i).getHeureDebut(), pulverisations.get(j).getHeureDebut()) &lt;= Math.min(pulverisations.get(i).getHeureFin(), pulverisations.get(j).getHeureFin())) {</b>
+<b class="nc"><i>83</i>&nbsp;                        return false;</b>
+<i>84</i>&nbsp;                    }
+<b class="nc"><i>85</i>&nbsp;                } else if (Math.max(pulverisations.get(i).getMoisDebut(), pulverisations.get(j).getMoisDebut()) &lt;= Math.min(pulverisations.get(i).getMoisFin(), pulverisations.get(j).getMoisFin())) {</b>
+<b class="nc"><i>86</i>&nbsp;                    return false;</b>
+<i>87</i>&nbsp;                }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;            }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;        }
+<b class="nc"><i>92</i>&nbsp;        return true;</b>
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    public static boolean analyeMoisTouteAnneePulverisationHygrometrie(List&lt;Pulverisation&gt; pulverisations) {
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;        for (int i = 0; i &lt; pulverisations.size() - 1; i++) {</b>
+<b class="nc"><i>98</i>&nbsp;            for (int j = i + 1; j &lt; pulverisations.size(); j++) {</b>
+<b class="nc"><i>99</i>&nbsp;                if (Math.max(pulverisations.get(i).getHeureDebut(), pulverisations.get(j).getHeureDebut()) &lt;= Math.min(pulverisations.get(i).getHeureFin(), pulverisations.get(j).getHeureFin())) {</b>
+<b class="nc"><i>100</i>&nbsp;                    return false;</b>
+<i>101</i>&nbsp;                }
+<i>102</i>&nbsp;            }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;        }
+<b class="nc"><i>105</i>&nbsp;        return true;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    public static boolean analyeMoisPulverisationHoraire(List&lt;Pulverisation&gt; pulverisations) {
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;        for (int i = 0; i &lt; pulverisations.size() - 1; i++) {</b>
+<b class="nc"><i>111</i>&nbsp;            for (int j = i + 1; j &lt; pulverisations.size(); j++) {</b>
+<b class="nc"><i>112</i>&nbsp;                if (Math.max(pulverisations.get(i).getMoisDebut(), pulverisations.get(j).getMoisDebut()) &lt;= Math.min(pulverisations.get(i).getMoisFin(), pulverisations.get(j).getMoisFin())) {</b>
+<b class="nc"><i>113</i>&nbsp;                    return false;</b>
+<i>114</i>&nbsp;                }
+<i>115</i>&nbsp;            }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;        }
+<b class="nc"><i>118</i>&nbsp;        for(Pulverisation p:pulverisations){</b>
+<b class="nc"><i>119</i>&nbsp;            if(!analyeMoisPulverisationHorairePulverisationHeure(p)){</b>
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;                return false;</b>
+<i>122</i>&nbsp;            }
+<b class="nc"><i>123</i>&nbsp;        }</b>
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;        return true;</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    public static boolean analyeMoisPulverisationHorairePulverisationHeure(Pulverisation pulverisation) {
+<b class="nc"><i>129</i>&nbsp;        HashSet set = new HashSet();</b>
+<b class="nc"><i>130</i>&nbsp;        for (Pulverisationheure pulverisationheure : pulverisation.getPulverisationheure()) {</b>
+<i>131</i>&nbsp;
+<b class="nc"><i>132</i>&nbsp;            set.add(pulverisationheure.getHeure());</b>
+<i>133</i>&nbsp;
+<b class="nc"><i>134</i>&nbsp;        }</b>
+<b class="nc"><i>135</i>&nbsp;        if (!(set.size() == pulverisation.getPulverisationheure().size())) {</b>
+<i>136</i>&nbsp;
+<b class="nc"><i>137</i>&nbsp;            return false;</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;        }
+<b class="nc"><i>140</i>&nbsp;        return true;</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>

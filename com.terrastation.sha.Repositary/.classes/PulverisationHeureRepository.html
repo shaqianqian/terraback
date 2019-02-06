@@ -1,0 +1,62 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PulverisationHeureRepository</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.terrastation.sha.Repositary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PulverisationHeureRepository (com.terrastation.sha.Repositary)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">PulverisationHeureRepository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.terrastation.sha.Repositary;
+<i>2</i>&nbsp;import com.terrastation.sha.Entity.Pulverisation;
+<i>3</i>&nbsp;import com.terrastation.sha.Entity.Pulverisationheure;
+<i>4</i>&nbsp;import com.terrastation.sha.Entity.Terrarium;
+<i>5</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+<i>6</i>&nbsp;import org.springframework.data.jpa.repository.Query;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;public interface PulverisationHeureRepository extends JpaRepository&lt;Pulverisationheure,Integer&gt; {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    @Query(value=&quot;DELETE FROM pulverisationheure WHERE id = ?1&quot;, nativeQuery = true)
+<i>13</i>&nbsp;    public void deleteUselessHeure(Integer id);
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-02-05 21:44</div>
+</div>
+</body>
+</html>
