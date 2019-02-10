@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import mysql.connector
+#import mysql.connector
+import json
 import asyncio
 import websockets
 from Adafruit_BME280 import *
@@ -22,9 +23,9 @@ async def sendData() :
         humidity = round(sensor.read_humidity(), 2)
 
         sensorVal = (humidity, temp)
-        await websocket.send(sensorVal)
+        await websocket.send(json.dumps(sensorVal))
 
-asyncio.get_event_loop().run_until_complete(sensData())
+asyncio.get_event_loop().run_until_complete(sendData())
 #insertValQuery = "INSERT INTO terrarium (create_time, humidite, temperature, update_time) VALUES (CURTIME(), %s, %s, CURTIME())"
 #terraCursor.execute(insertValQuery, sensorVal)
 #terradb.commit()
