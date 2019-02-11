@@ -32,6 +32,7 @@ public enum ResultEnum {
     Heure_existe_pas (11, "Vous n'avez pas configuré le pulverisateur pour cette heure"),
 
     Existe_chevauchement (12, "Il existe les chevauchements d'heure ou mois"),
+    Email_pattern (13, "L'email que vous avez entré ne correspond pas au format"),
     ;
 
     private Integer code;

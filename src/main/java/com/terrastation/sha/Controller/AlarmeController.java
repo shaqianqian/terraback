@@ -47,14 +47,38 @@ public class AlarmeController {
 
     Logger log = LoggerFactory.getLogger(AlarmeController.class);
 
-    @RequestMapping(value = "/addProfil", method = RequestMethod.POST)
+    @RequestMapping(value = "/configEmail", method = RequestMethod.GET)
 
-    public ResultVO<Lumiere> addProgil(@RequestParam String email) {
+    public ResultVO <Profil> addProgil(@RequestParam String email) {
         Profil profil = new Profil();
-        profil.setEmail(email);
-        return ResultUtil.success(profilRepository.save(profil));
+        if(profilRepository.findAll().isEmpty()){
+         profil.setEmail(email);
+
+
+        }
+        else{
+         profil=profilRepository.findAll().get(0);
+         profil.setEmail(email);
+
+        }
+        profilRepository.save(profil);
+        return ResultUtil.success(profil);
 
     }
+    @RequestMapping(value = "/getEmail", method = RequestMethod.GET)
+
+    public ResultVO<Profil> getProfil() {
+        Profil profil = new Profil();
+        if(!profilRepository.findAll().isEmpty()){
+
+            profil=profilRepository.findAll().get(0);
+
+        }
+
+        return ResultUtil.success(profil);
+
+    }
+
 
     @RequestMapping(value = "/getConfigNotification", method = RequestMethod.GET)
 

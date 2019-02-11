@@ -48,10 +48,13 @@ public class AlarmeServiceImpl implements AlarmeService {
      * Send an information alert to the user
      */
     public void send(String Notification) {
-
+        String email="sqq940814@gmail.com";
+       if(!profilRepository.findAll().isEmpty()){
+           email=profilRepository.findAll().get(0).getEmail();
+       }
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("terrastation111@gmail.com");
-        message.setTo("sqq940814@gmail.com");
+        message.setTo(email);
         message.setSubject("Terrastation");
         message.setText(Notification);
         mailSender.send(message);
